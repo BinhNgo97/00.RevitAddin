@@ -1,3 +1,4 @@
 layout:
   - FilterVisibility
   - FilterControl
+  - FilterControl2
