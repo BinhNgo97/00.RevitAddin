@@ -153,13 +153,54 @@ def _category_to_structural_type(cat_name):
 def _resolve_symbols(doc):
     """
     Trả về dict {'FamilyName : TypeName': FamilySymbol} cho toàn bộ doc.
+    Revit 2024: dùng FamilyName property + BuiltInParameter fallback thay vì
+    sym.Family.Name / sym.Name trực tiếp để tránh crash.
     """
     result = {}
     for sym in FilteredElementCollector(doc).OfClass(FamilySymbol):
-        if sym.Family is None:
+        try:
+            # Family name
+            fam_name = ''
+            try:
+                fam_name = sym.FamilyName or ''
+            except Exception:
+                pass
+            if not fam_name:
+                try:
+                    if sym.Family is not None:
+                        fam_name = sym.Family.Name or ''
+                except Exception:
+                    pass
+            if not fam_name:
+                continue
+
+            # Type name
+            sym_name = ''
+            try:
+                sym_name = sym.Name or ''
+            except Exception:
+                pass
+            if not sym_name:
+                try:
+                    p = sym.get_Parameter(BuiltInParameter.SYMBOL_NAME_PARAM)
+                    if p is not None:
+                        sym_name = p.AsString() or ''
+                except Exception:
+                    pass
+            if not sym_name:
+                try:
+                    p = sym.get_Parameter(BuiltInParameter.ALL_MODEL_TYPE_NAME)
+                    if p is not None:
+                        sym_name = p.AsString() or ''
+                except Exception:
+                    pass
+            if not sym_name:
+                continue
+
+            key = "{} : {}".format(fam_name, sym_name)
+            result[key] = sym
+        except Exception:
             continue
-        key = "{} : {}".format(sym.Family.Name, sym.Name)
-        result[key] = sym
     return result
 
 
@@ -167,7 +208,10 @@ def _resolve_levels(doc):
     """Trả về dict {'Level name': Level}."""
     result = {}
     for lv in FilteredElementCollector(doc).OfClass(Level):
-        result[lv.Name] = lv
+        try:
+            result[lv.Name] = lv
+        except Exception:
+            continue
     return result
 
 
@@ -222,12 +266,22 @@ class CreateModelHandler(IExternalEventHandler if _REVIT_AVAILABLE else object):
 
         # ── Kiểm tra dữ liệu đầu vào ────────────────────────────────
         if len(vm.cad_grid_elements) < 1 or len(vm.revit_grids) < 1:
-            print("CreateModel: Chua chon duong tham chieu CAD va Revit.")
+            MessageBox.Show(
+                "Chua chon duong tham chieu!\n"
+                "Vui long:\n"
+                "  1. Nhan 'Select grid in Cad' de chon duong ref trong CAD\n"
+                "  2. Nhan 'Select grid in Revit' de chon duong ref trong Revit",
+                "Thieu duong tham chieu"
+            )
             return
 
         ready_groups = [g for g in vm.CadGroups if g.is_ready()]
         if not ready_groups:
-            print("CreateModel: Khong co nhom nao da dien du thong tin.")
+            MessageBox.Show(
+                "Chua co nhom nao dien du thong tin.\n"
+                "Vui long dien Category, Family Type va Base Level cho it nhat 1 hang trong bang.",
+                "Thieu thong so"
+            )
             return
 
         # ── Tính transform ───────────────────────────────────────────
@@ -257,7 +311,8 @@ class CreateModelHandler(IExternalEventHandler if _REVIT_AVAILABLE else object):
                 symbol  = symbol_map.get(sym_key)
                 if symbol is None:
                     skipped += 1
-                    errors.append("Khong tim thay FamilySymbol: '{}'".format(sym_key))
+                    errors.append("Khong tim thay FamilySymbol: '{}'\n  (Keys mau: {})".format(
+                        sym_key, list(symbol_map.keys())[:3]))
                     continue
 
                 # Activate symbol nếu chưa active
@@ -332,6 +387,17 @@ class CreateModelHandler(IExternalEventHandler if _REVIT_AVAILABLE else object):
         print("CreateModel: {} created, {} skipped.".format(created, skipped))
         for msg in errors:
             print("  [WARN] {}".format(msg))
+        if errors:
+            MessageBox.Show(
+                "Tao {} instance.\nBo qua {} vi:\n{}".format(
+                    created, skipped, "\n".join(errors[:5])),
+                "Ket qua tao model"
+            )
+        else:
+            MessageBox.Show(
+                "Da tao thanh cong {} instance!".format(created),
+                "Hoan thanh"
+            )
 
     def GetName(self):
         return "CreateModel"

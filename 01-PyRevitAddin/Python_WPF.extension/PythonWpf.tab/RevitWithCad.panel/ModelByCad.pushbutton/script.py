@@ -16,7 +16,7 @@ try:
     from Autodesk.Revit.UI import IExternalEventHandler, ExternalEvent
     from Autodesk.Revit.DB import (
         FilteredElementCollector, Level, FamilySymbol,
-        BuiltInCategory
+        BuiltInCategory, BuiltInParameter
     )
     _REVIT_AVAILABLE = True
 except Exception:
@@ -30,48 +30,118 @@ def _load_revit_data(vm):
     Chỉ chạy khi Revit API khả dụng.
     """
     if not _REVIT_AVAILABLE:
+        print("[DEBUG] _load_revit_data: Revit API không khả dụng, bỏ qua.")
         return
     try:
         doc = __revit__.ActiveUIDocument.Document  # noqa: F821  (pyRevit global)
+        print("[DEBUG] _load_revit_data: Bắt đầu đọc dữ liệu Revit...")
 
         # --- Levels ---
-        level_elems = FilteredElementCollector(doc).OfClass(Level).ToElements()
+        # Chuyển sang list Python trước khi sort để tránh lỗi lazy-collection
+        level_elems = list(FilteredElementCollector(doc).OfClass(Level).ToElements())
+        def _lv_elev(lv):
+            try:
+                return lv.Elevation
+            except Exception:
+                return 0.0
         level_names = []
-        for lv in sorted(level_elems, key=lambda l: l.Elevation):
+        for lv in sorted(level_elems, key=_lv_elev):
             try:
                 level_names.append(lv.Name)
             except Exception:
                 pass
         vm.set_revit_levels(level_names)
+        print("[DEBUG] Levels tìm thấy: {}".format(level_names))
 
         # --- FamilySymbol names + category map ---
-        # Revit 2024: một số FamilySymbol có thể ném ngoại lệ khi đọc .Name /
-        # .Category.Name → xử lý từng phần tử riêng lẻ.
-        symbols = FilteredElementCollector(doc).OfClass(FamilySymbol).ToElements()
+        # Revit 2024: KHÔNG gọi s.IsValidObject – property đó có thể gây
+        # AccessViolationException (hard crash) với các element native bị invalid.
+        # Dùng thuần try/except cho từng thuộc tính.
+        symbols = list(FilteredElementCollector(doc).OfClass(FamilySymbol).ToElements())
+        print("[DEBUG] Tổng FamilySymbol tìm thấy: {}".format(len(symbols)))
 
         cat_type_map = {}
-        for s in symbols:
+        error_count = 0
+        skip_no_cat = 0
+        skip_no_catname = 0
+        skip_no_famname = 0
+        skip_no_symname = 0
+        ok_count = 0
+        for i, s in enumerate(symbols):
             try:
-                if s is None or not s.IsValidObject:
+                cat = s.Category
+                if cat is None:
+                    skip_no_cat += 1
                     continue
-                if s.Category is None:
+                cat_name = cat.Name
+                if not cat_name:
+                    skip_no_catname += 1
                     continue
-                cat_name = s.Category.Name          # tên Category
 
-                # FamilyName: dùng thuộc tính FamilyName (Revit 2015+) thay vì
-                # s.Family.Name để tránh lỗi khi Family là None / không load được
+                # Ưu tiên s.FamilyName (shortcut an toàn hơn s.Family.Name)
+                fam_name = ''
                 try:
-                    fam_name = s.FamilyName
+                    fam_name = s.FamilyName or ''
                 except Exception:
-                    fam_name = s.Family.Name if s.Family is not None else ''
+                    pass
+                # Fallback: thử s.Family.Name nếu FamilyName rỗng
                 if not fam_name:
+                    try:
+                        if s.Family is not None:
+                            fam_name = s.Family.Name or ''
+                    except Exception:
+                        pass
+                if not fam_name:
+                    skip_no_famname += 1
+                    if skip_no_famname <= 2:
+                        # In vài mẫu để debug
+                        try:
+                            print("[DEBUG] skip_no_famname cat={} sym={}".format(cat_name, s.Name))
+                        except Exception:
+                            print("[DEBUG] skip_no_famname cat={} (sym.Name loi)".format(cat_name))
                     continue
 
-                type_name = "{} : {}".format(fam_name, s.Name)
+                sym_name = ''
+                sym_ex2 = None
+                try:
+                    sym_name = s.Name or ''
+                except Exception as _e:
+                    sym_ex2 = _e
+                # Fallback 1: BuiltInParameter.SYMBOL_NAME_PARAM
+                if not sym_name:
+                    try:
+                        p = s.get_Parameter(BuiltInParameter.SYMBOL_NAME_PARAM)
+                        if p is not None:
+                            sym_name = p.AsString() or ''
+                    except Exception:
+                        pass
+                # Fallback 2: ALL_MODEL_TYPE_NAME
+                if not sym_name:
+                    try:
+                        p = s.get_Parameter(BuiltInParameter.ALL_MODEL_TYPE_NAME)
+                        if p is not None:
+                            sym_name = p.AsString() or ''
+                    except Exception:
+                        pass
+                # Debug 3 symbol đầu tiên
+                if ok_count + skip_no_symname < 3:
+                    print("[DEBUG] s.Name={!r}  sym_ex={} fam={}  sym_final={!r}".format(
+                        sym_name, sym_ex2, fam_name, sym_name))
+                if not sym_name:
+                    skip_no_symname += 1
+                    continue
+
+                type_name = "{} : {}".format(fam_name, sym_name)
                 cat_type_map.setdefault(cat_name, set()).add(type_name)
-            except Exception:
-                # Bỏ qua symbol lỗi, tiếp tục vòng lặp
+                ok_count += 1
+            except Exception as sym_ex:
+                error_count += 1
+                if error_count <= 3:
+                    print("[DEBUG] Symbol lỗi: {}".format(sym_ex))
                 continue
+
+        print("[DEBUG] Symbol stats: total={} ok={} err={} no_cat={} no_catname={} no_famname={} no_symname={}".format(
+            len(symbols), ok_count, error_count, skip_no_cat, skip_no_catname, skip_no_famname, skip_no_symname))
 
         # Sắp xếp từng nhóm
         cat_type_map_sorted = {k: sorted(v) for k, v in sorted(cat_type_map.items())}
@@ -82,10 +152,14 @@ def _load_revit_data(vm):
         vm.set_revit_family_types(type_names)
 
         # --- Categories – lấy từ map keys ---
-        vm.set_revit_categories(sorted(cat_type_map_sorted.keys()))
+        cat_list = sorted(cat_type_map_sorted.keys())
+        vm.set_revit_categories(cat_list)
+        print("[DEBUG] _load_revit_data XONG. Categories đã set: {}".format(len(cat_list)))
+        print("[DEBUG] vm.Categories count: {}".format(vm.Categories.Count))
 
     except Exception as ex:
-        print("_load_revit_data error: {}".format(ex))
+        import traceback
+        print("_load_revit_data error: {}\n{}".format(ex, traceback.format_exc()))
 
 
 class ModelByCadWindow(forms.WPFWindow):
