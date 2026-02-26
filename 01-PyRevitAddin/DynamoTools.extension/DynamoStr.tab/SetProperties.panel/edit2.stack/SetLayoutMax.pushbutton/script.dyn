@@ -1,0 +1,254 @@
+{
+  "Uuid": "3caa6357-6059-41e0-8d1f-5248a86386f5",
+  "IsCustomNode": false,
+  "Description": null,
+  "Name": "SetLayout",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "StructuralDesign.Model.Selection.PickObjects@int,string,bool",
+      "Id": "9670430a7bc6494eae0ac201766ce404",
+      "Inputs": [
+        {
+          "Id": "b308387c67bc421fa4cd317f06b6a19b",
+          "Name": "objectType",
+          "Description": "Specifies the type of object to be selected. 0-Nothing, 1-Element, 2-PointOnElement, 3-Edge, 4-Face, 5-LinkedElement, 6-Subelement\n\nint\nDefault value : 1",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "0500297431ea4a7baa263dfa60cc9a18",
+          "Name": "statusPrompt",
+          "Description": "The message shown on the status bar.\n\nstring\nDefault value : \"Click to select multiple elements, TAB for alternates, ESC quit.\"",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "7c61ae7abf5d41478bdc40083f393bcd",
+          "Name": "refresh",
+          "Description": "Refresh selection.\n\nbool\nDefault value : true",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "fafef99a611a45fba97efb599354dac8",
+          "Name": "Elements",
+          "Description": "Selected elements.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Prompts the user to select multiple objects while showing a custom status prompt string.\n\nSelection.PickObjects (objectType: int = 1, statusPrompt: string = \"Click to select multiple elements, TAB for alternates, ESC quit.\", refresh: bool = true): Element[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "Rhythm.Revit.Elements.Elements.SetParameterByNameTypeOrInstance@Revit.Elements.Element,string,var",
+      "Id": "8651bcb0531047959673b1a9bf56a7f6",
+      "Inputs": [
+        {
+          "Id": "50e453d92657431598a0d394422d3d41",
+          "Name": "element",
+          "Description": "The element to set parameter to.\n\nElement",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "ff3e93fa60884a3ba156115c896eb8cc",
+          "Name": "parameterName",
+          "Description": "The parameter name.\n\nstring",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "7d5fbea0b0a34084b356f632ec65b1ab",
+          "Name": "value",
+          "Description": "The value to set.\n\nvar",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "7b499a034f5b42ed87735f468c48359d",
+          "Name": "element",
+          "Description": "The element.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Set one of the element's parameters. Instance if it is instance or type if type.\n\nElements.SetParameterByNameTypeOrInstance (element: Element, parameterName: string, value: var): Element"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "\"Layout Rule\";",
+      "Id": "ade3517c7ab746f19099ff9c35f93c2a",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "6dfa3ae303b84852b2500a6c299ddd90",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "2;",
+      "Id": "c2184ab17d9342dfbe6eeb61ac76e2fa",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "25682aca39a44d7fbf2252b157a10a68",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly"
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "fafef99a611a45fba97efb599354dac8",
+      "End": "50e453d92657431598a0d394422d3d41",
+      "Id": "21e47f64d82b4408ba3a14c9d7e8cdb4"
+    },
+    {
+      "Start": "6dfa3ae303b84852b2500a6c299ddd90",
+      "End": "ff3e93fa60884a3ba156115c896eb8cc",
+      "Id": "0191a18ffc1540628f3d07c4bacec08a"
+    },
+    {
+      "Start": "25682aca39a44d7fbf2252b157a10a68",
+      "End": "7d5fbea0b0a34084b356f632ec65b1ab",
+      "Id": "42476040386243c3b6a6d518a27da118"
+    }
+  ],
+  "Dependencies": [],
+  "NodeLibraryDependencies": [
+    {
+      "Name": "Structural Design",
+      "Version": "2019.12.11",
+      "ReferenceType": "Package",
+      "Nodes": [
+        "9670430a7bc6494eae0ac201766ce404"
+      ]
+    },
+    {
+      "Name": "Rhythm",
+      "Version": "2020.7.25",
+      "ReferenceType": "Package",
+      "Nodes": [
+        "8651bcb0531047959673b1a9bf56a7f6"
+      ]
+    }
+  ],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.3.2.15696",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "Selection.PickObjects",
+        "Id": "9670430a7bc6494eae0ac201766ce404",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 429.23216430408149,
+        "Y": 7.9816130903341787
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "ʳʰʸᵗʰᵐ|Elements.SetParameterByNameTypeOrInstance",
+        "Id": "8651bcb0531047959673b1a9bf56a7f6",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1052.8812095032397,
+        "Y": 86.518358531317432
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Code Block",
+        "Id": "ade3517c7ab746f19099ff9c35f93c2a",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 541.23216430408149,
+        "Y": 224.36699397967573
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Code Block",
+        "Id": "c2184ab17d9342dfbe6eeb61ac76e2fa",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 607.23216430408149,
+        "Y": 315.09048618817155
+      }
+    ],
+    "Annotations": [],
+    "X": 175.65633089965115,
+    "Y": 128.43247837885536,
+    "Zoom": 0.71259483262848811
+  }
+}

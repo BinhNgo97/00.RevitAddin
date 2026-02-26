@@ -1,0 +1,5 @@
+layout:
+  - SelectSamePara
+  - SelectE_SameType
+  - UnjoinSelectedEle
+  - SWSelectedEle

@@ -1,0 +1,322 @@
+{
+  "Uuid": "317891b3-458f-4372-b636-de8c868a2c01",
+  "IsCustomNode": false,
+  "Description": null,
+  "Name": "script",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "be3283b4-e515-4728-ab60-8ab04fac6f7e",
+      "FunctionType": "Graph",
+      "NodeType": "FunctionNode",
+      "Id": "1d961ffe4c514c879d3046b0a38041c8",
+      "Inputs": [
+        {
+          "Id": "1d390497c0ca45aba245c98212821616",
+          "Name": "Elements_A",
+          "Description": "var[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "eb43c14441084ed6b9a25207d51f92a5",
+          "Name": "Elements_B",
+          "Description": "var[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "6627d9b08c4c4dff9f83d19c764d7e37",
+          "Name": "Elements_A",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "41858a9d46754618ba11cfcac04acf7c",
+          "Name": "Elements_B",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": ""
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "StructuralDesign.Model.Selection.PickElements@string,bool",
+      "Id": "8b3bc0d514fd49a5af7309434f5251f9",
+      "Inputs": [
+        {
+          "Id": "9f8ec403902d4aa4ab74cfac48bfbf24",
+          "Name": "statusPrompt",
+          "Description": "The message shown on the status bar.\n\nstring\nDefault value : \"Click to select multiple elements, TAB for alternates, ESC quit.\"",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "73369c28796b424aa9565fed82ff45f2",
+          "Name": "refresh",
+          "Description": "Refresh selection.\n\nbool\nDefault value : true",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "c14279cbdc4648ec8bf7e049613544fc",
+          "Name": "Elements",
+          "Description": "Selected elements.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Prompts the user to select multiple elements while showing a custom status prompt string.\n\nSelection.PickElements (statusPrompt: string = \"Click to select multiple elements, TAB for alternates, ESC quit.\", refresh: bool = true): Element[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "\"Select Ele1\";\n\"Select Ele2\";",
+      "Id": "d89a4f27e08a43b6be05d76471d2f9d7",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "ac1acf5044a44830957ad0eb0ef02c7d",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "b4050477bf904b7493739d7ef744f9ba",
+          "Name": "",
+          "Description": "Value of expression at line 2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "StructuralDesign.Model.Selection.PickElements@string,bool",
+      "Id": "46171bd23dc84597bda77a0bf09eaae4",
+      "Inputs": [
+        {
+          "Id": "b6234fd6cf6e4f279f1411fbaa670fbc",
+          "Name": "statusPrompt",
+          "Description": "The message shown on the status bar.\n\nstring\nDefault value : \"Click to select multiple elements, TAB for alternates, ESC quit.\"",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "706f344ab7624589888b7271596bcddb",
+          "Name": "refresh",
+          "Description": "Refresh selection.\n\nbool\nDefault value : true",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "1313aec8f6f744c38e7ee11747bbf486",
+          "Name": "Elements",
+          "Description": "Selected elements.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Prompts the user to select multiple elements while showing a custom status prompt string.\n\nSelection.PickElements (statusPrompt: string = \"Click to select multiple elements, TAB for alternates, ESC quit.\", refresh: bool = true): Element[]"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": true,
+      "Id": "14b9e1be9c2a4123a4b286f295483397",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "c56d9da1d52b433491fa4b03bf9eca6f",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Selection between a true and false."
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "c14279cbdc4648ec8bf7e049613544fc",
+      "End": "1d390497c0ca45aba245c98212821616",
+      "Id": "bfa5d2c4a5024e23ae68070f7cc041ce"
+    },
+    {
+      "Start": "ac1acf5044a44830957ad0eb0ef02c7d",
+      "End": "9f8ec403902d4aa4ab74cfac48bfbf24",
+      "Id": "eb737575abdd4887a9f02958f4ea471b"
+    },
+    {
+      "Start": "b4050477bf904b7493739d7ef744f9ba",
+      "End": "b6234fd6cf6e4f279f1411fbaa670fbc",
+      "Id": "5ebd8d95220b4608b5bdac3713e4a571"
+    },
+    {
+      "Start": "1313aec8f6f744c38e7ee11747bbf486",
+      "End": "eb43c14441084ed6b9a25207d51f92a5",
+      "Id": "e87daabf6cda4a7fadf0f1d7c51a0d3b"
+    },
+    {
+      "Start": "c56d9da1d52b433491fa4b03bf9eca6f",
+      "End": "73369c28796b424aa9565fed82ff45f2",
+      "Id": "ea7dda4f80834c0987bfc4583cea84ea"
+    },
+    {
+      "Start": "c56d9da1d52b433491fa4b03bf9eca6f",
+      "End": "706f344ab7624589888b7271596bcddb",
+      "Id": "892307ef929740dd86112a142b2cad74"
+    }
+  ],
+  "Dependencies": [
+    "be3283b4-e515-4728-ab60-8ab04fac6f7e"
+  ],
+  "NodeLibraryDependencies": [
+    {
+      "Name": "KYSUDO",
+      "Version": "2019.8.5",
+      "ReferenceType": "Package",
+      "Nodes": [
+        "1d961ffe4c514c879d3046b0a38041c8"
+      ]
+    },
+    {
+      "Name": "Structural Design",
+      "Version": "2021.1.5",
+      "ReferenceType": "Package",
+      "Nodes": [
+        "8b3bc0d514fd49a5af7309434f5251f9",
+        "46171bd23dc84597bda77a0bf09eaae4"
+      ]
+    }
+  ],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.6.1.8786",
+      "RunType": "Automatic",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "UnJoin",
+        "Id": "1d961ffe4c514c879d3046b0a38041c8",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 713.59700809046944,
+        "Y": 190.18404314917052
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Selection.PickElements",
+        "Id": "8b3bc0d514fd49a5af7309434f5251f9",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 255.76531941330848,
+        "Y": 115.96237866506942
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Code Block",
+        "Id": "d89a4f27e08a43b6be05d76471d2f9d7",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -9.0,
+        "Y": 116.0
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Selection.PickElements",
+        "Id": "46171bd23dc84597bda77a0bf09eaae4",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 252.08795762862337,
+        "Y": 251.86895558107358
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Boolean",
+        "Id": "14b9e1be9c2a4123a4b286f295483397",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 46.256392536893145,
+        "Y": 280.81270736297483
+      }
+    ],
+    "Annotations": [],
+    "X": -26.79559780322586,
+    "Y": -71.900418175330913,
+    "Zoom": 1.2484436539722303
+  }
+}

@@ -1,0 +1,48 @@
+<Window x:Class="UIExcel.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Excel Tool" Height="650" Width="1200"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid Margin="10">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- ================= TOP BUTTONS ================= -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,10">
+
+            <Button x:Name="btnSelect" Content="Select In Revit" Width="150" Height="40" Margin="5"/>
+            <Button x:Name="btnFile" Content="Filepath Excel" Width="150" Height="40" Margin="5"/>
+            <Button x:Name="btnExport" Content="Export data" Width="150" Height="40" Margin="5"/>
+            <Button x:Name="btnRefresh" Content="Refresh Data" Width="150" Height="40" Margin="5"/>
+
+        </StackPanel>
+
+        <!-- ================= MAIN AREA ================= -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- LISTVIEW PARAMETER -->
+            <ListView x:Name="lvParameters" Grid.Column="0" Margin="5"
+                      SelectionMode="Extended">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Parameter"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+
+            <!-- DATAGRID -->
+            <DataGrid x:Name="dgData" Grid.Column="1" Margin="5"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"/>
+        </Grid>
+
+    </Grid>
+</Window>

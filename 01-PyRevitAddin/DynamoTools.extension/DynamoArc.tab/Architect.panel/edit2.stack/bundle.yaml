@@ -1,0 +1,6 @@
+title:
+  en_us: Workwith-Room
+layout:
+  - Create-RoomByArea
+  - Copy-Para_FromRoom
+  - Create-FloorByRoom

@@ -1,0 +1,20 @@
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Filter Visibility"
+        Width="560" Height="500"
+        WindowStartupLocation="CenterScreen"
+        Background="#DDD">
+        
+    <Grid>
+        <ListBox x:Name="lstFilters" ItemsSource="{Binding Filters}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <CheckBox Content="{Binding Name}" 
+                             IsChecked="{Binding IsVisible, Mode=TwoWay}"
+                             Checked="CheckBox_Changed"
+                             Unchecked="CheckBox_Changed" />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</Window>

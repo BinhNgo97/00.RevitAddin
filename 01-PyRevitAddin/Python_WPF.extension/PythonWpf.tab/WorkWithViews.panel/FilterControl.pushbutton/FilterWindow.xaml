@@ -1,0 +1,96 @@
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Filter Control" 
+        Width="680" 
+        Height="600"
+        WindowStartupLocation="CenterScreen">
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="40"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Header / Apply -->
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Filter - search" FontSize="14" FontWeight="Bold" VerticalAlignment="Center"/>
+        
+        <!-- Header middle: Refresh button -->
+        <Button Grid.Row="0" Grid.Column="1" x:Name="btnRefresh" 
+                Content="🔄" 
+                Height="36" Width="36"
+                ToolTip="Refresh lists (reload filters from active view)"
+                HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        
+        <!-- Header right: Apply + Set color random -->
+        <Grid Grid.Row="0" Grid.Column="2" Margin="0,0,0,8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" x:Name="btnApplyVisibility" Content="Visible - Apply" Height="36" HorizontalAlignment="Stretch"/>
+            <Button Grid.Column="2" x:Name="btnSetColorRandom" Content="SetColor_Random" Height="36" HorizontalAlignment="Stretch" Margin="5,0,0,0"/>
+        </Grid>
+
+        <!-- Left: Filters in project (not in view) -->
+        <ListView x:Name="lstProjectFilters" Grid.Row="1" Grid.Column="0"
+                  ItemsSource="{Binding ProjectFilters}"
+                  SelectionMode="Extended"
+                  BorderThickness="1" BorderBrush="#CCCCCC">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Filter Name" Width="250" DisplayMemberBinding="{Binding Name}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <!-- Middle: Move Up/Down controls for View filters -->
+        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Button x:Name="btnMoveUp" Content="▲" Width="32" Height="32" Margin="0,0,0,6" ToolTip="Move up selected"/>
+            <Button x:Name="btnMoveDown" Content="▼" Width="32" Height="32" ToolTip="Move down selected"/>
+        </StackPanel>
+
+        <!-- Right: Filters in view with visibility toggle -->
+        <ListView x:Name="lstViewFilters" Grid.Row="1" Grid.Column="2"
+                  ItemsSource="{Binding ViewFilters}"
+                  SelectionMode="Extended"
+                  BorderThickness="1" BorderBrush="#CCCCCC">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Visible" Width="80">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding IsEnabled, Mode=TwoWay}"
+                                          HorizontalAlignment="Center"
+                                          Checked="OnViewCheckBoxChecked"
+                                          Unchecked="OnViewCheckBoxUnchecked"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Filter Name" Width="250" DisplayMemberBinding="{Binding Name}"/>
+                    <GridViewColumn Header="Color" Width="80">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="Pick"
+                                        Click="OnPickColorClick"
+                                        Height="24"
+                                        Width="60"
+                                        Background="{Binding ColorBrush}"
+                                        BorderBrush="#808080"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <!-- Footer Buttons -->
+        <Button x:Name="btnAdd" Grid.Row="2" Grid.Column="0" Content="ADD" Height="32" Margin="0,8,0,0"/>
+        <Button x:Name="btnRemove" Grid.Row="2" Grid.Column="2" Content="Remove" Height="32" Margin="0,8,0,0"/>
+    </Grid>
+</Window>

@@ -1,0 +1,98 @@
+﻿<Window
+    xmlns:x= "http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns = "http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    WindowStartupLocation=" CenterScreen"
+    Height="450" Width="650" Title="Duplicate View" >
+
+
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="365*"/>
+            <RowDefinition Height="35"/>
+            <RowDefinition Height="34*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="230"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <ComboBox x:Name="cb_ViewType" 
+                  Margin="10,10,10,0" VerticalAlignment="Top" Height="24"
+                  SelectionChanged="cb_selected">
+        </ComboBox>
+
+        <ListView Background="#FFC3F0" Margin="10,39,10,10" 
+                  x:Name="lv_ViewbyViewType"
+                  DisplayMemberPath="{Binding}"
+                  >
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="All View By ViewType Selected" 
+                                    Width="Auto"
+                                    DisplayMemberBinding="{Binding}"
+                                    />
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <DataGrid Name="dataGrid_NewView"
+                  Grid.Column="1" Background="#FF218622" 
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="True"
+                  CanUserDeleteRows="True"
+                  Margin="0,0,0,10"
+                  ItemsSource="{Binding DataGridItems}"
+                  SelectionMode="Extended"
+                  SelectionUnit="FullRow"
+                  CurrentCellChanged="dataGrid_CurrentCellChanged">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{Binding ViewName}" Width="*" />
+                <DataGridTextColumn Header="View Type" Binding="{Binding ViewType}" Width="*" />
+                <DataGridTemplateColumn Header="View Template">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding ViewTemplate}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <ComboBox ItemsSource="{Binding DataContext.ViewTemplates, RelativeSource={RelativeSource AncestorType=Window}}"
+                                      SelectedItem="{Binding ViewTemplate}"
+                                      SelectionChanged="ComboBox_SelectionChanged"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+
+        <Button Grid.Column="1" HorizontalAlignment="Left" Margin="10,0,0,5" Width="70"
+                Name="bt_Add" Content="Add View" Click="add_click" Grid.Row="2" Height="25" VerticalAlignment="Bottom"/>
+        <Button Grid.Column="1" Margin="100,0,0,4" 
+                Name="bt_Remove" Content="Remove View" Click="remove_click" Grid.Row="2" HorizontalAlignment="Left" Width="105" Height="25" VerticalAlignment="Bottom"/>
+
+        <Button Content="Cancel" Margin="0,0,135,0" Grid.Row="2" Grid.Column="1"
+                Name="bt_Cancel" Click="cancel_click" Height="24" VerticalAlignment="Center" HorizontalAlignment="Right" Width="50"/>
+        <Button Content="Duplicate View" 
+                Grid.Column="1" Grid.Row="2" Margin="0,0,12,0"
+                Name="bt_DuplicateView" Click="duplicate_click" Height="24" VerticalAlignment="Center" HorizontalAlignment="Right" Width="100"/>
+
+        <TextBlock Margin="10,0,145,9" Grid.Row="1" Text="Search :" TextWrapping="Wrap" VerticalAlignment="Bottom"/>
+
+        <TextBlock HorizontalAlignment="Left" Margin="10,0,0,9" Grid.Row="2" Text="Replace With :" TextWrapping="Wrap" Width="85" VerticalAlignment="Bottom"/>
+
+        <TextBox Grid.Row="1" Text="" VerticalContentAlignment="Center"
+                  Margin="100,3,0,3" TextAlignment= "Left"
+                 Name="tb_find" HorizontalAlignment="Left" Width="120"/>
+        <TextBox Grid.Row="2" VerticalContentAlignment="Center"
+                  Margin="100,3,0,3" 
+                 Name="tb_replace" HorizontalAlignment="Left" Width="120"/>
+        <RadioButton Content="Duplicate" VerticalContentAlignment="Center" x:Name="rb_Duplicate" GroupName="DuplicateOptions" IsChecked="True"
+                     Grid.Column="1" HorizontalAlignment="Left" Margin="2,5,0,5" Grid.Row="1" Width="70"/>
+        <RadioButton Content="Duplicate with Detailing" VerticalContentAlignment="Center" x:Name="rb_DuplicateWithDetailing" GroupName="DuplicateOptions"
+                     Grid.Column="1" HorizontalAlignment="Left" Margin="79,5,0,5" Grid.Row="1" Width="160"/>
+        <RadioButton Content="Duplicate as a Dependent" VerticalContentAlignment="Center" x:Name="rb_DuplicateAsDependent" GroupName="DuplicateOptions"
+                     Grid.Column="1" Margin="230,5,10,5" Grid.Row="1"/>
+
+
+    </Grid>
+</Window>

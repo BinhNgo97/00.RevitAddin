@@ -1,0 +1,241 @@
+{
+  "Uuid": "b7b911b2-ab6e-4f48-8bf0-967cb8cd28d7",
+  "IsCustomNode": false,
+  "Description": null,
+  "Name": "script",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": true,
+      "Id": "1e92cc6a832e48b3812cfc18dcf68b39",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "ebbdc7ac4fc147cfbee99b678d039f36",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Selection between a true and false."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "StructuralDesign.Rebar.Properties.RebarHostElement@Revit.Elements.Element",
+      "Id": "6cb5d025ba424314bf74f1a44c7657d8",
+      "Inputs": [
+        {
+          "Id": "9ba6a6e454a7478e8d932e514e68db75",
+          "Name": "rebar",
+          "Description": "Rebar Element\n\nElement",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "ab6bf780495a4b4299b17916bda858ce",
+          "Name": "Element",
+          "Description": "The Element that contains the rebar",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "The element that contains the rebar.\n\nProperties.RebarHostElement (rebar: Element): Element"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "8fe565e9-1f46-4933-b75c-2ee2947e342e",
+      "FunctionType": "Graph",
+      "NodeType": "FunctionNode",
+      "Id": "a0840c2fbb604171a13af666ce6e0135",
+      "Inputs": [
+        {
+          "Id": "7f065200c82843efba17cef9800f5d7f",
+          "Name": "element",
+          "Description": "var[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "404c5fa619184bb6ab475fc03f9e2411",
+          "Name": "reset",
+          "Description": "bool\nDefault value : true",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "cebe8928f87742c79d1a6d9960304b60",
+          "Name": "success?",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Selects the input elements inside the Revit UI."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "StructuralDesign.Model.Selection.PickElementsByRectangle@bool",
+      "Id": "cbb267ae9cb049babd3e4585b483ed8c",
+      "Inputs": [
+        {
+          "Id": "0c62aca802504dd68b5d845d55c77c3a",
+          "Name": "refresh",
+          "Description": "Refresh Selection\n\nbool\nDefault value : true",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "0e6a4628535348578c97482d2903c91d",
+          "Name": "Element[]",
+          "Description": "Element[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Prompts the user to select multiple elements by drawing a rectangle while showing a custom status prompt string.\n\nSelection.PickElementsByRectangle (refresh: bool = true): Element[]"
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "ebbdc7ac4fc147cfbee99b678d039f36",
+      "End": "0c62aca802504dd68b5d845d55c77c3a",
+      "Id": "257857f9007141c8a3868845c68b2bb8"
+    },
+    {
+      "Start": "ab6bf780495a4b4299b17916bda858ce",
+      "End": "7f065200c82843efba17cef9800f5d7f",
+      "Id": "60554e482bd64aadb28324793df5be30"
+    },
+    {
+      "Start": "0e6a4628535348578c97482d2903c91d",
+      "End": "9ba6a6e454a7478e8d932e514e68db75",
+      "Id": "f331757636c047d49e5de096b7c492d6"
+    }
+  ],
+  "Dependencies": [
+    "8fe565e9-1f46-4933-b75c-2ee2947e342e"
+  ],
+  "NodeLibraryDependencies": [
+    {
+      "Name": "Structural Design",
+      "Version": "2019.12.11",
+      "ReferenceType": "Package",
+      "Nodes": [
+        "6cb5d025ba424314bf74f1a44c7657d8",
+        "cbb267ae9cb049babd3e4585b483ed8c"
+      ]
+    },
+    {
+      "Name": "spring nodes",
+      "Version": "132.2.5",
+      "ReferenceType": "Package",
+      "Nodes": [
+        "a0840c2fbb604171a13af666ce6e0135"
+      ]
+    }
+  ],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.3.0.5885",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "Boolean",
+        "Id": "1e92cc6a832e48b3812cfc18dcf68b39",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 599.0,
+        "Y": 370.0
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Properties.RebarHostElement",
+        "Id": "6cb5d025ba424314bf74f1a44c7657d8",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1116.7438115539021,
+        "Y": 379.50442072587833
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Springs.SelectInRevit",
+        "Id": "a0840c2fbb604171a13af666ce6e0135",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1384.5974261164126,
+        "Y": 388.56227242605985
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Selection.PickElementsByRectangle",
+        "Id": "cbb267ae9cb049babd3e4585b483ed8c",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 776.04083266033524,
+        "Y": 388.47190359876345
+      }
+    ],
+    "Annotations": [],
+    "X": -471.82363505837145,
+    "Y": -149.83778286107707,
+    "Zoom": 1.0542982150113263
+  }
+}

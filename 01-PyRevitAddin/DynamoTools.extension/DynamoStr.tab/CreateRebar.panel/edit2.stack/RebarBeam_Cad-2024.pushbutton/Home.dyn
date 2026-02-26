@@ -1,0 +1,2381 @@
+{
+  "Uuid": "31f7e05f-cbd8-477e-9b82-79de98b86bed",
+  "IsCustomNode": false,
+  "Description": null,
+  "Name": "Home",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [],
+  "Outputs": [
+    {
+      "Id": "40852c2b601740f6bab439822bdb1da3",
+      "Name": "Python Script",
+      "Type": "unknown",
+      "InitialValue": "",
+      "Description": "Runs an embedded IronPython script."
+    }
+  ],
+  "Nodes": [
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "72690a76-7d09-4d5e-b58a-116b68687034",
+      "FunctionType": "Graph",
+      "NodeType": "FunctionNode",
+      "Id": "26f45bc788aa47328a97ddf3a6141bc7",
+      "Inputs": [
+        {
+          "Id": "19443325ca894be6a9556a20957c3845",
+          "Name": "Run",
+          "Description": "bool\nDefault value : false",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "af32bcc1b8de4110ba79de044d85a50b",
+          "Name": "ShowSwitchAlert",
+          "Description": "bool\nDefault value : true",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "637c43bdedfe481dab794079f98d1340",
+          "Name": "Message",
+          "Description": "string\nDefault value : \"Select objects <Exit>:\"",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "008e77e68f6e4d4a9f341c56c46f5bf8",
+          "Name": "COM_Objects",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "UI to select objects in AutoCAD"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": true,
+      "Id": "47072518376e4200843106bda7aef277",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "2dccab512178414bb5b209ee58a2d71d",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Selection between a true and false."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "4835aa8d-a13d-4a3c-b0ac-2e39d1d83888",
+      "FunctionType": "Graph",
+      "NodeType": "FunctionNode",
+      "Id": "8696d0327ed4452d8a1f7a1ebf794a0a",
+      "Inputs": [
+        {
+          "Id": "6972d88b3b1b45389c0a19b658e5af4e",
+          "Name": "COM_Object",
+          "Description": "var",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "1cefd361305547f5bbee5883e8df872a",
+          "Name": "[0] Properties",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "f920c334e431491f99d656a54b4d6edb",
+          "Name": "[1] Values",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Get properties of COM Object"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "DSCore.List.GetItemAtIndex@var[]..[],int",
+      "Id": "5c595626eda74c6ba58e05735c3ceb60",
+      "Inputs": [
+        {
+          "Id": "fe9cbece9d3249a18d79930fc480a7c5",
+          "Name": "list",
+          "Description": "List to fetch an item from.\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "462c57d3241a41a09151511d5f8f17ea",
+          "Name": "index",
+          "Description": "Index of the item to be fetched.\n\nint",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "6a07a822fe7f45db8ea20c7964b388eb",
+          "Name": "item",
+          "Description": "Item in the list at the given index.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Returns an item from the given list that's located at the specified index.\n\nList.GetItemAtIndex (list: var[]..[], index: int): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "3;",
+      "Id": "4a7b7627b98a4d72b09776c3dce53c1e",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "6a580d9114dd4a0eba4a1a8dd29b8fa5",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "import clr\r\nimport System\r\nclr.AddReference('System.Windows.Forms')\r\nfrom System.Windows.Forms import MessageBox\r\n\r\nrun = IN[0]        # True → chạy chọn\r\nshow_msg = IN[1]   # True → hiện hướng dẫn\r\n\r\nacad = None\r\ntry:\r\n    acad = System.Runtime.InteropServices.Marshal.GetActiveObject(\"AutoCAD.Application\")\r\nexcept:\r\n    OUT = \"Không tìm thấy AutoCAD\"\r\n    quit()\r\n\r\ndoc = acad.ActiveDocument\r\nresult = []\r\n\r\nif run and doc:\r\n    try:\r\n        if show_msg:\r\n            MessageBox.Show(\r\n                \"Chuyển sang AutoCAD và PICK các đối tượng.\\nNhấn ENTER để kết thúc.\",\r\n                \"Select in AutoCAD\"\r\n            )\r\n\r\n        doc.Activate()\r\n\r\n        # Lưu users5 để không làm ảnh hưởng đến user\r\n        backup_var = doc.GetVariable(\"users5\")\r\n\r\n        # AutoLISP gọi ssget để pick đối tượng\r\n        \r\n        cmd = \"(and(princ\\042\" + \"\\042)(setq ss(ssget))(setvar\\042users5\\042\\042LinkDWGUIOK\\042)(command\\042_.Select\\042ss\\042\\042)) \"\r\n        \r\n        doc.SendCommand(cmd)\r\n\r\n        sel = doc.ActiveSelectionSet\r\n\r\n        if sel:\r\n            for obj in sel:\r\n                result.append(obj)\r\n\r\n        # Clear ss\r\n        #doc.SendCommand('(setq ss nil)')\r\n        #doc.SetVariable(\"users5\", backup_var)\r\n\r\n    except Exception as e:\r\n        result = str(e)\r\n\r\nOUT = result\r\n",
+      "VariableInputPorts": true,
+      "Id": "ce29fcca0ef7496bb7c3519947b1366a",
+      "Inputs": [
+        {
+          "Id": "83fe1c8348844da398a5d5df8ee2c6f8",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "9d931511636a43258a760413d2cf723d",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "9923bc5914184ed5a3db17e65d3c7074",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# --- Imports cơ bản ---\r\nimport clr\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\n\r\nimport Autodesk\r\nimport System\r\n\r\n# --- AutoCAD → Dynamo support ---\r\ndef _ToDSPoint(coord):\r\n    return Point.ByCoordinates(coord[0], coord[1], coord[2])\r\n\r\ndef _ToDSPoints2D(coords, z=0):\r\n    pts = []\r\n    for i in range(0, len(coords), 2):\r\n        pts.append(Point.ByCoordinates(coords[i], coords[i+1], z))\r\n    return pts\r\n\r\n# --- Convert Polyline ---\r\ndef _ACADConvertPolyline(vlo):\r\n    try:\r\n        # 2D polyline\r\n        if hasattr(vlo, \"Coordinates\"):\r\n            coords = list(vlo.Coordinates)\r\n            pts = _ToDSPoints2D(coords)\r\n            return PolyCurve.ByPoints(pts)\r\n\r\n        # 3D polyline\r\n        if hasattr(vlo, \"Coordinate\"):\r\n            coords = list(vlo.Coordinate)\r\n            pts = []\r\n            for i in range(0, len(coords), 3):\r\n                pts.append(Point.ByCoordinates(coords[i], coords[i+1], coords[i+2]))\r\n            return PolyCurve.ByPoints(pts)\r\n\r\n        # Nếu polyline phức tạp (LWPOLYLINE có bulge)\r\n        if hasattr(vlo, \"Explode\"):\r\n            pieces = []\r\n            for seg in vlo.Explode():\r\n                if hasattr(seg, \"StartPoint\") and hasattr(seg, \"EndPoint\"):\r\n                    p0 = _ToDSPoint(seg.StartPoint)\r\n                    p1 = _ToDSPoint(seg.EndPoint)\r\n                    pieces.append(Line.ByStartPointEndPoint(p0, p1))\r\n                seg.Delete()\r\n            return PolyCurve.ByJoinedCurves(pieces)\r\n\r\n    except:\r\n        return None\r\n\r\n\r\n# --- WRAP / UNWRAP ---\r\ndef _ForceList(obj):\r\n    if hasattr(obj, \"__iter__\"):\r\n        return obj\r\n    return [obj]\r\n\r\ndef unwrap(obj):\r\n    if hasattr(obj, \"__iter__\"):\r\n        return [unwrap(x) for x in obj]\r\n    if hasattr(obj, \"comobject\"):\r\n        return obj.comobject.Document.HandleToObject(obj.handle)\r\n    return obj\r\n\r\n\r\n# --- MAIN ---\r\nvlo = IN[0]\r\nrtn = []\r\n\r\nif vlo:\r\n    for obj in _ForceList(vlo):\r\n        cad_obj = unwrap(obj)\r\n\r\n        # chỉ xử lý polyline\r\n        if hasattr(cad_obj, \"ObjectName\") and \"Polyline\" in cad_obj.ObjectName:\r\n            poly = _ACADConvertPolyline(cad_obj)\r\n            if poly: rtn.append(poly)\r\n\r\n# chuẩn hóa output\r\nif len(rtn) == 1:\r\n    OUT = rtn[0]\r\nelif rtn == []:\r\n    OUT = None\r\nelse:\r\n    OUT = rtn\r\n",
+      "VariableInputPorts": true,
+      "Id": "40852c2b601740f6bab439822bdb1da3",
+      "Inputs": [
+        {
+          "Id": "5c4d1b3f569a40959333f509f68c0732",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "c86e4b33d3ce43ecafdcb025b160e259",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": true,
+      "Id": "0ab8c800bf26403e84082c82c0ecc731",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "2152e6a750d44da6b39fc51bd0f262f9",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Selection between a true and false."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "36954a1f-1673-42d1-8f79-78da77167e91",
+      "FunctionType": "Graph",
+      "NodeType": "FunctionNode",
+      "Id": "fb82a86d91374b7bbd0f037a736366ec",
+      "Inputs": [
+        {
+          "Id": "d1f9c6983a5b40819b862dc9a90d309e",
+          "Name": "COM_Block",
+          "Description": "var[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "92dab9c671c54895a076fc26f38d20ce",
+          "Name": "[0] BlockName",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "9a21e4d865244379a67fd5d8de58e5e3",
+          "Name": "[1] Layer",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "7cf384a72e4243a08badc7b7406d79bc",
+          "Name": "[2] InsertionPoint",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "98edfb1ad5d9445b8d0dc1136549c03a",
+          "Name": "[3] RotationInRadians",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "fbb7948e976e46eea04848560849562d",
+          "Name": "[4] X ScaleFactor",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "3cd5a26c36c9421e9595b17a7d57049b",
+          "Name": "[5] Y ScaleFactor",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "d9d130acd71345f9878a18f92f2bacc7",
+          "Name": "[6] Z ScaleFactor",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "3a81c692dd5443ac8405854b9fc3cec1",
+          "Name": "[7] COM NestAttributes",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Get COM Block properties"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": true,
+      "Id": "1df43e5e9e7a468a9710b1b4db568494",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "68352704c1534a0aa5c219b7f2b046cb",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Selection between a true and false."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "a8c00670-1953-492b-80ca-0bf86b547d54",
+      "FunctionType": "Graph",
+      "NodeType": "FunctionNode",
+      "Id": "f329b617e57e4cbc84109605fe03131d",
+      "Inputs": [
+        {
+          "Id": "420b191ceb954a98811bf31b5d1c4691",
+          "Name": "COM_Circle",
+          "Description": "var[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "44b5d88f539941ceb9c35931db7243b5",
+          "Name": "[0] Center",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "f63c9222557d4e4f9fce2973f4a77b63",
+          "Name": "[1] Radius",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "ba9ba5adb93d4bcda2d4db3c27610aa7",
+          "Name": "[2] Layer",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "65c4349483934d9cab397ad0665ef7b1",
+          "Name": "[3] Length",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "4476e9aae1de408ebf7939830ddeba79",
+          "Name": "[4] Area",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Get COM circle properties"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "36954a1f-1673-42d1-8f79-78da77167e91",
+      "FunctionType": "Graph",
+      "NodeType": "FunctionNode",
+      "Id": "6c4b75afee474113b0e6c5457cb2024d",
+      "Inputs": [
+        {
+          "Id": "bde2eb8f7fec430b90cd792e7bac8242",
+          "Name": "COM_Block",
+          "Description": "var[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "dd611c32ae8b4f5399ecfd32f534c0fc",
+          "Name": "[0] BlockName",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "f7f0e3660b614db28ad79100c7eed14e",
+          "Name": "[1] Layer",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "6ab32b2ffb00439897c128109aaa90f4",
+          "Name": "[2] InsertionPoint",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "194361d3f84b47cb8b403411860c2d0f",
+          "Name": "[3] RotationInRadians",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "c8f9c7d8374840fbb11264a97f45c157",
+          "Name": "[4] X ScaleFactor",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "96db0486452d4afe9bfb3769baa3b909",
+          "Name": "[5] Y ScaleFactor",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "ffdf899095e546848a0439b09b85ce11",
+          "Name": "[6] Z ScaleFactor",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "6a7df7af83fb4deba5e95bef7f45569e",
+          "Name": "[7] COM NestAttributes",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Get COM Block properties"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "a2722560-6079-42f8-bb08-461ae1debed5",
+      "FunctionType": "Graph",
+      "NodeType": "FunctionNode",
+      "Id": "8335343821fb434a8190ea9c0614489f",
+      "Inputs": [
+        {
+          "Id": "8058028f15524a729aba9e574a2c4fe5",
+          "Name": "COM_AttBlock",
+          "Description": "var[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "950b5b661f1047899424b7cc3e6167c4",
+          "Name": "COM NestAttributes",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Get nest attribute COM object(s) from parent block"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "41f2a4a8-11b4-484d-bd33-4a3411060a1a",
+      "FunctionType": "Graph",
+      "NodeType": "FunctionNode",
+      "Id": "29fee5d9d5ee4d8e9014a6d58896cfdd",
+      "Inputs": [
+        {
+          "Id": "3f0df90afb9c40eb8acd505b4618dd1a",
+          "Name": "COM_MText",
+          "Description": "var[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "8878789bfa4b4bd4902b73a9c5f9692b",
+          "Name": "[0] Content",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "c00eeb42f7494c3cbe53d0086039b6be",
+          "Name": "[1] TextStyleName",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "621cd2961740451e8ee731ca5a3f420f",
+          "Name": "[2] Layer",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "4feb7361fdf9488a891170733ee1f9f3",
+          "Name": "[3] AlignmentPoint",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "891237ea1c5d4e4fbc8983f0f1223b0a",
+          "Name": "[4] RotationInRadians",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "a965f8d608c54007a9ccabdc26c27983",
+          "Name": "[5] Height",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "11ca7bc99f1b4895b06f2fd0409ff866",
+          "Name": "[6] PureTextContent",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Get COM TEXT/MTEXT properties"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "25540842-8fe5-49b3-a4cb-6788982bb2f0",
+      "FunctionType": "Graph",
+      "NodeType": "FunctionNode",
+      "Id": "cbb3b1f3d6e34a68b303b3088079d77b",
+      "Inputs": [
+        {
+          "Id": "596eaae628ef4c56817a0e224a981c31",
+          "Name": "COM_MLeader",
+          "Description": "var[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "542cefde8a3141d79d19800381124383",
+          "Name": "[0] LeaderlineVertice",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "411342ed2d8942f596617c823df66c29",
+          "Name": "[1] Content",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "0f9c52fca42444a1b33378d98a66ba1b",
+          "Name": "[2] PureTextContent",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "ed8ded676eec49b1a73e797d3b6eeafc",
+          "Name": "[3] TextStyle",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "610d83d48abe46c6ae4f4ef6ac768c9c",
+          "Name": "[4] TextHeight",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "3c85ac677b234ac38a6c4e379bc839f3",
+          "Name": "[5] BlockName",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "942f50176529491c80e246ff8c6de210",
+          "Name": "[6] BlockScale",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "aced175ea4ac45c49e16677c34e6a8a7",
+          "Name": "[7] NestAttributeTags",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "120732320c8748fdb4c4dce11297c3e7",
+          "Name": "[8] NestAttributeContents",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Get COM MLeader properties"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "c11c09d0-843f-41ce-8ead-fa8f6ac1f8b5",
+      "FunctionType": "Graph",
+      "NodeType": "FunctionNode",
+      "Id": "cf2d1e326c344a11b3e948661aa1604e",
+      "Inputs": [
+        {
+          "Id": "68c027f12ce64ba88bfe9a1e8e4e36b1",
+          "Name": "COM_Attribute",
+          "Description": "var",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "9b80f55dc5654d87a8185a4f1f26b0d9",
+          "Name": "[0] TagString",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "343cb64a7ff94d7aad55de7046bb6b99",
+          "Name": "[1] Content",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "f743da0296dd476f90d840e759d34293",
+          "Name": "[2] TextStyleName",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "f9dbd593355e47e58fd4124b50e1d64f",
+          "Name": "[3] Layer",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "578a31157b3a4822ab640de5f5d7a355",
+          "Name": "[4] AlignmentPoint",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "9c2b5a010f7a4d6086a44e50a1f3e8d3",
+          "Name": "[5] RotationInRadians",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "b3741f2fa03045b0ae8a55ee3ced1762",
+          "Name": "[6] Height",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Get COM NestAttribute/AttributeDefinition properties"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "ddabed56-9f3b-4c85-9fec-ba992787a43d",
+      "FunctionType": "Graph",
+      "NodeType": "FunctionNode",
+      "Id": "adb20ed5951548e5a566ac7528845c79",
+      "Inputs": [
+        {
+          "Id": "53ba2cdbc71545088f8280d714d40952",
+          "Name": "COM_DynBlock",
+          "Description": "var",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "3f6c8ab01fdc4d5fadaaeae51011c3de",
+          "Name": "PropertyNames",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "42f8a9d7831346aab5660aee7e27601a",
+          "Name": "PropertyValues",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "f437f819b179431d8749d7a1fbbe58a3",
+          "Name": "AllowedValues",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Get the proerties of AutoCAD Dynamic Block"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "a2722560-6079-42f8-bb08-461ae1debed5",
+      "FunctionType": "Graph",
+      "NodeType": "FunctionNode",
+      "Id": "8ecce5df31314fb88c09f08a40ebc019",
+      "Inputs": [
+        {
+          "Id": "44ceed8bb1b946728f4d7f0d071a7fe9",
+          "Name": "COM_AttBlock",
+          "Description": "var[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "66c10e97fad24acb999988c69f3d2768",
+          "Name": "COM NestAttributes",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Get nest attribute COM object(s) from parent block"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "003da7d7-57cf-4cfa-b92b-dd84b7a97cff",
+      "FunctionType": "Graph",
+      "NodeType": "FunctionNode",
+      "Id": "7de1bca111bf43efb131a6075c40dc06",
+      "Inputs": [
+        {
+          "Id": "1198db8f56b947ca94a80588bb8cf8c1",
+          "Name": "Run",
+          "Description": "bool\nDefault value : false",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "1621374453b646349792fcdf2f0a79ca",
+          "Name": "COM_DBXDocument",
+          "Description": "var",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "68d661de1a114e3faba839a4b08a0014",
+          "Name": "LayoutName",
+          "Description": "string\nDefault value : \"ModelSpace\"",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "1715106452b047988c56fac9061fa1bf",
+          "Name": "[0] COM Points",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "126e32ec48b741178b7926c815269a40",
+          "Name": "[1] COM Lines",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "13cfa2e2b999434bb306108987139a11",
+          "Name": "[2] COM Arcs",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "4d2d27331fdf475186f7325d1a08e3fe",
+          "Name": "[3] COM Circles",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "a88b4f3782d64b8e9c1b05d81aed2597",
+          "Name": "[4] COM Ellipses",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "1069a885585f420d8dd6ff3aac9163a8",
+          "Name": "[5] COM Poly/Spline",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "b0519bebdd5e46b398b5e36b8deda5ac",
+          "Name": "[6] COM 3DFace/Solids",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "1fa16e50fbd54653b4b83dc4994f36d7",
+          "Name": "[7] COM Meshes",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "9f71d8f853cb40d19e2945de367f94d4",
+          "Name": "[8] COM Regions",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "91db5ed750c04e1f89710938a10276e2",
+          "Name": "[9] COM Hatches",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "183148ffeb354825beb333b8fc0cecb7",
+          "Name": "[10] COM 3DSolids",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "d0da232369804c8fa05de035ee426639",
+          "Name": "[11] COM Texts",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "d0fbc4a99d714689953ad25a18f1d2f4",
+          "Name": "[12] COM MTexts",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "b35dd9ffed264d87a6df27775d3acb01",
+          "Name": "[13] COM Blocks/MInserts",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "df5b92c0bd9048988893f84cecad751c",
+          "Name": "[14] COM NestAttributes",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "8dd67ba09d774eaf98e9b25bdc15d04e",
+          "Name": "[15] COM AttributeDefinitions",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "19905d2b52b147b5abb6bfe8c2eaf1e3",
+          "Name": "[16] COM AcDbTables",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "8600a4f029db4ddab74f33a0a173a127",
+          "Name": "[17] COM Leaders",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "23f399570ba64e90a9bdff3244c9c2f9",
+          "Name": "[18] COM MLeaders",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "2cbe8f76c1cb4b00ba38e71141b17d02",
+          "Name": "[19] COM Others",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "96122691ac1e41a28f13fa391b309ba3",
+          "Name": "[20] COM AllObjects",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Get all COM Objects from current DBX drawing"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "987d4fc3-bc5e-4828-a723-8029a9bfc1fa",
+      "FunctionType": "Graph",
+      "NodeType": "FunctionNode",
+      "Id": "7c692ed04de54ee78fb6dbf287332859",
+      "Inputs": [
+        {
+          "Id": "ba9525123f8847d69e537ac7295e12d6",
+          "Name": "Run",
+          "Description": "bool\nDefault value : false",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "a22c3b79b75b405cb6239465345f3c65",
+          "Name": "ActiveSSET",
+          "Description": "bool\nDefault value : true",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "7ad9224f4bbe480e934a1cc7237d7d3b",
+          "Name": "[0] COM Points",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "4c0685dafcde436a8dc4c62f70658707",
+          "Name": "[1] COM Lines",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "3fce831502fb4ebdbd8858f80b9f48f7",
+          "Name": "[2] COM Arcs",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "d12f98f64a1e444bba531242371b8e23",
+          "Name": "[3] COM Circles",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "8cf3354369354ec29dcf6ec6fcfb88d1",
+          "Name": "[4] COM Ellipses",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "93df3c515286487598e5d3c58b227d35",
+          "Name": "[5] COM Poly/Splines",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "5bcd6ab65e6e4a208f61b424681c523e",
+          "Name": "[6] COM 3DFace/Solids",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "882105f286b6450e86071411e92d8798",
+          "Name": "[7] COM Meshes",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "20c07ecd1af142bd9c44d44a3a69e361",
+          "Name": "[8] COM Regions",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "6ad2b4b0d4d24c27956b028589ed55de",
+          "Name": "[9] COM Hatches",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "6848ae75be5142059f84388f2ad5fd0e",
+          "Name": "[10] COM 3DSolids",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "b469fb0219784139a6b75c1379d8e4bc",
+          "Name": "[11] COM Texts",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "9e0a0cfcc45646eeb03aa199b133ed84",
+          "Name": "[12] COM MTexts",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "068c93838dba4896884c049073d61fae",
+          "Name": "[13] COM Blocks/MInserts",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "02e7b4c21b2e4efd802bf10653adea55",
+          "Name": "[14] COM NestAttributes",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "c2ce678d0808497b9d6ddbfdd63eff99",
+          "Name": "[15] COM AttributeDefinitions",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "992a85e178384c36b6b9564fa359b874",
+          "Name": "[16] COM AcDbTables",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "7abd3b3ec128498889875a8c1ab59a27",
+          "Name": "[17] COM Leaders",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "94529b83b7d84258878139c108d8ee31",
+          "Name": "[18] COM MLeaders",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "d8cb16b79cff46e3acaa5627e1e78a23",
+          "Name": "[19] COM Others",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "82ac6bbe2fbf414490890932ded1edff",
+          "Name": "[20] COM AllObjects",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Get various objects (points, blocks, attributes, text, mtexts, polylines, spline, 3dfaces) from AutoCAD Active SelectionSet or layout, need to generate an AutoCAD selectionset if using active selectionset"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "4835aa8d-a13d-4a3c-b0ac-2e39d1d83888",
+      "FunctionType": "Graph",
+      "NodeType": "FunctionNode",
+      "Id": "4fcca14c649c4304a0b8ad2b8b764d78",
+      "Inputs": [
+        {
+          "Id": "a2646dd166594ac9b10f6e9777f5ff61",
+          "Name": "COM_Object",
+          "Description": "var",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "718cbcd6897a4b6d8a845ae2c6c57aaa",
+          "Name": "[0] Properties",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "b0c17c1d52a64ed6a9d421adc209e607",
+          "Name": "[1] Values",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Get properties of COM Object"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Python Script for Dynamo: Input IN[0] as wrapped COM Block object from AutoCAD, unwrap, explode and extract only circles\r\n# Outputs: List of DS Circle geometries\r\n\r\nimport clr\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\n\r\nfrom System import Math\r\n\r\n# ------------------- Unwrap from Segment 1 -------------------\r\ndef unwrap(lst):\r\n    if hasattr(lst, \"__iter__\"):\r\n        rtn = []\r\n        for x in lst:\r\n            rtn.append(unwrap(x))\r\n    elif hasattr(lst, \"comobject\") and hasattr(lst, \"layer\") and hasattr(lst, \"handle\"):\r\n        # Lấy object gốc từ handle\r\n        doc = lst.comobject.Document  # Document từ comobject gốc\r\n        rtn = doc.HandleToObject(lst.handle)\r\n    else:\r\n        rtn = lst\r\n    return rtn\r\n\r\n# ------------------- Helper -------------------\r\ndef ToDSPoint(acad_coord):\r\n    return Point.ByCoordinates(acad_coord[0], acad_coord[1], acad_coord[2])\r\n\r\ndef GetLayerLock(acad_doc, layer_name, cache):\r\n    if layer_name in cache:\r\n        return cache[layer_name]\r\n    try:\r\n        layer = acad_doc.Layers.Item(layer_name)\r\n        locked = layer.Lock\r\n        cache[layer_name] = locked\r\n        return locked\r\n    except:\r\n        return False\r\n\r\ndef DuplicateAndExplode(obj):\r\n    try:\r\n        obj.Copy()\r\n        d = obj.Document\r\n        d.SendCommand(\"Select (entlast)  \")\r\n        d.SendCommand(\"Explode  \")\r\n        d.SendCommand(\"Select (ssget \\\"_p\\\")  \")\r\n        return d.ActiveSelectionSet\r\n    except:\r\n        return None\r\n\r\n# ------------------- Convert only Circle to DS Circle -------------------\r\ndef ConvertCircle(obj):\r\n    try:\r\n        center = ToDSPoint(obj.Center)\r\n        radius = obj.Radius\r\n        return Circle.ByCenterPointRadius(center, radius)\r\n    except: return None\r\n\r\n# ------------------- Main recursive to get only Circles from Block -------------------\r\ndef GetDSCircles(obj, explode_blocks=True, lock_cache=None, acad_doc=None):\r\n    circles = []\r\n    if lock_cache is None: lock_cache = {}\r\n    if acad_doc is None: acad_doc = obj.Document\r\n    if GetLayerLock(acad_doc, obj.Layer, lock_cache):\r\n        return circles\r\n\r\n    name = obj.ObjectName\r\n    try:\r\n        if name == \"AcDbCircle\":\r\n            c = ConvertCircle(obj)\r\n            if c: circles.append(c)\r\n        elif name == \"AcDbBlockReference\" and explode_blocks:\r\n            exploded = DuplicateAndExplode(obj)\r\n            if exploded:\r\n                for i in range(exploded.Count):\r\n                    sub = exploded.Item(i)\r\n                    circles.extend(GetDSCircles(sub, explode_blocks, lock_cache, acad_doc))\r\n                    sub.Delete()\r\n    except: pass\r\n    return circles\r\n\r\n# ------------------- Main -------------------\r\nvlo = IN[0]  # Wrapped COM Block object (e.g., from unwrap or previous node)\r\noutput = []\r\n\r\nif vlo is not None:\r\n    try:\r\n        # Unwrap để lấy object gốc\r\n        unwrapped = unwrap(vlo)\r\n        lock_cache = {}\r\n        acad_doc = unwrapped.Document  # Bây giờ dùng unwrapped\r\n        output = GetDSCircles(unwrapped, True, lock_cache, acad_doc)\r\n    except Exception as ex:\r\n        output = str(ex)\r\n\r\nOUT = output",
+      "VariableInputPorts": true,
+      "Id": "64e699d58b904936be859eca835eb058",
+      "Inputs": [
+        {
+          "Id": "c435a17bc96b40a5af90c1847506d756",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "cc681b4a4a04488dae1695d8514a5524",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "1bec43ac-d261-46ae-a759-0348343c8f18",
+      "FunctionType": "Graph",
+      "NodeType": "FunctionNode",
+      "Id": "5146f8c170314126b3d5cf6505021255",
+      "Inputs": [
+        {
+          "Id": "003f561bc924469085aa8ef900f24178",
+          "Name": "COM_Leader",
+          "Description": "var[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "f4dfb2ed43114367896235462cb9feca",
+          "Name": "[0] LeaderlineVertice",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "23454da30228493fb0a5d57ad5135376",
+          "Name": "[1] Content",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "a93db04e14a14167bbe7b59629b730ba",
+          "Name": "[2] PureTextContent",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "d526635dd0004e75b6cf4aae0b35b350",
+          "Name": "[3] TextStyle",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "98b4fb6698934b19922ccda6ed6efd09",
+          "Name": "[4] TextHeight",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "2ec7decb34dd4417a0b3b0f0433b9508",
+          "Name": "[5] COM MText/Block",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "fb7887cbbb804dd4889f4e312e753a01",
+          "Name": "[6] BlockName",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "6d11e66090b04ca28ebe97bf1e9f2ca6",
+          "Name": "[7] COM NestAttributes",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Get COM Leader properties"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "a[1];",
+      "Id": "c1346329360043f28652b47e57dc0ed4",
+      "Inputs": [
+        {
+          "Id": "a88e46dc1e3b4dd6aba2ee71c414c507",
+          "Name": "a",
+          "Description": "a",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "1df5531682d54d72b9c5dfdd96a6cc9e",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "4835aa8d-a13d-4a3c-b0ac-2e39d1d83888",
+      "FunctionType": "Graph",
+      "NodeType": "FunctionNode",
+      "Id": "6e42131a6d724cfbbdc5d695e71af98c",
+      "Inputs": [
+        {
+          "Id": "406861f5059b4bfc9c0ffcd1c898635d",
+          "Name": "COM_Object",
+          "Description": "var",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "d265819a25ad4701ae9cbfdc8161ffc1",
+          "Name": "[0] Properties",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "eb77a0b140934d11a98dd05c6848ffd3",
+          "Name": "[1] Values",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Get properties of COM Object"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Python Script for Dynamo: Input IN[0] as wrapped COM Block object from AutoCAD, unwrap, explode and extract only leaders\r\n# Outputs: List of DS PolyCurve geometries representing leaders\r\n\r\nimport clr\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\n\r\n\r\nfrom System import Math\r\n\r\n# ------------------- Unwrap from Segment 1 -------------------\r\ndef unwrap(lst):\r\n    if hasattr(lst, \"__iter__\"):\r\n        rtn = []\r\n        for x in lst:\r\n            rtn.append(unwrap(x))\r\n    elif hasattr(lst, \"comobject\") and hasattr(lst, \"layer\") and hasattr(lst, \"handle\"):\r\n        # Lấy object gốc từ handle\r\n        doc = lst.comobject.Document  # Document từ comobject gốc\r\n        rtn = doc.HandleToObject(lst.handle)\r\n    else:\r\n        rtn = lst\r\n    return rtn\r\n\r\n# ------------------- Helper from Segment 2 -------------------\r\ndef _ToDSPoints3D(dat):\r\n    rtn = []\r\n    m = -3\r\n    n = len(dat)-2\r\n    for abc in dat: \r\n        m+= 3\r\n        if m < n:\r\n            px=Point.ByCoordinates(dat[m], dat[m+1], dat[m+2])\r\n            rtn.append(px)\r\n    return rtn\r\n\r\ndef ToDSPoint(acad_coord):\r\n    return Point.ByCoordinates(acad_coord[0], acad_coord[1], acad_coord[2])\r\n\r\ndef GetLayerLock(acad_doc, layer_name, cache):\r\n    if layer_name in cache:\r\n        return cache[layer_name]\r\n    try:\r\n        layer = acad_doc.Layers.Item(layer_name)\r\n        locked = layer.Lock\r\n        cache[layer_name] = locked\r\n        return locked\r\n    except:\r\n        return False\r\n\r\ndef DuplicateAndExplode(obj):\r\n    try:\r\n        obj.Copy()\r\n        d = obj.Document\r\n        d.SendCommand(\"Select (entlast)  \")\r\n        d.SendCommand(\"Explode  \")\r\n        d.SendCommand(\"Select (ssget \\\"_p\\\")  \")\r\n        return d.ActiveSelectionSet\r\n    except:\r\n        return None\r\n\r\n# ------------------- Convert only Leader to DS PolyCurve -------------------\r\ndef ConvertLeader(obj):\r\n    try:\r\n        # For AcDbLeader: Coordinates is flat array\r\n        coords = list(obj.Coordinates)  # Convert variant to list\r\n        points = _ToDSPoints3D(coords)\r\n        if len(points) < 2:\r\n            return None\r\n        # Create lines between points and join to PolyCurve\r\n        lines = []\r\n        for i in range(len(points) - 1):\r\n            lines.append(Line.ByStartPointEndPoint(points[i], points[i+1]))\r\n        return PolyCurve.ByJoinedCurves(lines)\r\n    except: return None\r\n\r\n# ------------------- Handle MLeader (basic: extract leader lines) -------------------\r\ndef ConvertMLeader(obj):\r\n    try:\r\n        curves = []\r\n        # MLeader có multiple leader lines\r\n        for idx in range(obj.LeaderCount):\r\n            verts = list(obj.GetLeaderVertices(idx))  # flat array\r\n            points = _ToDSPoints3D(verts)\r\n            if len(points) < 2:\r\n                continue\r\n            lines = []\r\n            for i in range(len(points) - 1):\r\n                lines.append(Line.ByStartPointEndPoint(points[i], points[i+1]))\r\n            curves.append(PolyCurve.ByJoinedCurves(lines))\r\n        if curves:\r\n            return curves  # list of PolyCurves if multiple\r\n        return None\r\n    except: return None\r\n\r\n# ------------------- Main recursive to get only Leaders from Block -------------------\r\ndef GetDSLeaders(obj, explode_blocks=True, lock_cache=None, acad_doc=None):\r\n    leaders = []\r\n    if lock_cache is None: lock_cache = {}\r\n    if acad_doc is None: acad_doc = obj.Document\r\n    if GetLayerLock(acad_doc, obj.Layer, lock_cache):\r\n        return leaders\r\n\r\n    name = obj.ObjectName\r\n    try:\r\n        if name == \"AcDbLeader\":\r\n            c = ConvertLeader(obj)\r\n            if c: leaders.append(c)\r\n        elif name == \"AcDbMLeader\":\r\n            c = ConvertMLeader(obj)\r\n            if c:\r\n                if isinstance(c, list):\r\n                    leaders.extend(c)\r\n                else:\r\n                    leaders.append(c)\r\n        elif name == \"AcDbBlockReference\" and explode_blocks:\r\n            exploded = DuplicateAndExplode(obj)\r\n            if exploded:\r\n                for i in range(exploded.Count):\r\n                    sub = exploded.Item(i)\r\n                    leaders.extend(GetDSLeaders(sub, explode_blocks, lock_cache, acad_doc))\r\n                    sub.Delete()\r\n    except: pass\r\n    return leaders\r\n\r\n# ------------------- Main -------------------\r\nvlo = IN[0]  # Wrapped COM Block object (e.g., from unwrap or previous node)\r\noutput = []\r\n\r\nif vlo is not None:\r\n    try:\r\n        # Unwrap để lấy object gốc\r\n        unwrapped = unwrap(vlo)\r\n        lock_cache = {}\r\n        acad_doc = unwrapped.Document  # Bây giờ dùng unwrapped\r\n        output = GetDSLeaders(unwrapped, True, lock_cache, acad_doc)\r\n    except Exception as ex:\r\n        output = str(ex)\r\n\r\nOUT = output",
+      "VariableInputPorts": true,
+      "Id": "0f6fc508e94441fd99901ca66f85991a",
+      "Inputs": [
+        {
+          "Id": "177fc9f399194f6db5ba2e4d917e1655",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "1eb3373cafc14b679edc817b1fd3b5c9",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "import clr\r\nimport System\r\nclr.AddReference('System.Windows.Forms')\r\nfrom System.Windows.Forms import MessageBox\r\n\r\nrun = IN[0]        # True → chạy chọn\r\nshow_msg = IN[1]   # True → hiện hướng dẫn\r\n\r\nacad = None\r\ntry:\r\n    acad = System.Runtime.InteropServices.Marshal.GetActiveObject(\"AutoCAD.Application\")\r\nexcept:\r\n    OUT = \"Không tìm thấy AutoCAD\"\r\n    quit()\r\n\r\ndoc = acad.ActiveDocument\r\nresult = []\r\n\r\nif run and doc:\r\n    try:\r\n        if show_msg:\r\n            MessageBox.Show(\r\n                \"Chuyển sang AutoCAD và PICK các đối tượng.\\nNhấn ENTER để kết thúc.\",\r\n                \"Select in AutoCAD\"\r\n            )\r\n\r\n        doc.Activate()\r\n\r\n        # Lưu users5 để không làm ảnh hưởng đến user\r\n        backup_var = doc.GetVariable(\"users5\")\r\n\r\n        # AutoLISP gọi ssget để pick đối tượng\r\n        \r\n        cmd = \"(and(princ\\042\" + \"\\042)(setq ss(ssget))(setvar\\042users5\\042\\042LinkDWGUIOK\\042)(command\\042_.Select\\042ss\\042\\042)) \"\r\n        \r\n        doc.SendCommand(cmd)\r\n\r\n        sel = doc.ActiveSelectionSet\r\n\r\n        if sel:\r\n            for obj in sel:\r\n                result.append(obj)\r\n\r\n        # Clear ss\r\n        #doc.SendCommand('(setq ss nil)')\r\n        #doc.SetVariable(\"users5\", backup_var)\r\n\r\n    except Exception as e:\r\n        result = str(e)\r\n\r\nOUT = result\r\n",
+      "VariableInputPorts": true,
+      "Id": "18f9180632cf49eab38ee16d085a78c7",
+      "Inputs": [
+        {
+          "Id": "0e11bf1e5f794114a6b9749240188631",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "a9177a61b72d44379a8fb1f638a36c0f",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "08c4e9de896044e98c7bd198e70905b2",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": true,
+      "Id": "ea97763ef7e0407d95e88b1700d6dec2",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "d04bc3beb8504a1a9cf0ddd17401fd6a",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Selection between a true and false."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "72690a76-7d09-4d5e-b58a-116b68687034",
+      "FunctionType": "Graph",
+      "NodeType": "FunctionNode",
+      "Id": "99d5be832a4e4cd787b7af5eebd3fb1c",
+      "Inputs": [
+        {
+          "Id": "9490507668c24bbe9c83df0e95277c66",
+          "Name": "Run",
+          "Description": "bool\nDefault value : false",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "b44645554d1e42168b1cdb68c4ad6586",
+          "Name": "ShowSwitchAlert",
+          "Description": "bool\nDefault value : true",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "1ceea2a8ab4a4c27a7c47ce397914d92",
+          "Name": "Message",
+          "Description": "string\nDefault value : \"Select objects <Exit>:\"",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "89813a187aba459098970b7134195fa1",
+          "Name": "COM_Objects",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "UI to select objects in AutoCAD"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "00b4aae5-0544-4c33-bd58-27775bece73b",
+      "FunctionType": "Graph",
+      "NodeType": "FunctionNode",
+      "Id": "62c2aadecd394f95b612f23ac84edec9",
+      "Inputs": [
+        {
+          "Id": "26b94cfe943a491ab435a63fd931c706",
+          "Name": "Run",
+          "Description": "bool\nDefault value : false",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "47abe68a082c46fbb16004240f546c52",
+          "Name": "ShowSwitchAlert",
+          "Description": "bool\nDefault value : true",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "fce05a60f5c2403187f4ead0d1e8f465",
+          "Name": "Message",
+          "Description": "string\nDefault value : \"Pick Object <Exit>:\"",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "c43b3d9f319641449ff6289d563e6e8e",
+          "Name": "COM_Object",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "UI to pick an object in AutoCAD"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "00b4aae5-0544-4c33-bd58-27775bece73b",
+      "FunctionType": "Graph",
+      "NodeType": "FunctionNode",
+      "Id": "749279bdc23f4aa7a98f348f57a91da8",
+      "Inputs": [
+        {
+          "Id": "12fae492dc254dbabe7d9391b63902ae",
+          "Name": "Run",
+          "Description": "bool\nDefault value : false",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "96e6764bafcb4983bd492a3d26b0b5d9",
+          "Name": "ShowSwitchAlert",
+          "Description": "bool\nDefault value : true",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "56c0bdcaa0a94b93a3098e1190fc1c12",
+          "Name": "Message",
+          "Description": "string\nDefault value : \"Pick Object <Exit>:\"",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "14dbee4c04a441a7b875a8001817c3a6",
+          "Name": "COM_Object",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "UI to pick an object in AutoCAD"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Python Script for Dynamo: Input IN[0] as wrapped COM Block object from AutoCAD, unwrap, explode and extract only leaders\r\n# Outputs: List of DS PolyCurve geometries representing leaders\r\n\r\nimport clr\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\n\r\n\r\nfrom System import Math\r\n\r\n# ------------------- Unwrap from Segment 1 -------------------\r\ndef unwrap(lst):\r\n    if hasattr(lst, \"__iter__\"):\r\n        rtn = []\r\n        for x in lst:\r\n            rtn.append(unwrap(x))\r\n    elif hasattr(lst, \"comobject\") and hasattr(lst, \"layer\") and hasattr(lst, \"handle\"):\r\n        # Lấy object gốc từ handle\r\n        doc = lst.comobject.Document  # Document từ comobject gốc\r\n        rtn = doc.HandleToObject(lst.handle)\r\n    else:\r\n        rtn = lst\r\n    return rtn\r\n\r\n# ------------------- Helper from Segment 2 -------------------\r\ndef _ToDSPoints3D(dat):\r\n    rtn = []\r\n    m = -3\r\n    n = len(dat)-2\r\n    for abc in dat: \r\n        m+= 3\r\n        if m < n:\r\n            px=Point.ByCoordinates(dat[m], dat[m+1], dat[m+2])\r\n            rtn.append(px)\r\n    return rtn\r\n\r\ndef ToDSPoint(acad_coord):\r\n    return Point.ByCoordinates(acad_coord[0], acad_coord[1], acad_coord[2])\r\n\r\ndef GetLayerLock(acad_doc, layer_name, cache):\r\n    if layer_name in cache:\r\n        return cache[layer_name]\r\n    try:\r\n        layer = acad_doc.Layers.Item(layer_name)\r\n        locked = layer.Lock\r\n        cache[layer_name] = locked\r\n        return locked\r\n    except:\r\n        return False\r\n\r\ndef DuplicateAndExplode(obj):\r\n    try:\r\n        obj.Copy()\r\n        d = obj.Document\r\n        d.SendCommand(\"Select (entlast)  \")\r\n        d.SendCommand(\"Explode  \")\r\n        d.SendCommand(\"Select (ssget \\\"_p\\\")  \")\r\n        return d.ActiveSelectionSet\r\n    except:\r\n        return None\r\n\r\n# ------------------- Convert only Leader to DS PolyCurve -------------------\r\ndef ConvertLeader(obj):\r\n    try:\r\n        # For AcDbLeader: Coordinates is flat array\r\n        coords = list(obj.Coordinates)  # Convert variant to list\r\n        points = _ToDSPoints3D(coords)\r\n        if len(points) < 2:\r\n            return None\r\n        # Create lines between points and join to PolyCurve\r\n        lines = []\r\n        for i in range(len(points) - 1):\r\n            lines.append(Line.ByStartPointEndPoint(points[i], points[i+1]))\r\n        return PolyCurve.ByJoinedCurves(lines)\r\n    except: return None\r\n\r\n# ------------------- Handle MLeader (basic: extract leader lines) -------------------\r\ndef ConvertMLeader(obj):\r\n    try:\r\n        curves = []\r\n        # MLeader có multiple leader lines\r\n        for idx in range(obj.LeaderCount):\r\n            verts = list(obj.GetLeaderVertices(idx))  # flat array\r\n            points = _ToDSPoints3D(verts)\r\n            if len(points) < 2:\r\n                continue\r\n            lines = []\r\n            for i in range(len(points) - 1):\r\n                lines.append(Line.ByStartPointEndPoint(points[i], points[i+1]))\r\n            curves.append(PolyCurve.ByJoinedCurves(lines))\r\n        if curves:\r\n            return curves  # list of PolyCurves if multiple\r\n        return None\r\n    except: return None\r\n\r\n# ------------------- Main recursive to get only Leaders from Block -------------------\r\ndef GetDSLeaders(obj, explode_blocks=True, lock_cache=None, acad_doc=None):\r\n    leaders = []\r\n    if lock_cache is None: lock_cache = {}\r\n    if acad_doc is None: acad_doc = obj.Document\r\n    if GetLayerLock(acad_doc, obj.Layer, lock_cache):\r\n        return leaders\r\n\r\n    name = obj.ObjectName\r\n    try:\r\n        if name == \"AcDbLeader\":\r\n            c = ConvertLeader(obj)\r\n            if c: leaders.append(c)\r\n        elif name == \"AcDbMLeader\":\r\n            c = ConvertMLeader(obj)\r\n            if c:\r\n                if isinstance(c, list):\r\n                    leaders.extend(c)\r\n                else:\r\n                    leaders.append(c)\r\n        elif name == \"AcDbBlockReference\" and explode_blocks:\r\n            exploded = DuplicateAndExplode(obj)\r\n            if exploded:\r\n                for i in range(exploded.Count):\r\n                    sub = exploded.Item(i)\r\n                    leaders.extend(GetDSLeaders(sub, explode_blocks, lock_cache, acad_doc))\r\n                    sub.Delete()\r\n    except: pass\r\n    return leaders\r\n\r\n# ------------------- Main -------------------\r\nvlo = IN[0]  # Wrapped COM Block object (e.g., from unwrap or previous node)\r\noutput = []\r\n\r\nif vlo is not None:\r\n    try:\r\n        # Unwrap để lấy object gốc\r\n        unwrapped = unwrap(vlo)\r\n        lock_cache = {}\r\n        acad_doc = unwrapped.Document  # Bây giờ dùng unwrapped\r\n        output = GetDSLeaders(unwrapped, True, lock_cache, acad_doc)\r\n    except Exception as ex:\r\n        output = str(ex)\r\n\r\nOUT = output",
+      "VariableInputPorts": true,
+      "Id": "388b4022d20c475eb555d05801bd7f6d",
+      "Inputs": [
+        {
+          "Id": "d05a891a068a4d3a827297a029fe18fe",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "75199361ebc14a5285c579970e6b990e",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "008e77e68f6e4d4a9f341c56c46f5bf8",
+      "End": "6972d88b3b1b45389c0a19b658e5af4e",
+      "Id": "baae80f420cb45f88f35a6e43c129e28"
+    },
+    {
+      "Start": "2dccab512178414bb5b209ee58a2d71d",
+      "End": "19443325ca894be6a9556a20957c3845",
+      "Id": "3664308b6e1c4dafafff7957a623f3d0"
+    },
+    {
+      "Start": "f920c334e431491f99d656a54b4d6edb",
+      "End": "fe9cbece9d3249a18d79930fc480a7c5",
+      "Id": "9b36eefd01b54a60b1bc5d9201c0c2fa"
+    },
+    {
+      "Start": "6a580d9114dd4a0eba4a1a8dd29b8fa5",
+      "End": "462c57d3241a41a09151511d5f8f17ea",
+      "Id": "a4cc9ecfd3cf4ae79378c9c64e017dfe"
+    },
+    {
+      "Start": "9923bc5914184ed5a3db17e65d3c7074",
+      "End": "5c4d1b3f569a40959333f509f68c0732",
+      "Id": "c0ac87be73eb4964bc35eb532811d27e"
+    },
+    {
+      "Start": "2152e6a750d44da6b39fc51bd0f262f9",
+      "End": "83fe1c8348844da398a5d5df8ee2c6f8",
+      "Id": "a7c540500c334a8bbebf64351f7ff49a"
+    },
+    {
+      "Start": "2152e6a750d44da6b39fc51bd0f262f9",
+      "End": "9d931511636a43258a760413d2cf723d",
+      "Id": "b0f49831956e4f74af2d4f98a681ac54"
+    },
+    {
+      "Start": "3a81c692dd5443ac8405854b9fc3cec1",
+      "End": "420b191ceb954a98811bf31b5d1c4691",
+      "Id": "a317c8bd8dd243beb4fdbd4a384bf1ca"
+    },
+    {
+      "Start": "68352704c1534a0aa5c219b7f2b046cb",
+      "End": "26b94cfe943a491ab435a63fd931c706",
+      "Id": "f47e293b9a1b4b6f842ea35a29dea0b0"
+    },
+    {
+      "Start": "68352704c1534a0aa5c219b7f2b046cb",
+      "End": "12fae492dc254dbabe7d9391b63902ae",
+      "Id": "5a2ebe8b7d25478aaa0ed353a92bdd64"
+    },
+    {
+      "Start": "6a7df7af83fb4deba5e95bef7f45569e",
+      "End": "8058028f15524a729aba9e574a2c4fe5",
+      "Id": "04a8438f2d3348f2a7fcbb2d594f05c5"
+    },
+    {
+      "Start": "6a7df7af83fb4deba5e95bef7f45569e",
+      "End": "68c027f12ce64ba88bfe9a1e8e4e36b1",
+      "Id": "d48ca090b4b64cc5beeed20783731684"
+    },
+    {
+      "Start": "6a7df7af83fb4deba5e95bef7f45569e",
+      "End": "53ba2cdbc71545088f8280d714d40952",
+      "Id": "6046b33f33384dc190f70e67bab176ed"
+    },
+    {
+      "Start": "1df5531682d54d72b9c5dfdd96a6cc9e",
+      "End": "003f561bc924469085aa8ef900f24178",
+      "Id": "972b70de5b6d47fe920dabb81e1cb51b"
+    },
+    {
+      "Start": "08c4e9de896044e98c7bd198e70905b2",
+      "End": "d05a891a068a4d3a827297a029fe18fe",
+      "Id": "ec2bc201b8164aa9b2d107e25063e787"
+    },
+    {
+      "Start": "d04bc3beb8504a1a9cf0ddd17401fd6a",
+      "End": "0e11bf1e5f794114a6b9749240188631",
+      "Id": "44e8ebe597fb49f3a14cec39ca6eac24"
+    },
+    {
+      "Start": "d04bc3beb8504a1a9cf0ddd17401fd6a",
+      "End": "a9177a61b72d44379a8fb1f638a36c0f",
+      "Id": "88f074131c194c6a9a3264f076eb86a8"
+    },
+    {
+      "Start": "c43b3d9f319641449ff6289d563e6e8e",
+      "End": "177fc9f399194f6db5ba2e4d917e1655",
+      "Id": "e4a3868604f2425cacf4b22c52e72884"
+    },
+    {
+      "Start": "14dbee4c04a441a7b875a8001817c3a6",
+      "End": "c435a17bc96b40a5af90c1847506d756",
+      "Id": "06695e72d03e46d894df2fcb39af6607"
+    }
+  ],
+  "Dependencies": [
+    "72690a76-7d09-4d5e-b58a-116b68687034",
+    "4835aa8d-a13d-4a3c-b0ac-2e39d1d83888",
+    "36954a1f-1673-42d1-8f79-78da77167e91",
+    "a8c00670-1953-492b-80ca-0bf86b547d54",
+    "a2722560-6079-42f8-bb08-461ae1debed5",
+    "41f2a4a8-11b4-484d-bd33-4a3411060a1a",
+    "25540842-8fe5-49b3-a4cb-6788982bb2f0",
+    "c11c09d0-843f-41ce-8ead-fa8f6ac1f8b5",
+    "ddabed56-9f3b-4c85-9fec-ba992787a43d",
+    "003da7d7-57cf-4cfa-b92b-dd84b7a97cff",
+    "987d4fc3-bc5e-4828-a723-8029a9bfc1fa",
+    "1bec43ac-d261-46ae-a759-0348343c8f18",
+    "00b4aae5-0544-4c33-bd58-27775bece73b"
+  ],
+  "NodeLibraryDependencies": [
+    {
+      "Name": "LinkDWG",
+      "Version": "0.3.91",
+      "ReferenceType": "Package",
+      "Nodes": [
+        "26f45bc788aa47328a97ddf3a6141bc7",
+        "8696d0327ed4452d8a1f7a1ebf794a0a",
+        "fb82a86d91374b7bbd0f037a736366ec",
+        "f329b617e57e4cbc84109605fe03131d",
+        "6c4b75afee474113b0e6c5457cb2024d",
+        "8335343821fb434a8190ea9c0614489f",
+        "29fee5d9d5ee4d8e9014a6d58896cfdd",
+        "cbb3b1f3d6e34a68b303b3088079d77b",
+        "cf2d1e326c344a11b3e948661aa1604e",
+        "adb20ed5951548e5a566ac7528845c79",
+        "8ecce5df31314fb88c09f08a40ebc019",
+        "7de1bca111bf43efb131a6075c40dc06",
+        "7c692ed04de54ee78fb6dbf287332859",
+        "4fcca14c649c4304a0b8ad2b8b764d78",
+        "5146f8c170314126b3d5cf6505021255",
+        "6e42131a6d724cfbbdc5d695e71af98c",
+        "99d5be832a4e4cd787b7af5eebd3fb1c",
+        "62c2aadecd394f95b612f23ac84edec9",
+        "749279bdc23f4aa7a98f348f57a91da8"
+      ]
+    }
+  ],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 100.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.5.0.7460",
+      "RunType": "Automatic",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": 0.0,
+      "EyeY": 192.48377066253747,
+      "EyeZ": 0.0,
+      "LookX": 0.0,
+      "LookY": -192.48377066253747,
+      "LookZ": 0.0,
+      "UpX": 0.0,
+      "UpY": 0.0,
+      "UpZ": -1.0
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "SelectObjects",
+        "Id": "26f45bc788aa47328a97ddf3a6141bc7",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 739.5,
+        "Y": 222.65424722133662
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Boolean",
+        "Id": "47072518376e4200843106bda7aef277",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": true,
+        "X": 453.74725500544105,
+        "Y": 253.0
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "COMObjectProperties",
+        "Id": "8696d0327ed4452d8a1f7a1ebf794a0a",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1162.2320608607718,
+        "Y": 215.44489340375316
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "List.GetItemAtIndex",
+        "Id": "5c595626eda74c6ba58e05735c3ceb60",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1635.0418724348867,
+        "Y": 140.36255976933876
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Code Block",
+        "Id": "4a7b7627b98a4d72b09776c3dce53c1e",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1366.9047211351156,
+        "Y": 124.23071168060733
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "ce29fcca0ef7496bb7c3519947b1366a",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1128.828491077787,
+        "Y": 929.87184875805178
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "40852c2b601740f6bab439822bdb1da3",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": true,
+        "Excluded": false,
+        "X": 1374.6426417609787,
+        "Y": 923.46304577632577
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Boolean",
+        "Id": "0ab8c800bf26403e84082c82c0ecc731",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 893.63711759133093,
+        "Y": 928.308080775478
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "BlockProperties",
+        "Id": "fb82a86d91374b7bbd0f037a736366ec",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 567.61064462919944,
+        "Y": 2132.7078109578711
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Boolean",
+        "Id": "1df43e5e9e7a468a9710b1b4db568494",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -361.9435270810489,
+        "Y": 530.38133676419636
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "CircleProperties",
+        "Id": "f329b617e57e4cbc84109605fe03131d",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1644.5368755408422,
+        "Y": 2325.4872792335191
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "BlockProperties",
+        "Id": "6c4b75afee474113b0e6c5457cb2024d",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 536.88260792721053,
+        "Y": 2619.5830732319428
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "NestAttributes",
+        "Id": "8335343821fb434a8190ea9c0614489f",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1093.9064351470524,
+        "Y": 2845.7491322035576
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "MTextProperties",
+        "Id": "29fee5d9d5ee4d8e9014a6d58896cfdd",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 925.91845030856337,
+        "Y": 3178.0775874336168
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "MLeaderProperties",
+        "Id": "cbb3b1f3d6e34a68b303b3088079d77b",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1268.818815523121,
+        "Y": 3180.0916289447605
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "AttributeProperties",
+        "Id": "cf2d1e326c344a11b3e948661aa1604e",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1086.7138749677431,
+        "Y": 2314.2988522879268
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "DynamicProperties",
+        "Id": "adb20ed5951548e5a566ac7528845c79",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 942.06349802830084,
+        "Y": 3421.9531199015578
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "NestAttributes",
+        "Id": "8ecce5df31314fb88c09f08a40ebc019",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1221.3225717992511,
+        "Y": 2888.4899231096974
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "GetCOMObjects",
+        "Id": "7de1bca111bf43efb131a6075c40dc06",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1723.01837065355,
+        "Y": 2948.5333032917279
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "GetCOMObjects",
+        "Id": "7c692ed04de54ee78fb6dbf287332859",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 217.93097409065359,
+        "Y": 3105.9803891023857
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "COMObjectProperties",
+        "Id": "4fcca14c649c4304a0b8ad2b8b764d78",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 28.460752182913211,
+        "Y": 3890.5472234809167
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "64e699d58b904936be859eca835eb058",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 356.6799372445729,
+        "Y": 355.85922594937853
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "LeaderProperties",
+        "Id": "5146f8c170314126b3d5cf6505021255",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 2751.7612435234696,
+        "Y": 1249.1993088007951
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Code Block",
+        "Id": "c1346329360043f28652b47e57dc0ed4",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 2159.2676103694284,
+        "Y": 1250.6919713941131
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "COMObjectProperties",
+        "Id": "6e42131a6d724cfbbdc5d695e71af98c",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 2175.8218702094764,
+        "Y": 1421.6675421888328
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "0f6fc508e94441fd99901ca66f85991a",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 363.15751342099486,
+        "Y": 652.30404024946233
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "18f9180632cf49eab38ee16d085a78c7",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -128.83792507864723,
+        "Y": 1223.2772076504023
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Boolean",
+        "Id": "ea97763ef7e0407d95e88b1700d6dec2",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -372.63021625488375,
+        "Y": 1240.3487613290231
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "SelectObjects",
+        "Id": "99d5be832a4e4cd787b7af5eebd3fb1c",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -50.58435008661661,
+        "Y": 876.29001635505188
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "PickObject",
+        "Id": "62c2aadecd394f95b612f23ac84edec9",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -98.358380492845981,
+        "Y": 661.91992600327455
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "PickObject",
+        "Id": "749279bdc23f4aa7a98f348f57a91da8",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -87.891505843316281,
+        "Y": 358.3805611669078
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "388b4022d20c475eb555d05801bd7f6d",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 127.27008791772812,
+        "Y": 1231.8795085656263
+      }
+    ],
+    "Annotations": [],
+    "X": 510.91232629537842,
+    "Y": -245.69362728017461,
+    "Zoom": 1.0157846814222957
+  }
+}
