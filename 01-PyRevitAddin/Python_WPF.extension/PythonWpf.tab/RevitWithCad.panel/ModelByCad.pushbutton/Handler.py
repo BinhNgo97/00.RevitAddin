@@ -924,12 +924,13 @@ def on_select_beam_elements_in_cad(sender, e):
     )
 
     _redraw(window)
-    MessageBox.Show(
-        "Da them {} dam tu AutoCAD.\nTong cong: {} dam, {} nhom.".format(
-            len(beam_pairs), total_beams, total_groups
-        ),
-        "Hoan thanh"
-    )
+    # Kết quả đã hiển thị trong Preview và Status bar
+    # MessageBox.Show(
+    #     "Da them {} dam tu AutoCAD.\nTong cong: {} dam, {} nhom.".format(
+    #         len(beam_pairs), total_beams, total_groups
+    #     ),
+    #     "Hoan thanh"
+    # )
 
 
 def on_select_elements_in_cad(sender, e):
@@ -969,12 +970,13 @@ def on_select_elements_in_cad(sender, e):
     )
 
     _redraw(window)
-    MessageBox.Show(
-        "Da them {} elements tu AutoCAD.\nTong cong: {} elements ({} polyline), {} nhom.".format(
-            len(raw_elements), total_elems, len(elements), total_groups
-        ),
-        "Hoan thanh"
-    )
+    # Kết quả đã hiển thị trong Preview và Status bar
+    # MessageBox.Show(
+    #     "Da them {} elements tu AutoCAD.\nTong cong: {} elements ({} polyline), {} nhom.".format(
+    #         len(raw_elements), total_elems, len(elements), total_groups
+    #     ),
+    #     "Hoan thanh"
+    # )
 
 
 def on_select_grid_in_cad(sender, e):
@@ -1001,7 +1003,8 @@ def on_select_grid_in_cad(sender, e):
     )
 
     _redraw(window)
-    MessageBox.Show("Da chon duong tham chieu trong AutoCAD.", "Hoan thanh")
+    # Kết quả đã hiển thị trong Preview và Status bar
+    # MessageBox.Show("Da chon duong tham chieu trong AutoCAD.", "Hoan thanh")
 
 
 def on_select_grid_in_revit(sender, e):
