@@ -35,23 +35,44 @@ def _load_revit_data(vm):
         doc = __revit__.ActiveUIDocument.Document  # noqa: F821  (pyRevit global)
 
         # --- Levels ---
-        levels = sorted(
-            FilteredElementCollector(doc).OfClass(Level).ToElements(),
-            key=lambda l: l.Elevation
-        )
-        vm.set_revit_levels([lv.Name for lv in levels])
+        level_elems = FilteredElementCollector(doc).OfClass(Level).ToElements()
+        level_names = []
+        for lv in sorted(level_elems, key=lambda l: l.Elevation):
+            try:
+                level_names.append(lv.Name)
+            except Exception:
+                pass
+        vm.set_revit_levels(level_names)
 
         # --- FamilySymbol names + category map ---
+        # Revit 2024: một số FamilySymbol có thể ném ngoại lệ khi đọc .Name /
+        # .Category.Name → xử lý từng phần tử riêng lẻ.
         symbols = FilteredElementCollector(doc).OfClass(FamilySymbol).ToElements()
 
-        # Map: category_name → sorted list of "FamilyName : TypeName"
         cat_type_map = {}
         for s in symbols:
-            if s.Family is None or s.Category is None:
+            try:
+                if s is None or not s.IsValidObject:
+                    continue
+                if s.Category is None:
+                    continue
+                cat_name = s.Category.Name          # tên Category
+
+                # FamilyName: dùng thuộc tính FamilyName (Revit 2015+) thay vì
+                # s.Family.Name để tránh lỗi khi Family là None / không load được
+                try:
+                    fam_name = s.FamilyName
+                except Exception:
+                    fam_name = s.Family.Name if s.Family is not None else ''
+                if not fam_name:
+                    continue
+
+                type_name = "{} : {}".format(fam_name, s.Name)
+                cat_type_map.setdefault(cat_name, set()).add(type_name)
+            except Exception:
+                # Bỏ qua symbol lỗi, tiếp tục vòng lặp
                 continue
-            cat_name  = s.Category.Name
-            type_name = "{} : {}".format(s.Family.Name, s.Name)
-            cat_type_map.setdefault(cat_name, set()).add(type_name)
+
         # Sắp xếp từng nhóm
         cat_type_map_sorted = {k: sorted(v) for k, v in sorted(cat_type_map.items())}
         vm.set_category_type_map(cat_type_map_sorted)
