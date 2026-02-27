@@ -330,21 +330,37 @@ class CreateModelHandler(IExternalEventHandler if _REVIT_AVAILABLE else object):
                 # Resolve StructuralType
                 struct_type = _category_to_structural_type(group.Category)
 
-                # ── Dầm (source_type='line') → dùng curve overload ────────────
+                # ── Dầm (source_type='line') → curve overload với Z = level.Elevation ────
                 if group.is_beam():
+                    level_z = level.Elevation   # feet
                     for pair in group.elements:
                         try:
-                            xyz_s = _transform_to_revit(
+                            # Chuyển XY từ CAD sang Revit, gán Z = level.Elevation
+                            xyz_s_2d = _transform_to_revit(
                                 pair.start[0], pair.start[1], s_cad, s_revit_ft, theta
                             )
-                            xyz_e = _transform_to_revit(
-                                pair.end[0], pair.end[1],   s_cad, s_revit_ft, theta
+                            xyz_e_2d = _transform_to_revit(
+                                pair.end[0], pair.end[1], s_cad, s_revit_ft, theta
                             )
+                            xyz_s = XYZ(xyz_s_2d.X, xyz_s_2d.Y, level_z)
+                            xyz_e = XYZ(xyz_e_2d.X, xyz_e_2d.Y, level_z)
                             curve = RvtLine.CreateBound(xyz_s, xyz_e)
+
+                            # Overload chính xác cho Structural Framing:
+                            # NewFamilyInstance(Curve, FamilySymbol, Level, StructuralType)
                             inst = doc.Create.NewFamilyInstance(
                                 curve, symbol, level, StructuralType.Beam
                             )
-                            # ① Y-justification = Left (= 1)
+
+                            # Gán Reference Level rõ ràng (phòng trường hợp Revit chọn sai)
+                            try:
+                                p_ref = inst.get_Parameter(BuiltInParameter.INSTANCE_REFERENCE_LEVEL_PARAM)
+                                if p_ref is not None and not p_ref.IsReadOnly:
+                                    p_ref.Set(level.Id)
+                            except Exception:
+                                pass
+
+                            # Y-justification = Centre (= 3)
                             try:
                                 param = inst.get_Parameter(BuiltInParameter.Y_JUSTIFICATION)
                                 if param is not None and not param.IsReadOnly:
