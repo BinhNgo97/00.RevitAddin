@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>RKS v2.0 (MVP)</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <main class="container">
+    <header class="header">
+      <h1>Reflexive Knowledge System (RKS v2.0) — MVP</h1>
+      <p class="muted">Node schema • Contradiction registry • NMS • Explore/Build/Active gate</p>
+    </header>
+
+    <section class="grid">
+      <div class="card">
+        <h2>Tạo node (Level 1 — AI skeleton)</h2>
+        <form method="post" action="/nodes/create" class="form">
+          <label>Layer
+            <select name="layer">
+              {% for l in layers %}
+              <option value="{{l}}">{{l}}</option>
+              {% endfor %}
+            </select>
+          </label>
+
+          <label>Title
+            <input name="title" placeholder="VD: Entropy Budget" required />
+          </label>
+
+          <label>Definition
+            <textarea name="definition" rows="3" placeholder="Định nghĩa ngắn"></textarea>
+          </label>
+
+          <label>Mechanism hint (AI)
+            <textarea name="mechanism_hint" rows="3" placeholder="Gợi ý cơ chế (nháp)"></textarea>
+          </label>
+
+          <label>Domain context
+            <textarea name="domain_context" rows="2" placeholder="Finance/Org/Tech... (tuỳ chọn)"></textarea>
+          </label>
+
+          <label>Status
+            <select name="status">
+              {% for s in statuses %}
+              <option value="{{s}}">{{s}}</option>
+              {% endfor %}
+            </select>
+          </label>
+
+          <button type="submit">Create</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2>Log run (Reflection loop)</h2>
+        <form method="post" action="/runs/log" class="form">
+          <label>Problem
+            <textarea name="problem" rows="2" required></textarea>
+          </label>
+          <label>Prediction
+            <textarea name="prediction" rows="2"></textarea>
+          </label>
+          <label>Outcome
+            <textarea name="outcome" rows="2"></textarea>
+          </label>
+          <label>Delta
+            <textarea name="delta" rows="2"></textarea>
+          </label>
+          <label>Suspected layer
+            <select name="suspected_layer">
+              <option value="">(none)</option>
+              {% for l in layers %}
+              <option value="{{l}}">{{l}}</option>
+              {% endfor %}
+            </select>
+          </label>
+          <label>Related node IDs (one per line)
+            <textarea name="related_nodes" rows="2" placeholder="N_..."></textarea>
+          </label>
+          <label>Notes
+            <textarea name="notes" rows="2"></textarea>
+          </label>
+          <button type="submit">Log</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Nodes (latest)</h2>
+      <p class="muted">Rule: thiếu causal/boundary/failure ⇒ INCOMPLETE ⇒ không nên link graph chính. Node &lt; 3 không được mở rộng.</p>
+
+      <div class="nodes">
+        {% for n in nodes %}
+        <details class="node" {% if request.query_params.get('focus') == n.node_id %}open{% endif %}>
+          <summary>
+            <span class="mono">{{n.node_id}}</span>
+            <strong>{{n.title}}</strong>
+            <span class="pill">{{n.layer.value}}</span>
+            <span class="pill">{{n.status.value}}</span>
+            <span class="pill">NMS={{n.node_maturity_score}}</span>
+          </summary>
+
+          <form method="post" action="/nodes/patch" class="form">
+            <input type="hidden" name="node_id" value="{{n.node_id}}" />
+
+            <label>Title
+              <input name="title" value="{{n.title}}" />
+            </label>
+
+            <label>Definition
+              <textarea name="definition" rows="3">{{n.definition}}</textarea>
+            </label>
+
+            <div class="two">
+              <label>Causal chain (Level 2 — HUMAN)
+                <textarea name="causal_chain" rows="4">{{n.causal_chain}}</textarea>
+              </label>
+
+              <label>Boundary condition (Level 2 — HUMAN)
+                <textarea name="boundary_condition" rows="4">{{n.boundary_condition}}</textarea>
+              </label>
+            </div>
+
+            <label>Failure mode (Level 2 — HUMAN)
+              <textarea name="failure_mode" rows="3">{{n.failure_mode}}</textarea>
+            </label>
+
+            <div class="two">
+              <label>Linked nodes (one per line)
+                <textarea name="linked_nodes" rows="3">{% for x in n.linked_nodes %}{{x}}\n{% endfor %}</textarea>
+              </label>
+
+              <label>Assumption ledger (one per line)
+                <textarea name="assumption_ledger" rows="3">{% for x in n.assumption_ledger %}{{x}}\n{% endfor %}</textarea>
+              </label>
+            </div>
+
+            <label>Evidence examples (one per line)
+              <textarea name="evidence_examples" rows="3">{% for x in n.evidence_examples %}{{x}}\n{% endfor %}</textarea>
+            </label>
+
+            <label class="check">
+              <input type="checkbox" name="cross_domain_validated" {% if n.cross_domain_validated %}checked{% endif %} />
+              Cross-domain validated
+            </label>
+
+            <label>Status
+              <select name="status">
+                {% for s in statuses %}
+                <option value="{{s}}" {% if n.status.value == s %}selected{% endif %}>{{s}}</option>
+                {% endfor %}
+              </select>
+              <span class="muted">Nếu thiếu Level 2, chọn Active sẽ bị hạ về Build.</span>
+            </label>
+
+            <button type="submit">Save / Re-score</button>
+          </form>
+        </details>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="card">
+        <h2>Tạo contradiction</h2>
+        <form method="post" action="/contradictions/create" class="form">
+          <label>Node A
+            <input name="node_a" placeholder="N_..." required />
+          </label>
+          <label>Node B
+            <input name="node_b" placeholder="N_..." required />
+          </label>
+          <label>Condition A đúng khi
+            <textarea name="condition_a" rows="2"></textarea>
+          </label>
+          <label>Condition B đúng khi
+            <textarea name="condition_b" rows="2"></textarea>
+          </label>
+          <label>Resolution trigger
+            <textarea name="resolution_trigger" rows="2"></textarea>
+          </label>
+          <button type="submit">Create contradiction</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <h2>Contradictions</h2>
+        <div class="list">
+          {% for c in contradictions %}
+          <div class="item">
+            <div><span class="mono">{{c.contradiction_id}}</span></div>
+            <div class="muted">A={{c.node_a}} • B={{c.node_b}}</div>
+            <div>Cond A: {{c.condition_a}}</div>
+            <div>Cond B: {{c.condition_b}}</div>
+            <div>Trigger: {{c.resolution_trigger}}</div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Recent runs</h2>
+      <div class="list">
+        {% for r in runs %}
+        <div class="item">
+          <div><span class="mono">{{r.run_id}}</span> <span class="muted">{{r.created_at}}</span></div>
+          <div><strong>Problem:</strong> {{r.problem}}</div>
+          {% if r.prediction %}<div><strong>Prediction:</strong> {{r.prediction}}</div>{% endif %}
+          {% if r.outcome %}<div><strong>Outcome:</strong> {{r.outcome}}</div>{% endif %}
+          {% if r.delta %}<div><strong>Delta:</strong> {{r.delta}}</div>{% endif %}
+          {% if r.suspected_layer %}<div><strong>Suspected:</strong> {{r.suspected_layer.value}}</div>{% endif %}
+          {% if r.related_nodes %}<div class="muted">Nodes: {{r.related_nodes}}</div>{% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+
+    <footer class="footer muted">
+      <div>Storage: JSONL in <span class="mono">data/</span>. Single-user MVP.</div>
+    </footer>
+  </main>
+</body>
+</html>
