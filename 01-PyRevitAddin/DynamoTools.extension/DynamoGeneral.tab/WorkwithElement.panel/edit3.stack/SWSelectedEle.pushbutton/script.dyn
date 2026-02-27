@@ -1,0 +1,443 @@
+{
+  "Uuid": "8fb29d61-b37b-459e-8483-ece0654b7f54",
+  "IsCustomNode": false,
+  "Description": null,
+  "Name": "script",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "StructuralDesign.Model.Selection.PickElements@string,bool",
+      "Id": "d5628da308c340bc97fc03098934298d",
+      "Inputs": [
+        {
+          "Id": "a4ba8f45c92d4be591a4125b5315ec0a",
+          "Name": "statusPrompt",
+          "Description": "The message shown on the status bar.\n\nstring\nDefault value : \"Click to select multiple elements, TAB for alternates, ESC quit.\"",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "0b064b3382254139b43288efb7cab498",
+          "Name": "refresh",
+          "Description": "Refresh selection.\n\nbool\nDefault value : true",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "0a7353a97a0e4cd3b6513ef3350f8a2c",
+          "Name": "Elements",
+          "Description": "Selected elements.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Prompts the user to select multiple elements while showing a custom status prompt string.\n\nSelection.PickElements (statusPrompt: string = \"Click to select multiple elements, TAB for alternates, ESC quit.\", refresh: bool = true): Element[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "Revit.BoundingBox.GetElementsIntersect@Autodesk.DesignScript.Geometry.BoundingBox,Revit.Elements.Element[],double",
+      "Id": "7ee7d8d68a2e47ad98d818b1328b7bfd",
+      "Inputs": [
+        {
+          "Id": "067bdae1735f470ebe3a03fdec621db7",
+          "Name": "boundingBox",
+          "Description": "Input a Bounding Box.\n\nBoundingBox",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "c26ffa57546142f4abacd49474696b12",
+          "Name": "elements",
+          "Description": "Input a list of Revit elements.\n\nElement[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "9998d1e817de491e92d9b0927bd96c49",
+          "Name": "tolerance",
+          "Description": "Enter values in active document units to control the match criteria in the geometry comparison. Use positive values to consider gaps, and negative values to consider overlaps.\n\ndouble\nDefault value : 0",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "66e7f9d7aec242c7be39a72ae8c592ee",
+          "Name": "Element[]",
+          "Description": "Element[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Filter and return Revit elements intersecting or inside a bounding box. Element Outlines (BoundingBox) are used to determine the result.\r\rUtilises the ElementQuickFilter class which operates only on the ElementRecord, a low-memory class, for rapid results.\r\rVisit bimorph.com/bimorph-nodes for support\n\nBoundingBox.GetElementsIntersect (boundingBox: BoundingBox, elements: Element[], tolerance: double = 0): Element[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "Revit.Elements.Element.BoundingBox",
+      "Id": "a9526ec06a3644adb1c5cbb894696f23",
+      "Inputs": [
+        {
+          "Id": "ff274935206641ee9a90b1397707767e",
+          "Name": "element",
+          "Description": "Revit.Elements.Element",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "b66d66f495134aeca527ae51a6383f65",
+          "Name": "BoundingBox",
+          "Description": "BoundingBox",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Get an Axis-aligned BoundingBox of the Element\n\nElement.BoundingBox: BoundingBox"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "StructuralDesign.Model.Selection.PickElements@string,bool",
+      "Id": "8edec09d929a43fa9300f50c55f1a70d",
+      "Inputs": [
+        {
+          "Id": "9e7fe2761e744f06808eec1a77629292",
+          "Name": "statusPrompt",
+          "Description": "The message shown on the status bar.\n\nstring\nDefault value : \"Click to select multiple elements, TAB for alternates, ESC quit.\"",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "5877dd6b0f4c428ca24cc68bd851237d",
+          "Name": "refresh",
+          "Description": "Refresh selection.\n\nbool\nDefault value : true",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "cd8b8d2b17d049c793d49909f75f4cb6",
+          "Name": "Elements",
+          "Description": "Selected elements.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Prompts the user to select multiple elements while showing a custom status prompt string.\n\nSelection.PickElements (statusPrompt: string = \"Click to select multiple elements, TAB for alternates, ESC quit.\", refresh: bool = true): Element[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "f56c7506-4cea-4410-be3a-0dcb3d385d04",
+      "FunctionType": "Graph",
+      "NodeType": "FunctionNode",
+      "Id": "09dec13d8f984c44ba57458a66c16711",
+      "Inputs": [
+        {
+          "Id": "8d55bd999a3647e4a7326343ba3bd79d",
+          "Name": "ElementsA",
+          "Description": "var[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "b0348f2bbf1f4ad993f3baafc75c1a91",
+          "Name": "ElementsB",
+          "Description": "var[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "542306d52ebc44a197d2eb3d28c31c92",
+          "Name": "ElementsA",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "c5a9aba406ec441d9557dccf3bdc6b64",
+          "Name": "ElementsB",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": ""
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": true,
+      "Id": "e2370c116e014ac689da47507ccc19f8",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "20672e187d244f0896abee75ea216c23",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Selection between a true and false."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "\"Select 1\";\n\"Select 2\";",
+      "Id": "a598fa37e64642348fd0a2ea7ec0e530",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "a8e1543c77104f1b8eb13503e4035a84",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "18362245dac2492c9a288c9534361051",
+          "Name": "",
+          "Description": "Value of expression at line 2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly"
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "0a7353a97a0e4cd3b6513ef3350f8a2c",
+      "End": "ff274935206641ee9a90b1397707767e",
+      "Id": "22dd0d72415c4ab4a66583ef2d7a63fe"
+    },
+    {
+      "Start": "0a7353a97a0e4cd3b6513ef3350f8a2c",
+      "End": "b0348f2bbf1f4ad993f3baafc75c1a91",
+      "Id": "1fb2750a542e4b85ae819f3e4679f3ee"
+    },
+    {
+      "Start": "66e7f9d7aec242c7be39a72ae8c592ee",
+      "End": "8d55bd999a3647e4a7326343ba3bd79d",
+      "Id": "39e688afcace428db6add142d70bb6da"
+    },
+    {
+      "Start": "b66d66f495134aeca527ae51a6383f65",
+      "End": "067bdae1735f470ebe3a03fdec621db7",
+      "Id": "510758a042d540de9503e643b14c581f"
+    },
+    {
+      "Start": "cd8b8d2b17d049c793d49909f75f4cb6",
+      "End": "c26ffa57546142f4abacd49474696b12",
+      "Id": "c0972b0a2fa6482392c4e05b2befe52e"
+    },
+    {
+      "Start": "20672e187d244f0896abee75ea216c23",
+      "End": "0b064b3382254139b43288efb7cab498",
+      "Id": "ddaedaaf4d2e4f73a721efffd42b0667"
+    },
+    {
+      "Start": "20672e187d244f0896abee75ea216c23",
+      "End": "5877dd6b0f4c428ca24cc68bd851237d",
+      "Id": "04041a7c232d411e8c7d9c296cffdb94"
+    },
+    {
+      "Start": "a8e1543c77104f1b8eb13503e4035a84",
+      "End": "a4ba8f45c92d4be591a4125b5315ec0a",
+      "Id": "928f009077ce4f75bb5f1d50103f2d55"
+    },
+    {
+      "Start": "18362245dac2492c9a288c9534361051",
+      "End": "9e7fe2761e744f06808eec1a77629292",
+      "Id": "4e233b2c909d41428c88d1dd3631193f"
+    }
+  ],
+  "Dependencies": [
+    "f56c7506-4cea-4410-be3a-0dcb3d385d04"
+  ],
+  "NodeLibraryDependencies": [
+    {
+      "Name": "Structural Design",
+      "Version": "2021.1.5",
+      "ReferenceType": "Package",
+      "Nodes": [
+        "d5628da308c340bc97fc03098934298d",
+        "8edec09d929a43fa9300f50c55f1a70d"
+      ]
+    },
+    {
+      "Name": "bimorphNodes",
+      "Version": "3.0.3",
+      "ReferenceType": "Package",
+      "Nodes": [
+        "7ee7d8d68a2e47ad98d818b1328b7bfd"
+      ]
+    },
+    {
+      "Name": "KYSUDO",
+      "Version": "2019.8.5",
+      "ReferenceType": "Package",
+      "Nodes": [
+        "09dec13d8f984c44ba57458a66c16711"
+      ]
+    }
+  ],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.6.1.8786",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "Selection.PickElements",
+        "Id": "d5628da308c340bc97fc03098934298d",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 383.73366178171773,
+        "Y": 150.21196078212438
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "BoundingBox.GetElementsIntersect",
+        "Id": "7ee7d8d68a2e47ad98d818b1328b7bfd",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1004.5064359862051,
+        "Y": 370.5109392437887
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Element.BoundingBox",
+        "Id": "a9526ec06a3644adb1c5cbb894696f23",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 688.516493251351,
+        "Y": 272.37556961200846
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Selection.PickElements",
+        "Id": "8edec09d929a43fa9300f50c55f1a70d",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 349.67011605439467,
+        "Y": 366.68029975898287
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Switch Join",
+        "Id": "09dec13d8f984c44ba57458a66c16711",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 1346.7206825754047,
+        "Y": 124.44404291548341
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Boolean",
+        "Id": "e2370c116e014ac689da47507ccc19f8",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 80.504654990336348,
+        "Y": 269.81220766217479
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Code Block",
+        "Id": "a598fa37e64642348fd0a2ea7ec0e530",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 53.991035028346687,
+        "Y": 168.26992677889507
+      }
+    ],
+    "Annotations": [],
+    "X": 145.65688808749283,
+    "Y": 100.39578836663354,
+    "Zoom": 0.7568895489133376
+  }
+}

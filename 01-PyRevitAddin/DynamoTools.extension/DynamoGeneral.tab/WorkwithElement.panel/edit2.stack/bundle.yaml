@@ -1,0 +1,4 @@
+layout:
+  - SelectSameType
+  - ResetUnconnected
+  - DuplicateTypeBySelected

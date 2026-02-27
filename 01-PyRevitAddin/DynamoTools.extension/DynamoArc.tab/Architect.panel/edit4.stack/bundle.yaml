@@ -1,0 +1,6 @@
+title:
+  en_us: CreateModel
+layout:
+  - Create-StiffinerbyWallCondition
+  - Create-Lintel_At-Door+Window
+  - Create-Lintel_WallCondition

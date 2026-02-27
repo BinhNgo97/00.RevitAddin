@@ -1,0 +1,55 @@
+<Window
+    xmlns:x= "http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns = "http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    WindowStartupLocation=" CenterScreen"
+    Height="450" Width="600" Title="Export Schedule">
+
+
+    <Grid Background="#FF909090">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="50"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Button Content="Select-FilePath_Excel" VerticalAlignment="Center" Margin="10,0,10,0"
+                Name="bt_SelectPath" Click="bt_SelectPathClick"/>
+        <TextBox Margin="10,10,10,0" Grid.Row="1" Text="Seach-Schedule"  VerticalAlignment="Top" Height="19"
+                 Name="SeachInRevit"
+                 TextChanged="tb_SeachInRevit" Opacity="0.7" BorderBrush="#FF093EDA" SelectionBrush="#FF0E88E8" Foreground="#FF867C7C"
+                 />
+        <TextBox Margin="10,10,10,0" Grid.Row="1" Text="Seach-Schedule" TextWrapping="Wrap" VerticalAlignment="Top" Height="19" Grid.Column="2"
+                 Name="SeachInExcel"
+                 TextChanged="tb_SeachInExcel" Opacity="0.7" BorderBrush="#FF081ADC" Foreground="#FFD0AEAE" SelectionBrush="#FF007FE5"/>
+        <ListView Grid.Row="1" Margin="10,39,10,10" Name="lv_AllScheduleInRevit" SelectionMode="Extended">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="All Schedule In Project" Width="Auto" DisplayMemberBinding="{Binding}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <ListView Grid.Row="1" Grid.Column="2" Margin="10,39,10,10" Name="lv_AllScheduleInExcel" SelectionMode="Extended">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Schedule in Excel" Width="Auto" DisplayMemberBinding="{Binding}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Button Content="Add" Grid.Column="1" HorizontalAlignment="Center" Margin="0,129,0,0" Grid.Row="1" VerticalAlignment="Top" Width="50"
+                Name="bt_Add" Click="bt_AddClick"/>
+        <Button Content="Remove" Grid.Column="1" HorizontalAlignment="Center" Margin="0,214,0,0" Grid.Row="1" VerticalAlignment="Top" Width="50"
+                Name="bt_Remove" Click="bt_RemoveClick"/>
+        <Button Content="Export-Schedule" Grid.Column="2" HorizontalAlignment="Right" Margin="0,0,10,0" Grid.Row="2" VerticalAlignment="Center" Width="100"
+                Name="bt_Export" Click="bt_ExportClick"/>
+        <Button Content="Cancel" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="2" VerticalAlignment="Center" Width="100"
+                Name="bt_Cancel" Click="bt_CancelClick"/>
+        <TextBlock Margin="10,5,10,5" Text="File Excel Link" TextWrapping="Wrap" Grid.ColumnSpan="2" Foreground="#FF004BDF" Background="#FFBABABA" Opacity="0.6"
+                   Name="txtB_ExcelPath" Grid.Column="1"
+                   />
+
+    </Grid>
+</Window>

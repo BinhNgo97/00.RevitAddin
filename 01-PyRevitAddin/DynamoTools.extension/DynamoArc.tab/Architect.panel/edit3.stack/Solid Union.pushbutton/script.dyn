@@ -1,0 +1,1776 @@
+{
+  "Uuid": "9d7483a4-aed3-41d9-a988-b57531848dce",
+  "IsCustomNode": false,
+  "Description": null,
+  "Name": "script",
+  "ElementResolver": {
+    "ResolutionMap": {
+      "Elements.Element": {
+        "Key": "Revit.Elements.Element",
+        "Value": "RevitNodes.dll"
+      },
+      "Revit.Elements.Element": {
+        "Key": "Revit.Elements.Element",
+        "Value": "RevitNodes.dll"
+      },
+      "DSCore.List": {
+        "Key": "DSCore.List",
+        "Value": "DSCoreNodes.dll"
+      },
+      "Solid": {
+        "Key": "Autodesk.DesignScript.Geometry.Solid",
+        "Value": "ProtoGeometry.dll"
+      }
+    }
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "DSRevitNodesUI.Categories, DSRevitNodesUI",
+      "SelectedIndex": 267,
+      "SelectedString": "OST_GenericModel",
+      "Id": "c2baf36992f247d484058ba559f651db",
+      "NodeType": "ExtensionNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "b76457948d7f42a68956c7785c2b0361",
+          "Name": "Category",
+          "Description": "The selected Category.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "All built-in categories."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "ecdb3729-0de2-4c50-bdca-28fe881027a2",
+      "FunctionType": "Graph",
+      "Id": "ffad7a0cadc94517b5ca3ef296800d11",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "df3be66d64424b66b2081eb995d3a047",
+          "Name": "geometry",
+          "Description": "var[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "76658af8b510474ea7a774b52dad82cd",
+          "Name": "familyTemplatePath",
+          "Description": "var",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "db1ec94db77f4290b6846001dc1d127f",
+          "Name": "familyName",
+          "Description": "var[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "764cf4ef76d940209cc5e13ed100011d",
+          "Name": "category",
+          "Description": "var[]\nDefault value : Revit.Elements.Category.ByName(\"OST_GenericModel\")",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "36d49d429ab64bf3852b3b52f11c0add",
+          "Name": "materialName",
+          "Description": "var[]\nDefault value : null",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "99b8e550f11c44fe9fbf35873d613b5f",
+          "Name": "isVoid",
+          "Description": "var[]\nDefault value : false",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "b5d5445f41964970b968383432b9027d",
+          "Name": "subcategoryName",
+          "Description": "var[]\nDefault value : null",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "3065f8de132c4aada6a1bab943778b5a",
+          "Name": "instance",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "f4c4377e59794cec890ce8d070b0e82a",
+          "Name": "family",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "You must provide a valid family template path that will be used for all input geometry objects. The project units(and not the templates) will be used to determine the size of the output geometry.\r\nThe provided category will be used only if the family template supports it. If not, the default template category will be used instead.\r\nLikewise, the family material(provided as a string) will be set only if a material with that name exists in the template. If not, the default material will be used instead (\"By Category\").\r\nFor void cuts, the material settings will be ignored.\r\nThe Subcategory name is an optional input. If you'd like to skip assigning a Subcategory to any new instance, simply use null.\r\nThe node expects a unique family name for each geometry object. The rest of the input lists will be processed as if the node lacing is set to longest."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "702fedd34daa46039737aab6b1c2df38",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "eddb3f90dc56479da90f8a3a4690f159",
+          "Name": "list",
+          "Description": "List to flatten.\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "9d17ff0ad93c4aec855f85ed2a716901",
+          "Name": "amount",
+          "Description": "Layers of list nesting to remove (-1 will remove all list nestings)\n\nint\nDefault value : -1",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "b15aff8cb1c54e3f911539a454404158",
+          "Name": "list",
+          "Description": "Flattened list by amount",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "DSCore.List.Flatten@var[]..[],int",
+      "Replication": "Auto",
+      "Description": "Flattens a nested list of lists by a certain amount.\n\nList.Flatten (list: var[]..[], amount: int = -1): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "462728e49cae44599d69b28966c07860",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "44625638c19f487e90d58e568e55f1de",
+          "Name": "element",
+          "Description": "Revit.Elements.Element",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "5beeb694a3c84ac4ac38f42c322165fc",
+          "Name": "Solid[]",
+          "Description": "Solid[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Revit.Elements.Element.Solids",
+      "Replication": "Auto",
+      "Description": "The Solids in this Element\n\nElement.Solids: Solid[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "Id": "033aa82de5cd4f0cbd0cd50c3b34d30b",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "b79b5f34995b4e38acc74a23bb37148f",
+          "Name": "solids",
+          "Description": "A collection of solids\n\nSolid[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "81af7a4baa244d7aaa66b59c89b63c0e",
+          "Name": "Solid",
+          "Description": "Solid",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "FunctionSignature": "Autodesk.DesignScript.Geometry.Solid.ByUnion@Autodesk.DesignScript.Geometry.Solid[]",
+      "Replication": "Auto",
+      "Description": "Union a collection of solids into one solid\n\nSolid.ByUnion (solids: Solid[]): Solid"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "74e4593d-80c7-459e-924d-6d7ace1dd16d",
+      "FunctionType": "Graph",
+      "Id": "5e5e61c72664493eab288a9224a7c6ba",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "0cdce83fd1d04d80a4bfe89b49648e45",
+          "Name": "list",
+          "Description": "var[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "2c20871ac67946078c2c74e67167b1e0",
+          "Name": "Updated",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Remove null from input list, imported from Lunchbox"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.StringInput, CoreNodeModels",
+      "Id": "cf26d38ee4264065a4c8739e743f098e",
+      "NodeType": "StringInputNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "e7f3d6dbda214b7fa8f4b3c9589b081b",
+          "Name": "",
+          "Description": "String",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Creates a string",
+      "InputValue": "Hidden Lines"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "74c13cd2-5b9a-494f-beac-ea71fec14b56",
+      "FunctionType": "Graph",
+      "Id": "b0105d4430d941a29b8c9fee1a290671",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "45f7074b9bc84fb1a3a74294d2192b4c",
+          "Name": "InputName",
+          "Description": "string\nDefault value : \"\"",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "55fba6536aee408ab0f73789b17e1b19",
+          "Name": "ButtonText",
+          "Description": "string\nDefault value : \"Select Linked Element(s)\"",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "11bea5985dff456fae435ba07055b872",
+          "Name": "SelectSingleElement",
+          "Description": "bool\nDefault value : false",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "b7415d90034f459b894b2692e6e53a78",
+          "Name": "SelectLinkedElements input",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Create a button input for UI.MultipleInputForm++ that allows to select elements in à linked document. See www.data-shapes.net for more infos!"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "9fbd05c0-ec1f-4bd3-bf37-969a1552eab8",
+      "FunctionType": "Graph",
+      "Id": "84ba272631f54c22aa730963b15ff8e7",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "2d1b4b9d246945b5be5afe2452c36808",
+          "Name": "Description_optional",
+          "Description": "string\nDefault value : \"\"",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "31f9fa0f5623457481fbf052fa973d8f",
+          "Name": "Logo_optional",
+          "Description": "var\nDefault value : \"\"",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "beae6030d73f4154a5943cb6b37507e6",
+          "Name": "ButtonText_optional",
+          "Description": "string\nDefault value : \"Set Values\"",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "9dcbc9a361e84a26936df66ca2e314f0",
+          "Name": "Inputs",
+          "Description": "var[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "441267b401954ea6ab43786c42b54054",
+          "Name": "Toggle",
+          "Description": "bool\nDefault value : false",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "dba7959bfe0c46849e13f2d44c83002c",
+          "Name": "LinkToHelp_optional",
+          "Description": "string\nDefault value : null",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "3741c5025ca44b69a944fd2c31805652",
+          "Name": "CancelButtonText_optional",
+          "Description": " Cancel button will only be displayed if a label text is entered here\n\nstring\nDefault value : null",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "1f0761fff26745219d0801840484cf79",
+          "Name": "MaxHeight_optional",
+          "Description": "int\nDefault value : 0",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "5d903e35d225473e83bedb4446270c3a",
+          "Name": "Width_optional",
+          "Description": "int\nDefault value : 400",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "ab9b49d228f74a8c8748a09a80bfe516",
+          "Name": "LabelWidth_optional",
+          "Description": "int\nDefault value : 140",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "8f6ff8ca0e9f4840833649ab6b0a5e65",
+          "Name": "User Inputs",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "c24860c74c96410ab1ccb2a1fc36c40e",
+          "Name": "Was Run ",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "1b7d61ebb90f41ab9e27cf88eb5b98f0",
+          "Name": "Was Cancelled",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Create a form with multiple inputs. \r\nsee www.data-shapes.net for tutorials and infos!"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "4b862920e47b40739452f7813e63209e",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "e9bb7bddfe9a45f58d151318c3507fd9",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "ea99db9765f04b62996416172946c654",
+          "Name": "",
+          "Description": "Value of expression at line 2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "914f955b576f464bacacb00ed8aaef62",
+          "Name": "",
+          "Description": "Value of expression at line 3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "ef83018f3bff4dee82b9c7a997d61e8c",
+          "Name": "",
+          "Description": "Value of expression at line 4",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "1a6eb099a6e040869fc14fbd0a9e8586",
+          "Name": "",
+          "Description": "Value of expression at line 5",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "ea9cb3fa1ab4434d9554be02c844654d",
+          "Name": "",
+          "Description": "Value of expression at line 6",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "77622b544af7479994f904176765d90b",
+          "Name": "",
+          "Description": "Value of expression at line 7",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": "\"Create Voil Solid\";\n\"Create\";\ntrue;\n\"Cancel\";\n500;\n400;\n200;"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "5b686a4a0e7e4d1ea45b94aead8cfc03",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "21f224d49e23407fa873007a44a6ef04",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "19e1857513c14d128392e924c455d33b",
+          "Name": "",
+          "Description": "Value of expression at line 2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "641644f95b5f4acb8aa1846c77afaf90",
+          "Name": "",
+          "Description": "Value of expression at line 3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "fd87e38e42aa4c8c88860eda8b9e6d86",
+          "Name": "",
+          "Description": "Value of expression at line 4",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "d8e61e093ec64dce83da40eba6a1dc26",
+          "Name": "",
+          "Description": "Value of expression at line 5",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "b0608099c8574aa7b6cb9044f0d375cf",
+          "Name": "",
+          "Description": "Value of expression at line 7",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "8b33cdcfa9fe452ba36b02b057d6928a",
+          "Name": "",
+          "Description": "Value of expression at line 8",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": "\"Select Element Link? _OR_\";\n\"Select\";\n\"Category ?\";\n\"Structural\";\n\"Solid Family File Path\";\n\n\"Family Name will Create\";\n\"\";"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.CreateList, CoreNodeModels",
+      "VariableInputPorts": true,
+      "Id": "c260264184f44bea8e7f03d3b32c1cd1",
+      "NodeType": "ExtensionNode",
+      "Inputs": [
+        {
+          "Id": "6350c858f73045ee82646ffed98fa52d",
+          "Name": "item0",
+          "Description": "Item Index #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "7b046a9378a64ea093e2176835a91ddb",
+          "Name": "item1",
+          "Description": "Item Index #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "12bc2e5e26db4f5f99062f53da102291",
+          "Name": "item2",
+          "Description": "Item Index #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "26533fc072f54e0c8035a437857bd4f3",
+          "Name": "list",
+          "Description": "A list",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Makes a new list from the given inputs"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "219697d9-d6eb-4f4a-97d6-1fc8acac27a7",
+      "FunctionType": "Graph",
+      "Id": "bde02dafb139419095f6b3ce059272d2",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "1e1c88e949264092b68a5bddf0f5f061",
+          "Name": "InputName",
+          "Description": "string\nDefault value : \"\"",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "aaa3db20183843adb7b7cf6d7220d1d8",
+          "Name": "DefaulPath",
+          "Description": "string\nDefault value : \"FilePath\"",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "b372845691b445adaa6ce86c20d982de",
+          "Name": "ButtonText",
+          "Description": "Is ignored if a default path is given\n\nstring\nDefault value : \"FilePath\"",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "4dc95938f11e492d8de00edc6ef462b0",
+          "Name": "FilePath input",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Create filepath input for UI.MultipleInputForm ++ . Check out www.data-shapes.net for more infos !"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "Id": "340f1a47844345438bef4b6d6cd1f369",
+      "NodeType": "CodeBlockNode",
+      "Inputs": [
+        {
+          "Id": "06e2a49e641143b6bac4f390e27e66ff",
+          "Name": "Element",
+          "Description": "Element",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "a2e16a4499ba43ea9ca0a15c9a08a500",
+          "Name": "FamilyPath",
+          "Description": "FamilyPath",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "205c6c33beeb4d76967eb25e46b2af31",
+          "Name": "FamilyNameCreate",
+          "Description": "FamilyNameCreate",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "b6dc4774f75841cba6727ceaf328e4e1",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "65b0b258250b4d278a898951178fcffa",
+          "Name": "",
+          "Description": "Value of expression at line 3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "e7ffe0efe87c4f959117b06183205854",
+          "Name": "",
+          "Description": "Value of expression at line 4",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly",
+      "Code": "Element[0];\n\nFamilyPath[1];\nFamilyNameCreate[2];"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "928e40a7-91ac-45c3-8d59-4d899fc49b83",
+      "FunctionType": "Graph",
+      "Id": "e944205e39894ec794f519537e098321",
+      "NodeType": "FunctionNode",
+      "Inputs": [
+        {
+          "Id": "166907a8b9ee4f8ea019f874f91e3c4e",
+          "Name": "InputName",
+          "Description": "string\nDefault value : \"\"",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "f5fef8be70754fa0b4235ad07555bc68",
+          "Name": "DefaultText",
+          "Description": "string\nDefault value : \"\"",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "73db61cbd3904144be39977ad1776cd1",
+          "Name": "IsNumberEntry",
+          "Description": "bool\nDefault value : false",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "8088ef4d89094140bb490a798228dd30",
+          "Name": "TextBox input",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Create Data for TextBox input in UI.MultipleInputForm ++ . Check out www.data-shapes.net for more informations"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.Filename, CoreNodeModels",
+      "Id": "fd1e325590b84f5091fec0d77f564baf",
+      "NodeType": "ExtensionNode",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "10d4128c47444c6f92bc5c287eaa3e91",
+          "Name": "",
+          "Description": "Filename",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows you to select a file on the system and returns its file path",
+      "HintPath": "G:\\BINHNGO\\Dynamo\\0.1 Family revit\\Metric Generic Model.rft",
+      "InputValue": "G:\\BINHNGO\\Dynamo\\0.1 Family revit\\Metric Generic Model.rft"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "Code": "# ==============================\r\n# Dynamo Python – SolidUtils\r\n# ==============================\r\n\r\nimport clr\r\n\r\n# Revit Services\r\nclr.AddReference(\"RevitServices\")\r\nfrom RevitServices.Persistence import DocumentManager\r\n\r\n# Revit API\r\nclr.AddReference(\"RevitAPI\")\r\nfrom Autodesk.Revit.DB import (\r\n    Solid,\r\n    GeometryInstance,\r\n    Options,\r\n    Transform,\r\n    SolidUtils\r\n)\r\n\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\n\r\n# ==============================\r\n# INPUT\r\n# ==============================\r\n# IN[0] : Element | Solid | List[Element/Solid]\r\n# IN[1] : Transform (optional) – nếu None → Identity\r\n\r\ninput_data = IN[0]\r\ninput_transform = IN[1] if len(IN) > 1 else None\r\n\r\n# ==============================\r\n# UTILS\r\n# ==============================\r\n\r\ndef ensure_list(obj):\r\n    if isinstance(obj, list):\r\n        return obj\r\n    return [obj]\r\n\r\ndef get_solids_from_geom(geom):\r\n    \"\"\"Extract valid solids from GeometryElement\"\"\"\r\n    solids = []\r\n    for g in geom:\r\n        if isinstance(g, Solid) and g.Volume > 0:\r\n            solids.append(g)\r\n\r\n        elif isinstance(g, GeometryInstance):\r\n            inst_geom = g.GetInstanceGeometry()\r\n            for ig in inst_geom:\r\n                if isinstance(ig, Solid) and ig.Volume > 0:\r\n                    solids.append(ig)\r\n    return solids\r\n\r\ndef get_solids(obj):\r\n    \"\"\"Accept Solid or Element\"\"\"\r\n    solids = []\r\n\r\n    if isinstance(obj, Solid):\r\n        if obj.Volume > 0:\r\n            solids.append(obj)\r\n\r\n    else:\r\n        try:\r\n            opt = Options()\r\n            geom = obj.get_Geometry(opt)\r\n            if geom:\r\n                solids.extend(get_solids_from_geom(geom))\r\n        except:\r\n            pass\r\n\r\n    return solids\r\n\r\n# ==============================\r\n# MAIN\r\n# ==============================\r\n\r\ninputs = ensure_list(input_data)\r\n\r\n# Transform\r\nif input_transform and isinstance(input_transform, Transform):\r\n    tf = input_transform\r\nelse:\r\n    tf = Transform.Identity\r\n\r\nresult_solids = []\r\n\r\nfor item in inputs:\r\n    solids = get_solids(item)\r\n\r\n    for s in solids:\r\n        try:\r\n            new_solid = SolidUtils.CreateTransformed(s, tf)\r\n            if new_solid and new_solid.Volume > 0:\r\n                result_solids.append(new_solid)\r\n        except:\r\n            pass\r\n\r\n# ==============================\r\n# OUTPUT\r\n# ==============================\r\n\r\nOUT = result_solids\r\n",
+      "Engine": "CPython3",
+      "EngineName": "CPython3",
+      "VariableInputPorts": true,
+      "Id": "70acf676893445ac8f849d0b9696a013",
+      "NodeType": "PythonScriptNode",
+      "Inputs": [
+        {
+          "Id": "c3f20f3d3225499083c26b06ccc71a74",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "94ba0f0b84074cb380f25603a0f5dedb",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "68e55be9baa94acaac2b4295cab1bad5",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded Python script."
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "Code": "# ============================================================\r\n# Create FreeForm Family from Dynamo Geometry\r\n# Revit 2024 | Dynamo | IronPython 2.7\r\n# FULL FIX: single solid + ExportToSAT\r\n# ============================================================\r\n\r\nimport clr\r\nimport System\r\nimport sys\r\nimport traceback\r\nfrom itertools import repeat\r\n\r\n# ------------------ IronPython Lib ------------------\r\npf_path = System.Environment.GetFolderPath(\r\n    System.Environment.SpecialFolder.ProgramFilesX86\r\n)\r\nsys.path.append('%s\\\\IronPython 2.7\\\\Lib' % pf_path)\r\n\r\n# ------------------ Dynamo Geometry ------------------\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\nfrom Autodesk.DesignScript.Geometry import Point as DynPoint\r\n\r\n# ------------------ Revit Services ------------------\r\nclr.AddReference('RevitServices')\r\nfrom RevitServices.Persistence import DocumentManager\r\nfrom RevitServices.Transactions import TransactionManager\r\n\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\nuiapp = DocumentManager.Instance.CurrentUIApplication\r\napp = uiapp.Application\r\n\r\n# ------------------ Revit API ------------------\r\nclr.AddReference('RevitAPI')\r\nfrom Autodesk.Revit.DB import *\r\nfrom Autodesk.Revit.DB.Structure import StructuralType\r\n\r\n# ------------------ Revit Nodes ------------------\r\nclr.AddReference('RevitNodes')\r\nimport Revit\r\nclr.ImportExtensions(Revit.Elements)\r\nclr.ImportExtensions(Revit.GeometryConversion)\r\n\r\n# ===================================================\r\n# UTILS (FIX SINGLE SOLID)\r\n# ===================================================\r\n\r\ndef tolist(x):\r\n    if isinstance(x, list):\r\n        return x\r\n    return [x]\r\n\r\ndef PadLists(lists):\r\n    base = len(lists[0])\r\n    for i in xrange(1, len(lists)):\r\n        if len(lists[i]) < base:\r\n            lists[i].extend(\r\n                repeat(lists[i][-1], base - len(lists[i]))\r\n            )\r\n        elif len(lists[i]) > base:\r\n            lists[i] = lists[i][:base]\r\n    return lists\r\n\r\n# ===================================================\r\n# FAMILY LOAD OPTIONS (FIXED)\r\n# ===================================================\r\n\r\nclass FamLoadOpt(IFamilyLoadOptions):\r\n    def OnFamilyFound(self, familyInUse, overwriteParameterValues):\r\n        overwriteParameterValues.Value = True\r\n        return True\r\n\r\n    def OnSharedFamilyFound(self, familyInUse, source, overwriteParameterValues):\r\n        overwriteParameterValues.Value = True\r\n        return True\r\n\r\n# ===================================================\r\n# INPUTS\r\n# ===================================================\r\n\r\ngeom     = tolist(IN[0])\r\nfam_path = IN[1]\r\nnames    = tolist(IN[2])\r\ncategory = tolist(IN[3])\r\nmaterial = tolist(IN[4])\r\nisVoid   = tolist(IN[5])\r\nsubcat   = tolist(IN[6])\r\n\r\norigin = XYZ.Zero\r\nstr_typ = StructuralType.NonStructural\r\ntemp_path = System.IO.Path.GetTempPath()\r\ninvalid_chars = System.IO.Path.GetInvalidFileNameChars()\r\n\r\nacceptable_views = (\r\n    'ThreeD', 'FloorPlan', 'EngineeringPlan',\r\n    'CeilingPlan', 'Elevation', 'Section'\r\n)\r\n\r\n# ------------------ Units (Revit 2024) ------------------\r\nif int(doc.Application.VersionNumber) > 2021:\r\n    units = doc.GetUnits().GetFormatOptions(\r\n        ForgeTypeId(\"autodesk.spec.aec:length\")\r\n    ).GetUnitTypeId()\r\nelse:\r\n    units = doc.GetUnits().GetFormatOptions(\r\n        UnitType.UT_Length\r\n    ).DisplayUnits\r\n\r\nfactor = UnitUtils.ConvertToInternalUnits(1, units)\r\n\r\n# ------------------ Import Options ------------------\r\nsatOpt = SATImportOptions()\r\nsatOpt.Placement = ImportPlacement.Origin\r\nsatOpt.Unit = ImportUnit.Foot\r\n\r\nSaveAsOpt = SaveAsOptions()\r\nSaveAsOpt.OverwriteExistingFile = True\r\n\r\n# ===================================================\r\n# GEOMETRY HELPER\r\n# ===================================================\r\n\r\ndef get_valid_solid(import_instance):\r\n    opt = Options()\r\n    opt.ComputeReferences = True\r\n\r\n    geo = import_instance.get_Geometry(opt)\r\n    for g in geo:\r\n        if isinstance(g, GeometryInstance):\r\n            for obj in g.GetInstanceGeometry():\r\n                if isinstance(obj, Solid) and obj.Volume > 1e-6:\r\n                    return obj\r\n    return None\r\n\r\n# ===================================================\r\n# MAIN FUNCTION\r\n# ===================================================\r\n\r\ndef CreateFamilyFromGeometry(\r\n        s1, name1, cat1, isVoid1, mat1, subcat1):\r\n\r\n    try:\r\n        # ---------- Validate ----------\r\n        if any(c in name1 for c in invalid_chars):\r\n            raise Exception(\"Invalid family name: \" + name1)\r\n\r\n        enable_mat = mat1 not in [None, \"\"]\r\n        enable_sub = subcat1 not in [None, \"\"]\r\n\r\n        TransactionManager.ForceCloseTransaction(\r\n            TransactionManager.Instance\r\n        )\r\n\r\n        # ---------- New Family ----------\r\n        famdoc = app.NewFamilyDocument(fam_path)\r\n\r\n        # ---------- Scale ----------\r\n        if factor != 1:\r\n            s1 = s1.Scale(factor)\r\n\r\n        vec = Vector.ByTwoPoints(\r\n            BoundingBox.ByGeometry(s1).MinPoint,\r\n            DynPoint.Origin()\r\n        )\r\n        s1 = s1.Translate(vec)\r\n\r\n        # ---------- Export SAT (FIX) ----------\r\n        sat_path = System.IO.Path.Combine(\r\n            temp_path, name1 + \".sat\"\r\n        )\r\n        Geometry.ExportToSAT([s1], sat_path)\r\n\r\n        # ---------- Find View ----------\r\n        view1 = None\r\n        for v in FilteredElementCollector(famdoc).OfClass(View):\r\n            if not v.IsTemplate and str(v.ViewType) in acceptable_views:\r\n                view1 = v\r\n                break\r\n\r\n        # ---------- Import SAT ----------\r\n        t = Transaction(famdoc, \"Import SAT\")\r\n        t.Start()\r\n        satId = famdoc.Import(sat_path, satOpt, view1)\r\n        t.Commit()\r\n\r\n        import_inst = famdoc.GetElement(satId)\r\n        solid = get_valid_solid(import_inst)\r\n\r\n        if not solid:\r\n            raise Exception(\"No valid solid from SAT\")\r\n\r\n        # ---------- Cleanup ----------\r\n        t = Transaction(famdoc, \"Cleanup\")\r\n        t.Start()\r\n        famdoc.Delete(satId)\r\n        t.Commit()\r\n        System.IO.File.Delete(sat_path)\r\n\r\n        # ---------- Category ----------\r\n        try:\r\n            famdoc.OwnerFamily.FamilyCategory = \\\r\n                famdoc.Settings.Categories.get_Item(cat1.Name)\r\n        except:\r\n            pass\r\n\r\n        # ---------- Create FreeForm ----------\r\n        t = Transaction(famdoc, \"Create FreeForm\")\r\n        t.Start()\r\n        ff = FreeFormElement.Create(famdoc, solid)\r\n\r\n        if isVoid1:\r\n            ff.get_Parameter(\r\n                BuiltInParameter.ELEMENT_IS_CUTTING\r\n            ).Set(1)\r\n            famdoc.OwnerFamily.get_Parameter(\r\n                BuiltInParameter.FAMILY_ALLOW_CUT_WITH_VOIDS\r\n            ).Set(1)\r\n        else:\r\n            if enable_mat:\r\n                fam_mat = None\r\n                for m in FilteredElementCollector(famdoc).OfClass(Material):\r\n                    if m.Name == mat1:\r\n                        fam_mat = m\r\n                        break\r\n                if fam_mat:\r\n                    ff.get_Parameter(\r\n                        BuiltInParameter.MATERIAL_ID_PARAM\r\n                    ).Set(fam_mat.Id)\r\n\r\n            if enable_sub:\r\n                fam_cat = famdoc.OwnerFamily.FamilyCategory\r\n                subs = fam_cat.SubCategories\r\n                if subs.Contains(subcat1):\r\n                    sc = subs[subcat1]\r\n                else:\r\n                    sc = famdoc.Settings.Categories.NewSubcategory(\r\n                        fam_cat, subcat1\r\n                    )\r\n                ff.Subcategory = sc\r\n\r\n        t.Commit()\r\n\r\n        # ---------- Save & Load ----------\r\n        save_path = System.IO.Path.Combine(\r\n            temp_path, name1 + \".rfa\"\r\n        )\r\n        famdoc.SaveAs(save_path, SaveAsOpt)\r\n        family = famdoc.LoadFamily(doc, FamLoadOpt())\r\n        famdoc.Close(False)\r\n        System.IO.File.Delete(save_path)\r\n\r\n        # ---------- Place Instance ----------\r\n        symbol_id = list(family.GetFamilySymbolIds())[0]\r\n        symbol = doc.GetElement(symbol_id)\r\n\r\n        t = Transaction(doc, \"Place Family\")\r\n        t.Start()\r\n        if not symbol.IsActive:\r\n            symbol.Activate()\r\n\r\n        inst = doc.Create.NewFamilyInstance(\r\n            origin, symbol, str_typ\r\n        )\r\n        ElementTransformUtils.MoveElement(\r\n            doc, inst.Id, vec.Reverse().ToXyz()\r\n        )\r\n        t.Commit()\r\n\r\n        return inst.ToDSType(False), family.ToDSType(False)\r\n\r\n    except:\r\n        return traceback.format_exc(), \"\"\r\n\r\n# ===================================================\r\n# EXECUTION (SAFE FOR SINGLE SOLID)\r\n# ===================================================\r\n\r\nif len(geom) == len(names) == len(category) == \\\r\n   len(isVoid) == len(material) == len(subcat):\r\n\r\n    results = map(\r\n        CreateFamilyFromGeometry,\r\n        geom, names, category, isVoid, material, subcat\r\n    )\r\n\r\nelif len(geom) == len(names):\r\n    padded = PadLists([geom, category, isVoid, material, subcat])\r\n    results = map(\r\n        CreateFamilyFromGeometry,\r\n        geom, names,\r\n        padded[1], padded[2], padded[3], padded[4]\r\n    )\r\nelse:\r\n    results = [(\"Geometry & Name mismatch\", \"\")]\r\n\r\nOUT = (\r\n    [r[0] for r in results],\r\n    [r[1] for r in results]\r\n)\r\n",
+      "Engine": "CPython3",
+      "EngineName": "CPython3",
+      "VariableInputPorts": true,
+      "Id": "a47c36ff801c450a8d8425946178a201",
+      "NodeType": "PythonScriptNode",
+      "Inputs": [
+        {
+          "Id": "24687fc75c774d95a61718b8463d0f50",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "5f6eca6f699c4136847fb2b4e03f27ea",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "2b9d0cadff3d42d68d5114b174a3fcb3",
+          "Name": "IN[2]",
+          "Description": "Input #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "065850b7d9fe4b008444de1c06f68187",
+          "Name": "IN[3]",
+          "Description": "Input #3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "777d4d1541674cda8eddb4636491ab68",
+          "Name": "IN[4]",
+          "Description": "Input #4",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "057be815d38e41218dbfa6c10a5e7793",
+          "Name": "IN[5]",
+          "Description": "Input #5",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "4dd5022530b44658a2c210f319a76055",
+          "Name": "IN[6]",
+          "Description": "Input #6",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "94622ccceb0f495bb28e8793e501c186",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded Python script."
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "Code": "# ============================================================\r\n# Create FreeForm Family from Dynamo Geometry\r\n# Revit 2024 + Dynamo + IronPython 2.7 (SAFE VERSION)\r\n# Refactor & Fix by ChatGPT\r\n# ============================================================\r\n\r\nimport clr\r\nimport System\r\nfrom System.Collections.Generic import *\r\nfrom itertools import repeat\r\nimport sys\r\nimport traceback\r\n\r\n# ------------------ IronPython Lib ------------------\r\npf_path = System.Environment.GetFolderPath(\r\n    System.Environment.SpecialFolder.ProgramFilesX86\r\n)\r\nsys.path.append('%s\\\\IronPython 2.7\\\\Lib' % pf_path)\r\n\r\n# ------------------ Dynamo Geometry ------------------\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\nfrom Autodesk.DesignScript.Geometry import Point as DynPoint\r\n\r\n# ------------------ Revit Services ------------------\r\nclr.AddReference('RevitServices')\r\nfrom RevitServices.Persistence import DocumentManager\r\nfrom RevitServices.Transactions import TransactionManager\r\n\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\nuiapp = DocumentManager.Instance.CurrentUIApplication\r\napp = uiapp.Application\r\n\r\n# ------------------ Revit API ------------------\r\nclr.AddReference('RevitAPI')\r\nfrom Autodesk.Revit.DB import *\r\nfrom Autodesk.Revit.DB.Structure import StructuralType\r\n\r\n# ------------------ Revit Nodes ------------------\r\nclr.AddReference('RevitNodes')\r\nimport Revit\r\nclr.ImportExtensions(Revit.Elements)\r\nclr.ImportExtensions(Revit.GeometryConversion)\r\n\r\n# ===================================================\r\n# UTILS\r\n# ===================================================\r\n\r\ndef tolist(x):\r\n    if isinstance(x, list):\r\n        return x\r\n    else:\r\n        return [x]\r\n\r\n\r\ndef PadLists(lists):\r\n    base_len = len(lists[0])\r\n    for i in xrange(1, len(lists)):\r\n        if len(lists[i]) < base_len:\r\n            lists[i].extend(\r\n                repeat(lists[i][-1], base_len - len(lists[i]))\r\n            )\r\n        elif len(lists[i]) > base_len:\r\n            lists[i] = lists[i][:base_len]\r\n    return lists\r\n\r\n# ===================================================\r\n# FAMILY LOAD OPTIONS (FIXED)\r\n# ===================================================\r\n\r\nclass FamLoadOpt(IFamilyLoadOptions):\r\n    def OnFamilyFound(self, familyInUse, overwriteParameterValues):\r\n        overwriteParameterValues.Value = True\r\n        return True\r\n\r\n    def OnSharedFamilyFound(self, familyInUse, source, overwriteParameterValues):\r\n        overwriteParameterValues.Value = True\r\n        return True\r\n\r\n# ===================================================\r\n# SETTINGS\r\n# ===================================================\r\n\r\ngeom      = tolist(IN[0])\r\nfam_path  = IN[1]\r\nnames     = tolist(IN[2])\r\ncategory  = tolist(IN[3])\r\nmaterial  = tolist(IN[4])\r\nisVoid    = tolist(IN[5])\r\nsubcat    = tolist(IN[6])\r\n\r\norigin = XYZ.Zero\r\nstr_typ = StructuralType.NonStructural\r\ntemp_path = System.IO.Path.GetTempPath()\r\ninvalid_chars = System.IO.Path.GetInvalidFileNameChars()\r\n\r\nacceptable_views = (\r\n    'ThreeD', 'FloorPlan', 'EngineeringPlan',\r\n    'CeilingPlan', 'Elevation', 'Section'\r\n)\r\n\r\n# ---------- Units (Revit 2024) ----------\r\nif int(doc.Application.VersionNumber) > 2021:\r\n    units = doc.GetUnits().GetFormatOptions(\r\n        ForgeTypeId(\"autodesk.spec.aec:length\")\r\n    ).GetUnitTypeId()\r\nelse:\r\n    units = doc.GetUnits().GetFormatOptions(\r\n        UnitType.UT_Length\r\n    ).DisplayUnits\r\n\r\nfactor = UnitUtils.ConvertToInternalUnits(1, units)\r\n\r\n# ---------- Import Options ----------\r\nsatOpt = SATImportOptions()\r\nsatOpt.Placement = ImportPlacement.Origin\r\nsatOpt.Unit = ImportUnit.Foot\r\n\r\nSaveAsOpt = SaveAsOptions()\r\nSaveAsOpt.OverwriteExistingFile = True\r\n\r\n# ===================================================\r\n# GEOMETRY HELPERS\r\n# ===================================================\r\n\r\ndef get_valid_solid(import_instance):\r\n    opt = Options()\r\n    opt.ComputeReferences = True\r\n    geo = import_instance.get_Geometry(opt)\r\n\r\n    for g in geo:\r\n        if isinstance(g, GeometryInstance):\r\n            inst_geo = g.GetInstanceGeometry()\r\n            for obj in inst_geo:\r\n                if isinstance(obj, Solid) and obj.Volume > 1e-6:\r\n                    return obj\r\n    return None\r\n\r\n# ===================================================\r\n# MAIN FUNCTION\r\n# ===================================================\r\n\r\ndef CreateFamilyFromGeometry(\r\n        s1, name1, cat1, isVoid1, mat1, subcat1):\r\n\r\n    try:\r\n        # ---------- Validate name ----------\r\n        if any(c in name1 for c in invalid_chars):\r\n            raise Exception(\"Invalid family name: \" + name1)\r\n\r\n        enable_mat = mat1 not in [None, \"\"]\r\n        enable_sub  = subcat1 not in [None, \"\"]\r\n\r\n        TransactionManager.ForceCloseTransaction(\r\n            TransactionManager.Instance\r\n        )\r\n\r\n        # ---------- New Family ----------\r\n        famdoc = app.NewFamilyDocument(fam_path)\r\n\r\n        # ---------- Scale & Move ----------\r\n        if factor != 1:\r\n            s1 = s1.Scale(factor)\r\n\r\n        vec = Vector.ByTwoPoints(\r\n            BoundingBox.ByGeometry(s1).MinPoint,\r\n            DynPoint.Origin()\r\n        )\r\n        s1 = s1.Translate(vec)\r\n\r\n        # ---------- Export SAT ----------\r\n        sat_path = System.IO.Path.Combine(\r\n            temp_path, name1 + \".sat\"\r\n        )\r\n        Geometry.ExportToSAT(s1, sat_path)\r\n\r\n        # ---------- Find View ----------\r\n        view1 = None\r\n        for v in FilteredElementCollector(famdoc).OfClass(View):\r\n            if not v.IsTemplate and str(v.ViewType) in acceptable_views:\r\n                view1 = v\r\n                break\r\n\r\n        # ---------- Import SAT ----------\r\n        t = Transaction(famdoc, \"Import SAT\")\r\n        t.Start()\r\n        satId = famdoc.Import(sat_path, satOpt, view1)\r\n        t.Commit()\r\n\r\n        import_inst = famdoc.GetElement(satId)\r\n        solid = get_valid_solid(import_inst)\r\n\r\n        if not solid:\r\n            raise Exception(\"No valid solid found\")\r\n\r\n        # ---------- Cleanup ----------\r\n        t = Transaction(famdoc, \"Cleanup\")\r\n        t.Start()\r\n        famdoc.Delete(satId)\r\n        t.Commit()\r\n        System.IO.File.Delete(sat_path)\r\n\r\n        # ---------- Category ----------\r\n        try:\r\n            famdoc.OwnerFamily.FamilyCategory = \\\r\n                famdoc.Settings.Categories.get_Item(cat1.Name)\r\n        except:\r\n            pass\r\n\r\n        # ---------- Create FreeForm ----------\r\n        t = Transaction(famdoc, \"Create FreeForm\")\r\n        t.Start()\r\n        ff = FreeFormElement.Create(famdoc, solid)\r\n\r\n        if isVoid1:\r\n            ff.get_Parameter(\r\n                BuiltInParameter.ELEMENT_IS_CUTTING\r\n            ).Set(1)\r\n            famdoc.OwnerFamily.get_Parameter(\r\n                BuiltInParameter.FAMILY_ALLOW_CUT_WITH_VOIDS\r\n            ).Set(1)\r\n        else:\r\n            if enable_mat:\r\n                fam_mat = None\r\n                for m in FilteredElementCollector(famdoc).OfClass(Material):\r\n                    if m.Name == mat1:\r\n                        fam_mat = m\r\n                        break\r\n                if fam_mat:\r\n                    ff.get_Parameter(\r\n                        BuiltInParameter.MATERIAL_ID_PARAM\r\n                    ).Set(fam_mat.Id)\r\n\r\n            if enable_sub:\r\n                fam_cat = famdoc.OwnerFamily.FamilyCategory\r\n                subs = fam_cat.SubCategories\r\n                if subs.Contains(subcat1):\r\n                    sc = subs[subcat1]\r\n                else:\r\n                    sc = famdoc.Settings.Categories.NewSubcategory(\r\n                        fam_cat, subcat1\r\n                    )\r\n                ff.Subcategory = sc\r\n\r\n        t.Commit()\r\n\r\n        # ---------- Save & Load ----------\r\n        save_path = System.IO.Path.Combine(\r\n            temp_path, name1 + \".rfa\"\r\n        )\r\n        famdoc.SaveAs(save_path, SaveAsOpt)\r\n        family = famdoc.LoadFamily(doc, FamLoadOpt())\r\n        famdoc.Close(False)\r\n        System.IO.File.Delete(save_path)\r\n\r\n        # ---------- Place Instance ----------\r\n        symbol_id = list(family.GetFamilySymbolIds())[0]\r\n        symbol = doc.GetElement(symbol_id)\r\n\r\n        t = Transaction(doc, \"Place Family\")\r\n        t.Start()\r\n        if not symbol.IsActive:\r\n            symbol.Activate()\r\n\r\n        inst = doc.Create.NewFamilyInstance(\r\n            origin, symbol, str_typ\r\n        )\r\n        ElementTransformUtils.MoveElement(\r\n            doc, inst.Id, vec.Reverse().ToXyz()\r\n        )\r\n        t.Commit()\r\n\r\n        return inst.ToDSType(False), family.ToDSType(False)\r\n\r\n    except:\r\n        return traceback.format_exc(), \"\"\r\n\r\n# ===================================================\r\n# EXECUTION\r\n# ===================================================\r\n\r\nif len(geom) == len(names) == len(category) == \\\r\n   len(isVoid) == len(material) == len(subcat):\r\n\r\n    results = map(\r\n        CreateFamilyFromGeometry,\r\n        geom, names, category, isVoid, material, subcat\r\n    )\r\n\r\nelif len(geom) == len(names):\r\n    padded = PadLists([geom, category, isVoid, material, subcat])\r\n    results = map(\r\n        CreateFamilyFromGeometry,\r\n        geom, names,\r\n        padded[1], padded[2], padded[3], padded[4]\r\n    )\r\nelse:\r\n    results = [(\"Geometry & Name mismatch\", \"\")]\r\n\r\nOUT = (\r\n    [r[0] for r in results],\r\n    [r[1] for r in results]\r\n)\r\n",
+      "Engine": "IronPython2",
+      "EngineName": "IronPython2",
+      "VariableInputPorts": true,
+      "Id": "5ec1da95785848a384e23d6f517feaf6",
+      "NodeType": "PythonScriptNode",
+      "Inputs": [
+        {
+          "Id": "87e1c4d2bf6b4079a208277547a171ce",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "bd5697e5cb934ef187f86983b7c1c51d",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "29817f3fe7fd494b9f0924a598d25b4f",
+          "Name": "IN[2]",
+          "Description": "Input #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "c227b03cc1754b5690a98ba8648c5f13",
+          "Name": "IN[3]",
+          "Description": "Input #3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "505efd63345649c98941bb6f483ac09a",
+          "Name": "IN[4]",
+          "Description": "Input #4",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "b8f3ad434894430b8897fe5fbd4e933f",
+          "Name": "IN[5]",
+          "Description": "Input #5",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "fc1a5e1485dd43d590cfb3cd201d18c3",
+          "Name": "IN[6]",
+          "Description": "Input #6",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "48c56e6ee93b446ebaca7f0685a8d0d3",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded Python script."
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "Code": "# ============================================================\r\n# Create FreeForm Family from Dynamo Geometry\r\n# Revit 2024 | Dynamo | IronPython 2.7\r\n# FULL FIX: single solid + ExportToSAT\r\n# ============================================================\r\n\r\nimport clr\r\nimport System\r\nimport sys\r\nimport traceback\r\nfrom itertools import repeat\r\n\r\n# ------------------ IronPython Lib ------------------\r\npf_path = System.Environment.GetFolderPath(\r\n    System.Environment.SpecialFolder.ProgramFilesX86\r\n)\r\nsys.path.append('%s\\\\IronPython 2.7\\\\Lib' % pf_path)\r\n\r\n# ------------------ Dynamo Geometry ------------------\r\nclr.AddReference('ProtoGeometry')\r\nfrom Autodesk.DesignScript.Geometry import *\r\nfrom Autodesk.DesignScript.Geometry import Point as DynPoint\r\n\r\n# ------------------ Revit Services ------------------\r\nclr.AddReference('RevitServices')\r\nfrom RevitServices.Persistence import DocumentManager\r\nfrom RevitServices.Transactions import TransactionManager\r\n\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\nuiapp = DocumentManager.Instance.CurrentUIApplication\r\napp = uiapp.Application\r\n\r\n# ------------------ Revit API ------------------\r\nclr.AddReference('RevitAPI')\r\nfrom Autodesk.Revit.DB import *\r\nfrom Autodesk.Revit.DB.Structure import StructuralType\r\n\r\n# ------------------ Revit Nodes ------------------\r\nclr.AddReference('RevitNodes')\r\nimport Revit\r\nclr.ImportExtensions(Revit.Elements)\r\nclr.ImportExtensions(Revit.GeometryConversion)\r\n\r\n# ===================================================\r\n# UTILS (FIX SINGLE SOLID)\r\n# ===================================================\r\n\r\ndef tolist(x):\r\n    if isinstance(x, list):\r\n        return x\r\n    return [x]\r\n\r\ndef PadLists(lists):\r\n    base = len(lists[0])\r\n    for i in xrange(1, len(lists)):\r\n        if len(lists[i]) < base:\r\n            lists[i].extend(\r\n                repeat(lists[i][-1], base - len(lists[i]))\r\n            )\r\n        elif len(lists[i]) > base:\r\n            lists[i] = lists[i][:base]\r\n    return lists\r\n\r\n# ===================================================\r\n# FAMILY LOAD OPTIONS (FIXED)\r\n# ===================================================\r\n\r\nclass FamLoadOpt(IFamilyLoadOptions):\r\n    def OnFamilyFound(self, familyInUse, overwriteParameterValues):\r\n        overwriteParameterValues.Value = True\r\n        return True\r\n\r\n    def OnSharedFamilyFound(self, familyInUse, source, overwriteParameterValues):\r\n        overwriteParameterValues.Value = True\r\n        return True\r\n\r\n# ===================================================\r\n# INPUTS\r\n# ===================================================\r\n\r\ngeom     = tolist(IN[0])\r\nfam_path = IN[1]\r\nnames    = tolist(IN[2])\r\ncategory = tolist(IN[3])\r\nmaterial = tolist(IN[4])\r\nisVoid   = tolist(IN[5])\r\nsubcat   = tolist(IN[6])\r\n\r\norigin = XYZ.Zero\r\nstr_typ = StructuralType.NonStructural\r\ntemp_path = System.IO.Path.GetTempPath()\r\ninvalid_chars = System.IO.Path.GetInvalidFileNameChars()\r\n\r\nacceptable_views = (\r\n    'ThreeD', 'FloorPlan', 'EngineeringPlan',\r\n    'CeilingPlan', 'Elevation', 'Section'\r\n)\r\n\r\n# ------------------ Units (Revit 2024) ------------------\r\nif int(doc.Application.VersionNumber) > 2021:\r\n    units = doc.GetUnits().GetFormatOptions(\r\n        ForgeTypeId(\"autodesk.spec.aec:length\")\r\n    ).GetUnitTypeId()\r\nelse:\r\n    units = doc.GetUnits().GetFormatOptions(\r\n        UnitType.UT_Length\r\n    ).DisplayUnits\r\n\r\nfactor = UnitUtils.ConvertToInternalUnits(1, units)\r\n\r\n# ------------------ Import Options ------------------\r\nsatOpt = SATImportOptions()\r\nsatOpt.Placement = ImportPlacement.Origin\r\nsatOpt.Unit = ImportUnit.Foot\r\n\r\nSaveAsOpt = SaveAsOptions()\r\nSaveAsOpt.OverwriteExistingFile = True\r\n\r\n# ===================================================\r\n# GEOMETRY HELPER\r\n# ===================================================\r\n\r\ndef get_valid_solid(import_instance):\r\n    opt = Options()\r\n    opt.ComputeReferences = True\r\n\r\n    geo = import_instance.get_Geometry(opt)\r\n    for g in geo:\r\n        if isinstance(g, GeometryInstance):\r\n            for obj in g.GetInstanceGeometry():\r\n                if isinstance(obj, Solid) and obj.Volume > 1e-6:\r\n                    return obj\r\n    return None\r\n\r\n# ===================================================\r\n# MAIN FUNCTION\r\n# ===================================================\r\n\r\ndef CreateFamilyFromGeometry(\r\n        s1, name1, cat1, isVoid1, mat1, subcat1):\r\n\r\n    try:\r\n        # ---------- Validate ----------\r\n        if any(c in name1 for c in invalid_chars):\r\n            raise Exception(\"Invalid family name: \" + name1)\r\n\r\n        enable_mat = mat1 not in [None, \"\"]\r\n        enable_sub = subcat1 not in [None, \"\"]\r\n\r\n        TransactionManager.ForceCloseTransaction(\r\n            TransactionManager.Instance\r\n        )\r\n\r\n        # ---------- New Family ----------\r\n        famdoc = app.NewFamilyDocument(fam_path)\r\n\r\n        # ---------- Scale ----------\r\n        if factor != 1:\r\n            s1 = s1.Scale(factor)\r\n\r\n        vec = Vector.ByTwoPoints(\r\n            BoundingBox.ByGeometry(s1).MinPoint,\r\n            DynPoint.Origin()\r\n        )\r\n        s1 = s1.Translate(vec)\r\n\r\n        # ---------- Export SAT (FIX) ----------\r\n        sat_path = System.IO.Path.Combine(\r\n            temp_path, name1 + \".sat\"\r\n        )\r\n        Geometry.ExportToSAT([s1], sat_path)\r\n\r\n        # ---------- Find View ----------\r\n        view1 = None\r\n        for v in FilteredElementCollector(famdoc).OfClass(View):\r\n            if not v.IsTemplate and str(v.ViewType) in acceptable_views:\r\n                view1 = v\r\n                break\r\n\r\n        # ---------- Import SAT ----------\r\n        t = Transaction(famdoc, \"Import SAT\")\r\n        t.Start()\r\n        satId = famdoc.Import(sat_path, satOpt, view1)\r\n        t.Commit()\r\n\r\n        import_inst = famdoc.GetElement(satId)\r\n        solid = get_valid_solid(import_inst)\r\n\r\n        if not solid:\r\n            raise Exception(\"No valid solid from SAT\")\r\n\r\n        # ---------- Cleanup ----------\r\n        t = Transaction(famdoc, \"Cleanup\")\r\n        t.Start()\r\n        famdoc.Delete(satId)\r\n        t.Commit()\r\n        System.IO.File.Delete(sat_path)\r\n\r\n        # ---------- Category ----------\r\n        try:\r\n            famdoc.OwnerFamily.FamilyCategory = \\\r\n                famdoc.Settings.Categories.get_Item(cat1.Name)\r\n        except:\r\n            pass\r\n\r\n        # ---------- Create FreeForm ----------\r\n        t = Transaction(famdoc, \"Create FreeForm\")\r\n        t.Start()\r\n        ff = FreeFormElement.Create(famdoc, solid)\r\n\r\n        if isVoid1:\r\n            ff.get_Parameter(\r\n                BuiltInParameter.ELEMENT_IS_CUTTING\r\n            ).Set(1)\r\n            famdoc.OwnerFamily.get_Parameter(\r\n                BuiltInParameter.FAMILY_ALLOW_CUT_WITH_VOIDS\r\n            ).Set(1)\r\n        else:\r\n            if enable_mat:\r\n                fam_mat = None\r\n                for m in FilteredElementCollector(famdoc).OfClass(Material):\r\n                    if m.Name == mat1:\r\n                        fam_mat = m\r\n                        break\r\n                if fam_mat:\r\n                    ff.get_Parameter(\r\n                        BuiltInParameter.MATERIAL_ID_PARAM\r\n                    ).Set(fam_mat.Id)\r\n\r\n            if enable_sub:\r\n                fam_cat = famdoc.OwnerFamily.FamilyCategory\r\n                subs = fam_cat.SubCategories\r\n                if subs.Contains(subcat1):\r\n                    sc = subs[subcat1]\r\n                else:\r\n                    sc = famdoc.Settings.Categories.NewSubcategory(\r\n                        fam_cat, subcat1\r\n                    )\r\n                ff.Subcategory = sc\r\n\r\n        t.Commit()\r\n\r\n        # ---------- Save & Load ----------\r\n        save_path = System.IO.Path.Combine(\r\n            temp_path, name1 + \".rfa\"\r\n        )\r\n        famdoc.SaveAs(save_path, SaveAsOpt)\r\n        family = famdoc.LoadFamily(doc, FamLoadOpt())\r\n        famdoc.Close(False)\r\n        System.IO.File.Delete(save_path)\r\n\r\n        # ---------- Place Instance ----------\r\n        symbol_id = list(family.GetFamilySymbolIds())[0]\r\n        symbol = doc.GetElement(symbol_id)\r\n\r\n        t = Transaction(doc, \"Place Family\")\r\n        t.Start()\r\n        if not symbol.IsActive:\r\n            symbol.Activate()\r\n\r\n        inst = doc.Create.NewFamilyInstance(\r\n            origin, symbol, str_typ\r\n        )\r\n        ElementTransformUtils.MoveElement(\r\n            doc, inst.Id, vec.Reverse().ToXyz()\r\n        )\r\n        t.Commit()\r\n\r\n        return inst.ToDSType(False), family.ToDSType(False)\r\n\r\n    except:\r\n        return traceback.format_exc(), \"\"\r\n\r\n# ===================================================\r\n# EXECUTION (SAFE FOR SINGLE SOLID)\r\n# ===================================================\r\n\r\nif len(geom) == len(names) == len(category) == \\\r\n   len(isVoid) == len(material) == len(subcat):\r\n\r\n    results = map(\r\n        CreateFamilyFromGeometry,\r\n        geom, names, category, isVoid, material, subcat\r\n    )\r\n\r\nelif len(geom) == len(names):\r\n    padded = PadLists([geom, category, isVoid, material, subcat])\r\n    results = map(\r\n        CreateFamilyFromGeometry,\r\n        geom, names,\r\n        padded[1], padded[2], padded[3], padded[4]\r\n    )\r\nelse:\r\n    results = [(\"Geometry & Name mismatch\", \"\")]\r\n\r\nOUT = (\r\n    [r[0] for r in results],\r\n    [r[1] for r in results]\r\n)\r\n",
+      "Engine": "IronPython2",
+      "EngineName": "IronPython2",
+      "VariableInputPorts": true,
+      "Id": "6861c29b82c54015b8856b09d8f4d1ab",
+      "NodeType": "PythonScriptNode",
+      "Inputs": [
+        {
+          "Id": "12362f19dcaa49529928870d1b01a96b",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "6ba27d5c6c7b45b08297a5f8507a3682",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "5e523de94f3d4e319edab62402c63fbf",
+          "Name": "IN[2]",
+          "Description": "Input #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "302a9af1d9a145fdaa0bbf1c3b3441b4",
+          "Name": "IN[3]",
+          "Description": "Input #3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "d213ff02fc8e47f993b93d3edd976dec",
+          "Name": "IN[4]",
+          "Description": "Input #4",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "c07470048dc7432db7ce80530dc2ad74",
+          "Name": "IN[5]",
+          "Description": "Input #5",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "879e1cb7e7e64971b53643916efa295d",
+          "Name": "IN[6]",
+          "Description": "Input #6",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "c289cb03de364dc0b4a9569bf17e0f29",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded Python script."
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "b76457948d7f42a68956c7785c2b0361",
+      "End": "065850b7d9fe4b008444de1c06f68187",
+      "Id": "53ace1e0e7124e63bb8937812cf0196d",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "b76457948d7f42a68956c7785c2b0361",
+      "End": "c227b03cc1754b5690a98ba8648c5f13",
+      "Id": "6124b05d0f0c45c7b51d71a6560026a9",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "b76457948d7f42a68956c7785c2b0361",
+      "End": "302a9af1d9a145fdaa0bbf1c3b3441b4",
+      "Id": "f159cf127593494bb22068c92ca5ac23",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "b15aff8cb1c54e3f911539a454404158",
+      "End": "0cdce83fd1d04d80a4bfe89b49648e45",
+      "Id": "968d340a0ee9448489aad71220b75837",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "5beeb694a3c84ac4ac38f42c322165fc",
+      "End": "eddb3f90dc56479da90f8a3a4690f159",
+      "Id": "5fcecc0a8666426a98381485638a87da",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "81af7a4baa244d7aaa66b59c89b63c0e",
+      "End": "24687fc75c774d95a61718b8463d0f50",
+      "Id": "b76afb5d90f34e338f3a0859bbe2c376",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "81af7a4baa244d7aaa66b59c89b63c0e",
+      "End": "c3f20f3d3225499083c26b06ccc71a74",
+      "Id": "df9b2e82b1544bce9632f29b5924a082",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "81af7a4baa244d7aaa66b59c89b63c0e",
+      "End": "87e1c4d2bf6b4079a208277547a171ce",
+      "Id": "51b85efac44e461faf5d4bff9e0606cd",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "81af7a4baa244d7aaa66b59c89b63c0e",
+      "End": "12362f19dcaa49529928870d1b01a96b",
+      "Id": "b67688aee5434f94bfb1e20bd745335c",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "2c20871ac67946078c2c74e67167b1e0",
+      "End": "b79b5f34995b4e38acc74a23bb37148f",
+      "Id": "7b372a4c342d422baf60a1df83c17030",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "e7f3d6dbda214b7fa8f4b3c9589b081b",
+      "End": "4dd5022530b44658a2c210f319a76055",
+      "Id": "3f9c4480f975400db618eeb96f2a1725",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "e7f3d6dbda214b7fa8f4b3c9589b081b",
+      "End": "fc1a5e1485dd43d590cfb3cd201d18c3",
+      "Id": "e6ddc6a0d8674ace96449da4b556dc65",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "e7f3d6dbda214b7fa8f4b3c9589b081b",
+      "End": "879e1cb7e7e64971b53643916efa295d",
+      "Id": "d11e68a92817493995f76dd3befb3e14",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "b7415d90034f459b894b2692e6e53a78",
+      "End": "6350c858f73045ee82646ffed98fa52d",
+      "Id": "0daeaf642302425aa9df2eacf83162d1",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "8f6ff8ca0e9f4840833649ab6b0a5e65",
+      "End": "06e2a49e641143b6bac4f390e27e66ff",
+      "Id": "d30dc74b7efa49478500829a3e90e906",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "8f6ff8ca0e9f4840833649ab6b0a5e65",
+      "End": "a2e16a4499ba43ea9ca0a15c9a08a500",
+      "Id": "2d67c50d48c74beea2ffe32960c8c295",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "8f6ff8ca0e9f4840833649ab6b0a5e65",
+      "End": "205c6c33beeb4d76967eb25e46b2af31",
+      "Id": "aa304a6f509d4ea68a2843472172f07d",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "e9bb7bddfe9a45f58d151318c3507fd9",
+      "End": "2d1b4b9d246945b5be5afe2452c36808",
+      "Id": "404b9285107e4c0697c989803b5885df",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "ea99db9765f04b62996416172946c654",
+      "End": "beae6030d73f4154a5943cb6b37507e6",
+      "Id": "0a8239affb66418da5e069fb6fafd8e7",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "914f955b576f464bacacb00ed8aaef62",
+      "End": "441267b401954ea6ab43786c42b54054",
+      "Id": "6dcd68c325c44362b25ee58f2d1ffb17",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "ef83018f3bff4dee82b9c7a997d61e8c",
+      "End": "3741c5025ca44b69a944fd2c31805652",
+      "Id": "d2b9a7e8bfd6490a8a2aeeacbf99e2fb",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "1a6eb099a6e040869fc14fbd0a9e8586",
+      "End": "1f0761fff26745219d0801840484cf79",
+      "Id": "2dd38b14170440869309ed22214b7485",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "ea9cb3fa1ab4434d9554be02c844654d",
+      "End": "5d903e35d225473e83bedb4446270c3a",
+      "Id": "70830ac90a654820ae488618084f0776",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "77622b544af7479994f904176765d90b",
+      "End": "ab9b49d228f74a8c8748a09a80bfe516",
+      "Id": "a3259eef78904de58306294eea9f56d6",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "21f224d49e23407fa873007a44a6ef04",
+      "End": "45f7074b9bc84fb1a3a74294d2192b4c",
+      "Id": "36f5e754fc064e5fa706e6594765c9a7",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "19e1857513c14d128392e924c455d33b",
+      "End": "55fba6536aee408ab0f73789b17e1b19",
+      "Id": "a386d390dc6a47729aab18cc209fa327",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "d8e61e093ec64dce83da40eba6a1dc26",
+      "End": "1e1c88e949264092b68a5bddf0f5f061",
+      "Id": "b254a8d590174c909a3615200e33d477",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "b0608099c8574aa7b6cb9044f0d375cf",
+      "End": "166907a8b9ee4f8ea019f874f91e3c4e",
+      "Id": "4c07b1eecb164ded9d483edea6bc5639",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "8b33cdcfa9fe452ba36b02b057d6928a",
+      "End": "f5fef8be70754fa0b4235ad07555bc68",
+      "Id": "59c72a3603b34b549160260d77545ab0",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "26533fc072f54e0c8035a437857bd4f3",
+      "End": "9dcbc9a361e84a26936df66ca2e314f0",
+      "Id": "9cd526ce7db2412ea0fafe7faef88222",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "4dc95938f11e492d8de00edc6ef462b0",
+      "End": "7b046a9378a64ea093e2176835a91ddb",
+      "Id": "91687301f3c9425fa296d920ffc9c47a",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "b6dc4774f75841cba6727ceaf328e4e1",
+      "End": "44625638c19f487e90d58e568e55f1de",
+      "Id": "5c8d1352a6e24a9984f0f8b3ce8d7f97",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "65b0b258250b4d278a898951178fcffa",
+      "End": "5f6eca6f699c4136847fb2b4e03f27ea",
+      "Id": "306fad61c8af4e69b63e1e54cf7950f1",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "65b0b258250b4d278a898951178fcffa",
+      "End": "bd5697e5cb934ef187f86983b7c1c51d",
+      "Id": "54a391e17924485b82dc2cb7db646ff7",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "65b0b258250b4d278a898951178fcffa",
+      "End": "6ba27d5c6c7b45b08297a5f8507a3682",
+      "Id": "41b64837db164023ae1284f36d690aba",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "e7ffe0efe87c4f959117b06183205854",
+      "End": "2b9d0cadff3d42d68d5114b174a3fcb3",
+      "Id": "8cf51ae0d8c740a5b2bfbe8cd1d544b9",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "e7ffe0efe87c4f959117b06183205854",
+      "End": "29817f3fe7fd494b9f0924a598d25b4f",
+      "Id": "3bf4107c5e384518a9c1bb76c8f14944",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "e7ffe0efe87c4f959117b06183205854",
+      "End": "5e523de94f3d4e319edab62402c63fbf",
+      "Id": "0a284f2602df45548a9e45ca49656697",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "8088ef4d89094140bb490a798228dd30",
+      "End": "12bc2e5e26db4f5f99062f53da102291",
+      "Id": "8c950e4a278f4859b4604fbb9d3312cd",
+      "IsHidden": "False"
+    },
+    {
+      "Start": "10d4128c47444c6f92bc5c287eaa3e91",
+      "End": "aaa3db20183843adb7b7cf6d7220d1d8",
+      "Id": "d4b002ed28d7476bad86e15840cff328",
+      "IsHidden": "False"
+    }
+  ],
+  "Dependencies": [
+    "ecdb3729-0de2-4c50-bdca-28fe881027a2",
+    "74e4593d-80c7-459e-924d-6d7ace1dd16d",
+    "74c13cd2-5b9a-494f-beac-ea71fec14b56",
+    "9fbd05c0-ec1f-4bd3-bf37-969a1552eab8",
+    "219697d9-d6eb-4f4a-97d6-1fc8acac27a7",
+    "928e40a7-91ac-45c3-8d59-4d899fc49b83"
+  ],
+  "NodeLibraryDependencies": [
+    {
+      "Name": "spring nodes",
+      "Version": "204.1.0",
+      "ReferenceType": "Package",
+      "Nodes": [
+        "ffad7a0cadc94517b5ca3ef296800d11"
+      ]
+    },
+    {
+      "Name": "Chynamo",
+      "Version": "0.8.5",
+      "ReferenceType": "Package",
+      "Nodes": [
+        "5e5e61c72664493eab288a9224a7c6ba"
+      ]
+    },
+    {
+      "Name": "Data-Shapes",
+      "Version": "2022.2.96",
+      "ReferenceType": "Package",
+      "Nodes": [
+        "b0105d4430d941a29b8c9fee1a290671",
+        "84ba272631f54c22aa730963b15ff8e7",
+        "bde02dafb139419095f6b3ce059272d2",
+        "e944205e39894ec794f519537e098321"
+      ]
+    },
+    {
+      "Name": "Metric Generic Model.rft",
+      "ReferenceType": "External",
+      "Nodes": [
+        "340f1a47844345438bef4b6d6cd1f369"
+      ]
+    }
+  ],
+  "Thumbnail": "",
+  "GraphDocumentationURL": null,
+  "ExtensionWorkspaceData": [
+    {
+      "ExtensionGuid": "28992e1d-abb9-417f-8b1b-05e053bee670",
+      "Name": "Properties",
+      "Version": "2.19",
+      "Data": {}
+    },
+    {
+      "ExtensionGuid": "DFBD9CC0-DB40-457A-939E-8C8555555A9D",
+      "Name": "Generative Design",
+      "Version": "6.1",
+      "Data": {}
+    }
+  ],
+  "Author": "None provided",
+  "Linting": {
+    "activeLinter": "None",
+    "activeLinterId": "7b75fb44-43fd-4631-a878-29f4d5d8399a",
+    "warningCount": 0,
+    "errorCount": 0
+  },
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.19.3.6394",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "_Background Preview",
+      "EyeX": -63413.2109375,
+      "EyeY": 11031.154296875,
+      "EyeZ": -8840.162109375,
+      "LookX": 20913.2109375,
+      "LookY": -3481.15625,
+      "LookZ": 7690.162109375,
+      "UpX": -0.057297687977552414,
+      "UpY": 0.99813473224639893,
+      "UpZ": -0.021069373935461044
+    },
+    "ConnectorPins": [],
+    "NodeViews": [
+      {
+        "Id": "c2baf36992f247d484058ba559f651db",
+        "Name": "Categories",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 2412.9517689563727,
+        "Y": 24.035065598147696
+      },
+      {
+        "Id": "ffad7a0cadc94517b5ca3ef296800d11",
+        "Name": "ꟿ FamilyInstance.ByGeometry",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 2882.9874992000687,
+        "Y": -61.8466330193404
+      },
+      {
+        "Id": "702fedd34daa46039737aab6b1c2df38",
+        "Name": "List.Flatten",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 1842.6708623088653,
+        "Y": -99.097489141324559
+      },
+      {
+        "Id": "462728e49cae44599d69b28966c07860",
+        "Name": "Element.Solids",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 1869.8821963999731,
+        "Y": -297.47733199165788
+      },
+      {
+        "Id": "033aa82de5cd4f0cbd0cd50c3b34d30b",
+        "Name": "Solid.ByUnion",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 2461.3995731149089,
+        "Y": -205.69662520931905
+      },
+      {
+        "Id": "5e5e61c72664493eab288a9224a7c6ba",
+        "Name": "RemoveNull-Lunchbox",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": false,
+        "X": 2165.1545091072157,
+        "Y": -320.7018622868606
+      },
+      {
+        "Id": "cf26d38ee4264065a4c8739e743f098e",
+        "Name": "String",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 2416.6708623088653,
+        "Y": 118.90251085867544
+      },
+      {
+        "Id": "b0105d4430d941a29b8c9fee1a290671",
+        "Name": "SelectLinkedElement(s) Data",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 224.14226876905718,
+        "Y": -175.38212591425327
+      },
+      {
+        "Id": "84ba272631f54c22aa730963b15ff8e7",
+        "Name": "MultipleInputForm ++",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 1046.9724207269744,
+        "Y": -147.24810673360253
+      },
+      {
+        "Id": "4b862920e47b40739452f7813e63209e",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 745.85306705974426,
+        "Y": 43.616193504895136
+      },
+      {
+        "Id": "5b686a4a0e7e4d1ea45b94aead8cfc03",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -162.92080628229769,
+        "Y": -168.51304202128165
+      },
+      {
+        "Id": "c260264184f44bea8e7f03d3b32c1cd1",
+        "Name": "List Create",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 745.85306705974426,
+        "Y": -143.87713982843826
+      },
+      {
+        "Id": "bde02dafb139419095f6b3ce059272d2",
+        "Name": "FilePath Data",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 374.93848833059656,
+        "Y": 117.44507306998969
+      },
+      {
+        "Id": "340f1a47844345438bef4b6d6cd1f369",
+        "Name": "Code Block",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 1490.1821902442016,
+        "Y": -267.95878163897288
+      },
+      {
+        "Id": "e944205e39894ec794f519537e098321",
+        "Name": "TextBox Data",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 340.85326814077519,
+        "Y": -27.795345106757679
+      },
+      {
+        "Id": "fd1e325590b84f5091fec0d77f564baf",
+        "Name": "File Path",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": -210.0465412472895,
+        "Y": 183.67687655798233
+      },
+      {
+        "Id": "70acf676893445ac8f849d0b9696a013",
+        "Name": "Python Script",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 3833.6331407415864,
+        "Y": -772.51734953811922
+      },
+      {
+        "Id": "a47c36ff801c450a8d8425946178a201",
+        "Name": "Python Script",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": true,
+        "ShowGeometry": true,
+        "X": 3369.5540923899262,
+        "Y": -785.03685880587159
+      },
+      {
+        "Id": "5ec1da95785848a384e23d6f517feaf6",
+        "Name": "Python Script",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": true,
+        "ShowGeometry": true,
+        "X": 3840.3026671137504,
+        "Y": -444.57841724868337
+      },
+      {
+        "Id": "6861c29b82c54015b8856b09d8f4d1ab",
+        "Name": "Python Script",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "ShowGeometry": true,
+        "X": 4245.9280635250834,
+        "Y": -554.6414059090755
+      }
+    ],
+    "Annotations": [
+      {
+        "Id": "0b9e0184d9e2488cb6dfb14b5a618a98",
+        "Title": "CreateModel",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "c2baf36992f247d484058ba559f651db",
+          "ffad7a0cadc94517b5ca3ef296800d11",
+          "033aa82de5cd4f0cbd0cd50c3b34d30b",
+          "5e5e61c72664493eab288a9224a7c6ba",
+          "cf26d38ee4264065a4c8739e743f098e",
+          "702fedd34daa46039737aab6b1c2df38"
+        ],
+        "HasNestedGroups": false,
+        "Left": 1832.6708623088653,
+        "Top": -393.7018622868606,
+        "Width": 1366.3166368912034,
+        "Height": 668.85522926752014,
+        "FontSize": 36.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": -320.7018622868606,
+        "InitialHeight": 584.6043731455361,
+        "TextblockHeight": 63.0,
+        "Background": "#FFC1D676"
+      },
+      {
+        "Id": "555438d647274c478bb6ea7d99be1cc1",
+        "Title": "To Revit",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "462728e49cae44599d69b28966c07860"
+        ],
+        "HasNestedGroups": false,
+        "Left": 1859.8821963999731,
+        "Top": -356.47733199165788,
+        "Width": 237.0,
+        "Height": 191.0,
+        "FontSize": 24.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": -297.47733199165788,
+        "InitialHeight": 145.0,
+        "TextblockHeight": 49.0,
+        "Background": "#FFFFA07A"
+      },
+      {
+        "Id": "f7b87099660649d0ba568cd8a19296d4",
+        "Title": "UI",
+        "DescriptionText": null,
+        "IsExpanded": true,
+        "WidthAdjustment": 0.0,
+        "HeightAdjustment": 0.0,
+        "Nodes": [
+          "b0105d4430d941a29b8c9fee1a290671",
+          "84ba272631f54c22aa730963b15ff8e7",
+          "4b862920e47b40739452f7813e63209e",
+          "5b686a4a0e7e4d1ea45b94aead8cfc03",
+          "c260264184f44bea8e7f03d3b32c1cd1",
+          "bde02dafb139419095f6b3ce059272d2",
+          "340f1a47844345438bef4b6d6cd1f369",
+          "fd1e325590b84f5091fec0d77f564baf"
+        ],
+        "HasNestedGroups": false,
+        "Left": -220.0465412472895,
+        "Top": -326.95878163897288,
+        "Width": 2089.2287314914911,
+        "Height": 651.63565819695521,
+        "FontSize": 24.0,
+        "GroupStyleId": "00000000-0000-0000-0000-000000000000",
+        "InitialTop": -267.95878163897288,
+        "InitialHeight": 596.63565819695521,
+        "TextblockHeight": 49.0,
+        "Background": "#FF90EE90"
+      }
+    ],
+    "X": -275.56333630337951,
+    "Y": 279.60664932276194,
+    "Zoom": 0.77090729092417887
+  }
+}

@@ -1,0 +1,520 @@
+{
+  "Uuid": "799ddde0-5bb4-4ccc-ae06-75d03daa0931",
+  "IsCustomNode": false,
+  "Description": null,
+  "Name": "script",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "StructuralDesign.Model.Selection.PickElements@string,bool",
+      "Id": "2e11e8113f9b4999a63e9c87c903b507",
+      "Inputs": [
+        {
+          "Id": "7c2b3148fd204ab09fce829097e5b9e2",
+          "Name": "statusPrompt",
+          "Description": "The message shown on the status bar.\n\nstring\nDefault value : \"Click to select multiple elements, TAB for alternates, ESC quit.\"",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "5bf6b9cb0bba4c2c82eac6c0d54175e9",
+          "Name": "refresh",
+          "Description": "Refresh selection.\n\nbool\nDefault value : true",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "3fdefc14f31646d69955b745dca9c45c",
+          "Name": "Elements",
+          "Description": "Selected elements.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Prompts the user to select multiple elements while showing a custom status prompt string.\n\nSelection.PickElements (statusPrompt: string = \"Click to select multiple elements, TAB for alternates, ESC quit.\", refresh: bool = true): Element[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "StructuralDesign.Model.Selection.PickElements@string,bool",
+      "Id": "640d9cb6576844358ad3ef26f7161ed1",
+      "Inputs": [
+        {
+          "Id": "db4b946d6d45465d951d3c213abeb4c7",
+          "Name": "statusPrompt",
+          "Description": "The message shown on the status bar.\n\nstring\nDefault value : \"Click to select multiple elements, TAB for alternates, ESC quit.\"",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "8adb79a0ff8743fdbf4c4c8351cc5c96",
+          "Name": "refresh",
+          "Description": "Refresh selection.\n\nbool\nDefault value : true",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "e3f74fc52ae74d369a0415712b31393f",
+          "Name": "Elements",
+          "Description": "Selected elements.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Prompts the user to select multiple elements while showing a custom status prompt string.\n\nSelection.PickElements (statusPrompt: string = \"Click to select multiple elements, TAB for alternates, ESC quit.\", refresh: bool = true): Element[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "66f78539-8a80-402e-81dc-28a0737ab127",
+      "FunctionType": "Graph",
+      "NodeType": "FunctionNode",
+      "Id": "712716dd49e34c2396043884bb40c53f",
+      "Inputs": [
+        {
+          "Id": "8f9f21496aff464ba6a98f703207a22e",
+          "Name": "elementToBeCut",
+          "Description": "var[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": true,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "4a02d3661f2b418ea1cffde30c1c72e6",
+          "Name": "cuttingElement",
+          "Description": "var[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 1,
+          "UseLevels": true,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "7d072abfd9af4fe79f3214274f3c631e",
+          "Name": "success",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "0f8fcec156c1473ab70ecda0dbebb470",
+          "Name": "elementToBeCut",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "2db8c64dcf7e443485953ec635930b30",
+          "Name": "cuttingElement",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Longest",
+      "Description": "Adds a solid-solid cut for two model elements (if possible). "
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "Revit.BoundingBox.GetElementsIntersect@Autodesk.DesignScript.Geometry.BoundingBox,Revit.Elements.Element[],double",
+      "Id": "8fc54ee84cc94177bb6991d026950604",
+      "Inputs": [
+        {
+          "Id": "c4d22b04379e4d6685f08ba0adb14ca4",
+          "Name": "boundingBox",
+          "Description": "Input a Bounding Box.\n\nBoundingBox",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "a5c979a1422542c1bcee04148ceb61a6",
+          "Name": "elements",
+          "Description": "Input a list of Revit elements.\n\nElement[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "84f4c72e1e894470894efc59bf82d989",
+          "Name": "tolerance",
+          "Description": "Enter values in active document units to control the match criteria in the geometry comparison. Use positive values to consider gaps, and negative values to consider overlaps.\n\ndouble\nDefault value : 0",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "684ff52cc4d746d4a7919865d26a4b0f",
+          "Name": "Element[]",
+          "Description": "Element[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Filter and return Revit elements intersecting or inside a bounding box. Element Outlines (BoundingBox) are used to determine the result.\r\rUtilises the ElementQuickFilter class which operates only on the ElementRecord, a low-memory class, for rapid results.\r\rVisit bimorph.com/bimorph-nodes for support\n\nBoundingBox.GetElementsIntersect (boundingBox: BoundingBox, elements: Element[], tolerance: double = 0): Element[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "Revit.Elements.Element.BoundingBox",
+      "Id": "7a892aacfbc44d6f914f37f00b7f9647",
+      "Inputs": [
+        {
+          "Id": "0c2c0fc27e934c7cb22492f7367e85d5",
+          "Name": "element",
+          "Description": "Revit.Elements.Element",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "e3132ead8eca4ae5b56def67e709cf50",
+          "Name": "BoundingBox",
+          "Description": "BoundingBox",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Get an Axis-aligned BoundingBox of the Element\n\nElement.BoundingBox: BoundingBox"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "DSCore.List.Chop@var[]..[],int[]",
+      "Id": "97727a26c5df4eb5bfca25cc915c644f",
+      "Inputs": [
+        {
+          "Id": "2d6174fb772a4bb0944d567863ac0252",
+          "Name": "list",
+          "Description": "List to chop into sublists\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "c1249c399c89422b880d893d858664d9",
+          "Name": "lengths",
+          "Description": "Lengths of consecutive sublists to be created from the input list\n\nint[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "0ce8e81088e045bf913d7efd96ab0748",
+          "Name": "lists",
+          "Description": "Sublists created from the list",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Chop a list into a set of consecutive sublists with the specified lengths. List division begins at the top of the list.\n\nList.Chop (list: var[]..[], lengths: int[]): var[]..[]"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "1;",
+      "Id": "07b9c1fb9ea34c1b9a62a5ad623713ce",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "2e7d16a88f4344348105f8628adf8589",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "\"Select Void Cut\";\ntrue;\n\"Select Ele be Cut\";",
+      "Id": "c91b6f3497874acda211614561128300",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "33c7a7e39fe14efc92f9d386b9d657ed",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "0ad6b48b24514361b288659cc3a8f643",
+          "Name": "",
+          "Description": "Value of expression at line 2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "8abdec56b8f140c59b70d4b58fc5b0f0",
+          "Name": "",
+          "Description": "Value of expression at line 3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly"
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "3fdefc14f31646d69955b745dca9c45c",
+      "End": "0c2c0fc27e934c7cb22492f7367e85d5",
+      "Id": "883a033dfc3b403c80f8d728ae17a994"
+    },
+    {
+      "Start": "3fdefc14f31646d69955b745dca9c45c",
+      "End": "2d6174fb772a4bb0944d567863ac0252",
+      "Id": "5eea581ee6f24ca58030e766676b98d7"
+    },
+    {
+      "Start": "e3f74fc52ae74d369a0415712b31393f",
+      "End": "a5c979a1422542c1bcee04148ceb61a6",
+      "Id": "95f74fb2253049e3a243ae2acc22b5fd"
+    },
+    {
+      "Start": "684ff52cc4d746d4a7919865d26a4b0f",
+      "End": "8f9f21496aff464ba6a98f703207a22e",
+      "Id": "25c59f1f4184411986fdbbe53ee0a670"
+    },
+    {
+      "Start": "e3132ead8eca4ae5b56def67e709cf50",
+      "End": "c4d22b04379e4d6685f08ba0adb14ca4",
+      "Id": "35a71ea5c2004d059f43cdcdf749fef9"
+    },
+    {
+      "Start": "0ce8e81088e045bf913d7efd96ab0748",
+      "End": "4a02d3661f2b418ea1cffde30c1c72e6",
+      "Id": "04b014dc0c0f4bd7b8164869e37e044c"
+    },
+    {
+      "Start": "2e7d16a88f4344348105f8628adf8589",
+      "End": "c1249c399c89422b880d893d858664d9",
+      "Id": "05906a1754794490b624ff39344c8db5"
+    },
+    {
+      "Start": "33c7a7e39fe14efc92f9d386b9d657ed",
+      "End": "7c2b3148fd204ab09fce829097e5b9e2",
+      "Id": "4ce9d2bb4c384391a6cd0fe12bc192a2"
+    },
+    {
+      "Start": "0ad6b48b24514361b288659cc3a8f643",
+      "End": "5bf6b9cb0bba4c2c82eac6c0d54175e9",
+      "Id": "055694551a634e519b607ee3dbe7c8e0"
+    },
+    {
+      "Start": "0ad6b48b24514361b288659cc3a8f643",
+      "End": "8adb79a0ff8743fdbf4c4c8351cc5c96",
+      "Id": "89f4158a620641a590699446a5280240"
+    },
+    {
+      "Start": "8abdec56b8f140c59b70d4b58fc5b0f0",
+      "End": "db4b946d6d45465d951d3c213abeb4c7",
+      "Id": "8a52865e323648219159c1d1618f9685"
+    }
+  ],
+  "Dependencies": [
+    "66f78539-8a80-402e-81dc-28a0737ab127"
+  ],
+  "NodeLibraryDependencies": [
+    {
+      "Name": "Structural Design",
+      "Version": "2019.12.11",
+      "ReferenceType": "Package",
+      "Nodes": [
+        "2e11e8113f9b4999a63e9c87c903b507",
+        "640d9cb6576844358ad3ef26f7161ed1"
+      ]
+    },
+    {
+      "Name": "Clockwork for Dynamo 2.x",
+      "Version": "2.3.0",
+      "ReferenceType": "Package",
+      "Nodes": [
+        "712716dd49e34c2396043884bb40c53f"
+      ]
+    },
+    {
+      "Name": "bimorphNodes",
+      "Version": "3.0.3",
+      "ReferenceType": "Package",
+      "Nodes": [
+        "8fc54ee84cc94177bb6991d026950604"
+      ]
+    }
+  ],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.3.0.5885",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "Id": "2e11e8113f9b4999a63e9c87c903b507",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "Selection.PickElements",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 422.0,
+        "Y": -31.0
+      },
+      {
+        "Id": "640d9cb6576844358ad3ef26f7161ed1",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "Selection.PickElements",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 418.0,
+        "Y": 398.0
+      },
+      {
+        "Id": "712716dd49e34c2396043884bb40c53f",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "Element.CutGeometry",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 1752.0000435193883,
+        "Y": 103.53363672427409
+      },
+      {
+        "Id": "8fc54ee84cc94177bb6991d026950604",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "BoundingBox.GetElementsIntersect",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 1159.5093399177226,
+        "Y": 299.05801023009064
+      },
+      {
+        "Id": "7a892aacfbc44d6f914f37f00b7f9647",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "Element.BoundingBox",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 755.0,
+        "Y": -14.0
+      },
+      {
+        "Id": "97727a26c5df4eb5bfca25cc915c644f",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "List.Chop",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 1238.1811726065455,
+        "Y": -164.71818423521725
+      },
+      {
+        "Id": "07b9c1fb9ea34c1b9a62a5ad623713ce",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "Code Block",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 1061.0,
+        "Y": -93.0
+      },
+      {
+        "Id": "c91b6f3497874acda211614561128300",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "Code Block",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 18.0,
+        "Y": -20.0
+      }
+    ],
+    "Annotations": [],
+    "X": -61.201924986150686,
+    "Y": 0.45916848844819924,
+    "Zoom": 0.65088413848656845
+  }
+}

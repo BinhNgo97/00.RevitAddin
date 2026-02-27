@@ -1,0 +1,109 @@
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Isolate element by parameter" Height="520" Width="720" WindowStartupLocation="CenterScreen">
+  <Grid Margin="6">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="260"/>
+      <ColumnDefinition Width="10"/>
+      <ColumnDefinition Width="*"/>
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="60"/>
+      <RowDefinition Height="10"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="40"/>
+    </Grid.RowDefinitions>
+
+    <!-- Title area -->
+    <Border Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Background="#EEE" CornerRadius="4" Padding="8" BorderBrush="#CCC" BorderThickness="1">
+      <TextBlock Text="Isolate element by parameter." FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+    </Border>
+
+    <!-- Left panel: Seach Parameter -->
+    <GroupBox Grid.Column="0" Grid.Row="2" Header="Seach Parameter" Margin="0,0,0,0">
+      <Grid>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="28"/>
+          <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBox Name="txtSearch" Grid.Row="0" Margin="2" Text="{Binding FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <ListView Name="lvSearchParameters" Grid.Row="1" Margin="2">
+          <ListView.ItemTemplate>
+            <DataTemplate>
+              <CheckBox Content="{Binding Name}" IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            </DataTemplate>
+          </ListView.ItemTemplate>
+        </ListView>
+      </Grid>
+    </GroupBox>
+
+    <!-- Right panel: Seach by Parameter Value -->
+    <GroupBox Grid.Column="2" Grid.Row="2" Header="Seach by Parameter Value">
+      <Grid>
+        <DataGrid Name="dgParameterValues" AutoGenerateColumns="False" CanUserAddRows="False" Margin="2" ItemsSource="{Binding ParameterRows}">
+          <DataGrid.Columns>
+            <DataGridTextColumn Header="Parameter Name" Binding="{Binding ParameterName}" Width="*" IsReadOnly="True"/>
+            <DataGridTemplateColumn Header="Parameter Value" Width="*">
+              <DataGridTemplateColumn.CellTemplate>
+                <DataTemplate>
+                  <ComboBox ItemsSource="{Binding Values}" SelectedItem="{Binding SelectedValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                </DataTemplate>
+              </DataGridTemplateColumn.CellTemplate>
+              <DataGridTemplateColumn.CellEditingTemplate>
+                <DataTemplate>
+                  <ComboBox ItemsSource="{Binding Values}" SelectedItem="{Binding SelectedValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                </DataTemplate>
+              </DataGridTemplateColumn.CellEditingTemplate>
+            </DataGridTemplateColumn>
+
+            <!-- NEW: Set Color one -->
+            <DataGridTemplateColumn Header="Set Color one" Width="140">
+              <DataGridTemplateColumn.CellTemplate>
+                <DataTemplate>
+                  <Button Padding="0" BorderThickness="1"
+                          HorizontalAlignment="Stretch"
+                          HorizontalContentAlignment="Stretch"
+                          ToolTip="Pick color for this row"
+                          Command="{Binding DataContext.PickRowColorCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                          CommandParameter="{Binding}">
+                    <Button.Background>
+                      <SolidColorBrush Color="{Binding RowColor}"/>
+                    </Button.Background>
+                  </Button>
+                </DataTemplate>
+              </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
+
+            <!-- NEW: Select one -->
+            <DataGridTemplateColumn Header="Select one" Width="120">
+              <DataGridTemplateColumn.CellTemplate>
+                <DataTemplate>
+                  <Button Content="Get-E" Width="80" Height="22"
+                          Command="{Binding DataContext.SelectRowElementsCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                          CommandParameter="{Binding}"/>
+                </DataTemplate>
+              </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
+          </DataGrid.Columns>
+        </DataGrid>
+      </Grid>
+    </GroupBox>
+
+    <!-- Bottom area: Ruler + Buttons -->
+    <DockPanel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="3" LastChildFill="True">
+      <!-- Ruler group styled -->
+      <Border DockPanel.Dock="Left" Background="#F2F2F2" BorderBrush="#CCCCCC" BorderThickness="1" CornerRadius="4" Padding="8" Margin="0,0,8,0">
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+          <TextBlock Text="Ruler:" FontWeight="SemiBold" Foreground="#333333" VerticalAlignment="Center" Margin="0,0,8,0"/>
+          <RadioButton Content="And" IsChecked="{Binding IsAndSelected, Mode=TwoWay}" GroupName="MatchMode" Margin="0,0,12,0" VerticalAlignment="Center"/>
+          <RadioButton Content="Or" IsChecked="{Binding IsOrSelected, Mode=TwoWay}" GroupName="MatchMode" VerticalAlignment="Center"/>
+        </StackPanel>
+      </Border>
+      <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+        <Button Name="btnUnIsolate" Content="UnIsolate" Width="120" Height="28" Margin="6"/>
+        <Button Name="btnCopyRow" Content="Copy Row" Width="100" Height="28" Margin="6"/>
+        <Button Name="btnIsolate" Content="Isolate Element" Width="140" Height="28" Margin="6"/>
+      </StackPanel>
+    </DockPanel>
+  </Grid>
+</Window>

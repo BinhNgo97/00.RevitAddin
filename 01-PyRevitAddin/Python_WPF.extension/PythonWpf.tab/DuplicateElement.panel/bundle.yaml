@@ -1,0 +1,4 @@
+layout:
+  - DuplicateElement
+  - IsolateElementByPara
+  - DuplicateView
