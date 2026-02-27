@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+import os
 class dotCamera_t(object):
  # no doc
  DirectionVector=None
