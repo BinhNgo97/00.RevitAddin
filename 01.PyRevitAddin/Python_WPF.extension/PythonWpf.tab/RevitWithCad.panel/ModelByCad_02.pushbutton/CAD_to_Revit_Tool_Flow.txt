@@ -1,0 +1,218 @@
+================================================================
+        FLOW HOÀN CHỈNH TOOL CAD → REVIT
+================================================================
+
+----------------------------------------------------------------
+BƯỚC 1 — LOAD FILE CAD
+----------------------------------------------------------------
+
+User nhấn [Load File Cad]
+→ Chọn 1 hoặc nhiều file .dwg
+→ Hệ thống đọc file, extract:
+    - Danh sách layer names → dùng cho dropdown Value ở Bảng 2
+    - Toàn bộ geometry (line, polyline, circle, text) → cache vào memory
+→ File name xuất hiện trong dropdown ở Bảng 1
+
+
+----------------------------------------------------------------
+BƯỚC 2 — SETUP CONDITION (BẢNG 1 + BẢNG 2)
+----------------------------------------------------------------
+
+Bảng 1 — User nhập thông tin condition:
+    Condition Name : user tự nhập text   VD: "str-C2_LK1.1-02"
+    File Name      : dropdown            VD: "C2_LK1.1-FRM-02.dwg"
+    Category       : dropdown
+                    (Structural Columns / Structural Framings / Walls / ...)
+
+Nhấn [Insert] → Bảng 2 được populate các Parameter mặc định theo Category:
+    Category = Structural Columns  → Parameter gợi ý: Layer Name, Distance
+    Category = Structural Framings → Parameter gợi ý: Layer Name, Length, Distance
+    Category = Walls               → Parameter gợi ý: Layer Name, Length, Distance
+
+Bảng 2 — User thiết lập từng rule:
+    | Parameter  | Ruler         | Value              |
+    |------------|---------------|--------------------|
+    | Layer Name | Equal         | [dropdown-layers]  |  ← Equal → Value là dropdown layer
+    | Layer Name | Equal         | [dropdown-layers]  |
+    | Length     | is great than | [number input]     |  ← Ruler khác → Value là text/number
+    | Distance   | is Less than  | [number input]     |
+    | Layer Name | Equal         | [dropdown-layers]  |
+
+    Logic giữa các dòng: OR
+    (object thỏa bất kỳ 1 dòng nào → đạt)
+
+Các button Bảng 2:
+    [Add]    → thêm dòng trống vào cuối Bảng 2
+    [Remove] → xoá dòng đang được chọn
+    [Update] → cập nhật conditions của dòng đang chọn ở Bảng 3
+
+
+----------------------------------------------------------------
+BƯỚC 3 — ADD VÀO BẢNG 3
+----------------------------------------------------------------
+
+Nhấn [Add] → Thêm 1 dòng vào Bảng 3:
+    | Condition Name  | File Name            | Categories          | Analysis | Preview | Line in Revit | Base Level |
+    |-----------------|----------------------|---------------------|----------|---------|---------------|------------|
+    | str-C2_LK1.1-02 | C2_LK1.1-FRM-02.dwg  | Structural Framings |    x     |  [ ]    |   [Select]    |    [▼]     |
+    |                 |                      |                     |          |  [ ]    |               |            |  ← dòng trống luôn có ở cuối
+
+    Condition Name  ← lấy từ Bảng 1
+    File Name       ← lấy từ Bảng 1
+    Categories      ← lấy từ Bảng 1 (chỉ hiển thị, không phải dropdown)
+    Analysis        ← "x" = chưa chạy, "v" = đã chạy có kết quả
+    Preview         ← tickbox
+    Line in Revit   ← button [Select]: user pick line tham chiếu trong Revit
+    Base Level      ← dropdown chọn level
+
+Liên kết Bảng 3 ↔ Bảng 2:
+    User click dòng bất kỳ ở Bảng 3
+    → Bảng 1 load lại: Condition Name, File Name, Category của dòng đó
+    → Bảng 2 load lại: hiển thị các conditions của dòng đó để user chỉnh sửa
+    → Sau khi chỉnh → nhấn [Update] → cập nhật lại dòng đó ở Bảng 3
+
+Button ngoài Bảng 3:
+    [Remove] → xoá dòng đang chọn ở Bảng 3
+
+
+----------------------------------------------------------------
+BƯỚC 4 — ANALYSIS
+----------------------------------------------------------------
+
+User nhấn [Analysis] trên dòng bất kỳ ở Bảng 3:
+    → Hệ thống đọc conditions của dòng đó từ Bảng 2
+    → Quét toàn bộ geometry trong file CAD tương ứng
+    → Apply logic OR: object thỏa bất kỳ rule nào → đưa vào kết quả
+    → Với từng Category thực hiện thêm:
+
+    [Structural Columns]
+        - Lọc closed polyline + circle
+        - Kiểm tra aspect ratio < 3
+        - Confirm bằng grid intersection (tolerance 200mm)
+        - Tính kích thước từ geometry: width x height hoặc diameter
+        - Group các polyline lồng nhau cùng centroid → lấy cái lớn nhất
+
+    [Structural Framings]
+        - Lọc open line/polyline
+        - Merge các collinear segments bị đứt (khoảng cách đầu-cuối < 50mm)
+        - Group 2 line song song + overlap + khoảng cách < 1000mm
+        - Assign text label gần nhất (radius < 2000mm) → extract bxh
+        - Xác định dầm biên: chỉ tìm được 1 line gần text thay vì 2
+
+    [Walls]
+        - Lọc open line/polyline + closed polyline có aspect ratio > 3
+        - Group 2 line song song, khoảng cách 100-300mm
+        - Tính centerline + thickness
+        - Xử lý góc tường: snap endpoint lệch < 50mm
+        - Bỏ qua single line (convention 3)
+
+    → Analysis "x" đổi thành "v" nếu tìm thấy kết quả
+    → Analysis giữ "x" + hiện warning nếu không tìm thấy element nào
+
+Lưu ý - Analysis độc lập từng dòng (không theo thứ tự Cột→Dầm→Tường):
+    ⚠ Object có thể thỏa nhiều condition → phát hiện ở bước Preview
+    ⚠ Tường có thể overlap với cột/dầm → user tự xử lý qua Delete selected
+    ⚠ Không có context hình học liên kết → xử lý trim/extend tại bước Create Model
+
+
+----------------------------------------------------------------
+BƯỚC 5 — PREVIEW + SET UP DATA TYPE
+----------------------------------------------------------------
+
+User tick [Preview] trên dòng ở Bảng 3:
+    Đồng thời xảy ra 2 việc:
+
+    [Canvas]
+        - Hiển thị các element detect được
+        - Mỗi condition 1 màu riêng
+        - Element thuộc nhiều condition → màu cảnh báo (đỏ/vàng) + tooltip
+        - User có thể click element trên canvas
+          → highlight dòng tương ứng trong Set up data type
+        - Tick Preview nhiều dòng → hiển thị chồng, phân biệt màu theo condition
+
+    [Set up data type]
+        | Data From Cad   | Family Type |
+        |-----------------|-------------|
+        | REC : 200 x 200 | [dropdown]  |
+        | REC : 300 x 300 | [dropdown]  |
+        | Cir : 300       | [dropdown]  |
+        | Cir : 200       | [dropdown]  |
+
+        - Group theo kích thước unique
+          VD: REC:200x200 = đại diện cho 5 cột cùng size
+        - Tick Preview nhiều dòng → merge danh sách, phân biệt màu theo condition
+        - User map mỗi loại geometry → 1 Revit Family Type
+
+    [Delete selected]
+        Option 1: Chọn element trực tiếp trên Canvas → xoá element đó khỏi kết quả
+        Option 2: Chọn dòng trong Set up data type → xoá toàn bộ nhóm đó
+                  VD: xoá REC:200x200 → xoá hết tất cả element có size 200x200
+
+
+----------------------------------------------------------------
+BƯỚC 6 — CREATE MODEL
+----------------------------------------------------------------
+
+Điều kiện trước khi Create:
+    ✅ Dòng đó đã Analysis = "v"
+    ✅ Base Level đã chọn
+    ✅ Các dòng trong Set up data type đã được map Family Type
+    ⚠ Nếu thiếu → hiện warning, không cho Create
+
+Nhấn [Create Model]:
+    → Với từng element trong kết quả Analysis:
+        1. Lấy Family Type từ mapping Set up data type
+           theo kích thước geometry tương ứng
+        2. Kiểm tra overlap với element đã tạo từ condition khác
+           → Nếu overlap: warn user, skip, không tạo chồng
+        3. Đặt family vào Revit tại đúng vị trí + Base Level
+        4. Trim/extend điểm đầu cuối dựa trên
+           toàn bộ data đã có (cột, dầm, tường)
+
+    → Hoàn tất: hiện report tổng kết
+        "Đã tạo: 12 Columns, 8 Beams, 0 Walls"
+        "Bỏ qua: 2 element bị overlap"
+
+
+----------------------------------------------------------------
+SƠ ĐỒ TỔNG QUAN
+----------------------------------------------------------------
+
+    [Load File CAD]
+          ↓
+    [Bảng 1: Condition Name + File + Category]
+          ↓ Insert
+    [Bảng 2: Parameter | Ruler | Value] ←──── click dòng Bảng 3
+          ↓ Add                    Update ───→ cập nhật Bảng 3
+    [Bảng 3: Condition | File | Category | Analysis | Preview | Line | Level]
+          ↓ Analysis (từng dòng độc lập)
+    [Kết quả gom nhóm theo conditions]
+          ↓ tick Preview
+    [Canvas] + [Set up data type: geometry → Family Type mapping]
+          ↓ Delete selected (nếu cần làm sạch)
+          ↓ [Create Model]
+    [Revit Model]
+
+
+----------------------------------------------------------------
+BẢNG TỔNG HỢP LOGIC PHÂN TÍCH THEO CATEGORY
+----------------------------------------------------------------
+
+                    CỘT                 DẦM                 TƯỜNG
+Geometry        Closed poly/Circle  Open line/poly      2 line song song /
+                                                        Closed poly ratio>3
+Layer           Layer cột           Layer dầm           Layer tường
+Kích thước      Aspect ratio < 3    Length > 1000mm     Khoảng cách 2 line:
+                Diện tích nhỏ                           100-300mm
+Vị trí          Tại grid            Dọc theo grid       Không bắt buộc
+                intersection        line                trên grid
+Text            Không dùng,         Pattern:            Không dùng
+                lấy từ geometry     D\d+-\d+ (\d+x\d+)
+Kích thước      width x height      b x h từ text       thickness từ
+output          hoặc diameter                           khoảng cách 2 line
+Loại trừ        Hatch, block        Closed polyline,    Đã xác định là
+                trang trí           dimension line      cột/dầm
+
+================================================================
+                        END OF DOCUMENT
+================================================================
