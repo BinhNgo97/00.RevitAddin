@@ -1153,10 +1153,40 @@ def align_elements_to_axis(elements, grid_elem):
                 elem.points = [(p[0]+dx_s, p[1]+dy_s) for p in elem.points]
 
         elif elem.type == 'polyline' and elem.points:
-            xs = [p[0] for p in elem.points]
-            ys = [p[1] for p in elem.points]
-            cx = sum(xs) / len(xs)
-            cy = sum(ys) / len(ys)
+            pts = elem.points
+            # Loại bỏ điểm trùng cuối (closed polyline có pts[0] == pts[-1])
+            if len(pts) > 1 and _dist_sq(pts[0], pts[-1]) < 1.0:
+                pts = pts[:-1]
+            if not pts:
+                continue
+            # Tính tâm hình học đúng bằng công thức centroid đa giác
+            # (có trọng số theo diện tích từng tam giác) để đúng với mọi hình dạng.
+            n = len(pts)
+            if n == 1:
+                cx, cy = pts[0]
+            elif n == 2:
+                cx = (pts[0][0] + pts[1][0]) / 2.0
+                cy = (pts[0][1] + pts[1][1]) / 2.0
+            else:
+                # Polygon centroid formula (Shoelace)
+                area2 = 0.0   # 2 * signed area
+                cx = 0.0
+                cy = 0.0
+                for i in range(n):
+                    j = (i + 1) % n
+                    xi, yi = pts[i]
+                    xj, yj = pts[j]
+                    cross = xi * yj - xj * yi
+                    area2 += cross
+                    cx    += (xi + xj) * cross
+                    cy    += (yi + yj) * cross
+                if abs(area2) > 1e-9:
+                    cx /= 3.0 * area2
+                    cy /= 3.0 * area2
+                else:
+                    # Degenerate polygon → fallback mean
+                    cx = sum(p[0] for p in pts) / n
+                    cy = sum(p[1] for p in pts) / n
             new_cx, new_cy = _snap_pt((cx, cy))
             dx_s = new_cx - cx
             dy_s = new_cy - cy

@@ -569,6 +569,9 @@ def bind_handlers(window):
     window.BtnInsertCondition.Tag   = window
     window.BtnInsertCondition.Click += on_insert_condition
 
+    window.CbCategory.Tag             = window
+    window.CbCategory.SelectionChanged += on_category_changed
+
     window.BtnRemoveCondition.Tag   = window
     window.BtnRemoveCondition.Click += on_remove_condition
 
@@ -780,7 +783,11 @@ def on_refresh(sender, e):
 def on_insert_condition(sender, e):
     """
     Insert: lấy Bảng 1 + Bảng 2 hiện tại → thêm 1 dòng vào Bảng 3.
-    Sau đó populate Bảng 2 với default rules theo Category.
+    Trình tự:
+      1. Lưu rules hiện tại vào condition mới.
+      2. Auto-select dòng vừa thêm (setter load rules về Bảng 2).
+      3. Populate default template theo category lên Bảng 2
+         → sẵn sàng cho lần Insert tiếp theo với category bất kỳ.
     """
     window = sender.Tag
     vm     = window.DataContext
@@ -799,15 +806,31 @@ def on_insert_condition(sender, e):
         MessageBox.Show(u"Vui long chon Category.", u"Thieu thong tin")
         return
 
-    # Populate default rules theo category nếu Bảng 2 đang trống
-    if not list(vm.CurrentRules):
-        _populate_default_rules(vm, category)
-
-    # Thêm condition với rules hiện tại
+    # Bước 1: Lưu rules user đang nhập vào condition mới
     cond = vm.add_condition(name, filename, category, list(vm.CurrentRules))
     cond.save_rules_snapshot(list(vm.CurrentRules))
 
+    # Bước 2: Auto-select dòng vừa thêm trong Bảng 3
+    # (setter tự load rules của cond về Bảng 2 – hiện đúng những gì vừa lưu)
+    vm.SelectedCondition = cond
+    window.DgConditions.ScrollIntoView(cond)
+
     vm.Status = u"Da them condition '{}' [{} | {}].".format(name, filename, category)
+
+
+def on_category_changed(sender, e):
+    """
+    Khi user thay đổi Category ở Bảng 1,
+    populate ngay default rules vào Bảng 2 theo category mới.
+    """
+    try:
+        window = sender.Tag
+        vm     = window.DataContext
+        category = vm.CondCategory
+        if category:
+            _populate_default_rules(vm, category)
+    except Exception as ex:
+        print("on_category_changed error: {}".format(ex))
 
 
 def _populate_default_rules(vm, category):
@@ -941,7 +964,11 @@ def on_conditions_selection_changed(sender, e):
         if window is None: return
         vm  = window.DataContext
         sel = sender.SelectedItem
-        if sel is None: return
+        if sel is None:
+            # Deselect → clear SelectedCondition để on_category_changed
+            # biết đang ở trạng thái nhập mới và được populate rules
+            vm.SelectedCondition = None
+            return
         vm.SelectedCondition = sel    # setter tự load Bảng 1 + Bảng 2
     except Exception as ex:
         print("on_conditions_selection_changed error: {}".format(ex))
