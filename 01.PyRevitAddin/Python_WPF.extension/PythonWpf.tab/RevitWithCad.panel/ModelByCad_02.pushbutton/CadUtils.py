@@ -174,11 +174,13 @@ def load_file_to_doc(filepath):
 # =============================================
 def extract_all_from_doc(doc):
     """
-    Trích xuất toàn bộ elements + danh sách layer từ Document COM.
-    Trả về (elements: list[CadElement], layers: list[str]).
+    Trích xuất toàn bộ elements + layers + texts từ Document COM.
+    Trả về (elements: list[CadElement], layers: list[str],
+             texts: list[(content, x, y, layer)]).
     """
     elements = []
     layers   = set()
+    texts    = []   # (content, x, y, layer)
 
     try:
         model_space = doc.ModelSpace
@@ -186,6 +188,24 @@ def extract_all_from_doc(doc):
         for i in range(count):
             try:
                 obj  = model_space.Item(i)
+                name = ''
+                try: name = obj.ObjectName.upper()
+                except Exception: pass
+
+                # Parse TEXT / MTEXT trước khi thử CadElement
+                if 'TEXT' in name:
+                    try:
+                        content = obj.TextString
+                        ins     = obj.InsertionPoint
+                        lyr     = ''
+                        try: lyr = (obj.Layer or '').upper()
+                        except Exception: pass
+                        texts.append((content, ins[0], ins[1], lyr))
+                        layers.add(lyr)
+                    except Exception:
+                        pass
+                    continue
+
                 elem = CadElement(obj)
                 if elem.type != 'unknown':
                     elements.append(elem)
@@ -194,7 +214,7 @@ def extract_all_from_doc(doc):
             except Exception:
                 pass
 
-        # Thêm layer từ Layers collection (bao gồm cả layer rỗng)
+        # Thêm layer từ Layers collection
         try:
             for j in range(doc.Layers.Count):
                 try:
@@ -207,7 +227,7 @@ def extract_all_from_doc(doc):
     except Exception as ex:
         print("extract_all_from_doc error: {}".format(ex))
 
-    return elements, sorted(layers)
+    return elements, sorted(layers), texts
 
 
 # =============================================
@@ -294,6 +314,12 @@ def _apply_rule(elem, rule_dict):
     """
     Kiểm tra 1 element có thỏa 1 rule không.
     rule_dict: {'parameter': str, 'ruler': str, 'value': str}
+
+    Các parameter được hỗ trợ:
+      Layer Name           → so sánh layer name (Equal)
+      Length               → chiều dài element (is greater than / is less than)
+      Min Beam Distance    → dùng để trích min_d khi gọi detect_beams; không filter element
+      Max Beam Distance    → dùng để trích max_d khi gọi detect_beams; không filter element
     """
     param = rule_dict.get('parameter', '')
     ruler = rule_dict.get('ruler', '')
@@ -301,6 +327,10 @@ def _apply_rule(elem, rule_dict):
 
     if param == 'Layer Name':
         return elem.layer.upper() == value.upper()
+
+    # Các parameter điều khiển thuật toán, không dùng để filter element
+    if param in ('Min Beam Distance', 'Max Beam Distance', 'Text Layer'):
+        return False
 
     try:
         num_value = float(value)
@@ -313,13 +343,8 @@ def _apply_rule(elem, rule_dict):
             return length > num_value
         if ruler == 'is less than':
             return length < num_value
-
-    if param == 'Distance':
-        dist = _poly_width(elem)
-        if ruler == 'is greater than':
-            return dist > num_value
-        if ruler == 'is less than':
-            return dist < num_value
+        if ruler == 'Equal':
+            return abs(length - num_value) < 1.0
 
     return False
 
@@ -606,29 +631,38 @@ def _analyze_walls(elements):
 
 
 # =============================================
-# BEAM DETECTION – Method 1: Adjacent Offset Pairing
+# =============================================
+# BEAM DETECTION – Cluster → Merge → Pair → Validate
 # =============================================
 class BeamAxis:
     """
-    Trục dầm phát hiện từ 2 line biên song song.
-    type  = 'beam_axis'
-    points = [start, end]  – trung điểm 2 đầu của cặp biên
-    width  = khoảng cách 2 line biên (mm)
-    layer  = layer của line biên (ưu tiên outer)
+    Trục dầm phát hiện từ 2 cluster line song song.
+    type      = 'beam_axis'
+    points    = [start, end]  – 2 đầu location line
+    width     = khoảng cách 2 cluster (mm) = bề rộng dầm
+    beam_type = 'edge' | 'middle'
+                edge   → location line = nét ngoài cùng (trimmed)
+                middle → location line = tim 2 cluster (trimmed)
+    layer     = layer của cluster ngoài (edge) hoặc cluster A (middle)
     """
-    def __init__(self, start, end, width, layer=''):
-        self.type   = 'beam_axis'
-        self.points = [start, end]
-        self.start  = start
-        self.end    = end
-        self.width  = _round5(width)
-        self.center = None
-        self.radius = 0.0
-        self.layer  = layer
+    def __init__(self, start, end, width, layer='', beam_type='middle'):
+        self.type       = 'beam_axis'
+        self.points     = [start, end]
+        self.start      = start
+        self.end        = end
+        self.width      = _round5(width)
+        self.center     = None
+        self.radius     = 0.0
+        self.layer      = layer
+        self.beam_type  = beam_type   # 'edge' or 'middle'
+        self.h          = 0           # chiều cao dầm từ text CAD (0 = chưa có)
+        self.text_label = None        # chuỗi 'bxh' parse được từ text gần nhất
+        self.location_type_override = None  # None=auto | 0=Left | 1=Right | 2=Center | 3=Origin
+        self.family_type_override   = None  # None=use group.FamilyType | str=per-element override
 
     @property
     def height(self):
-        """Alias: height = chiều dài trục (không phải tiết diện)."""
+        """Chiều dài trục dầm."""
         return _poly_length(self)
 
 
@@ -752,41 +786,230 @@ def _merge_collinear_segs(segs, angle_tol=0.052, gap_tol=50.0):
     return merged
 
 
+def _merge_segs_in_cluster(segs, p0_ref, ref_angle, merge_tol):
+    """
+    Merge các segment trong 1 offset-cluster thành các interval liên tục.
+    Sort theo projection lên ref_angle, merge nếu overlap OR gap <= merge_tol.
+    Trả về list of (proj_start, proj_end, layer) đã sort.
+    """
+    if not segs:
+        return []
+    cos_a     = math.cos(ref_angle)
+    sin_a     = math.sin(ref_angle)
+    ref_proj  = p0_ref[0]*cos_a + p0_ref[1]*sin_a
+
+    intervals = []
+    for (p0, p1, lyr) in segs:
+        t0 = p0[0]*cos_a + p0[1]*sin_a - ref_proj
+        t1 = p1[0]*cos_a + p1[1]*sin_a - ref_proj
+        if t0 > t1:
+            t0, t1 = t1, t0
+        intervals.append((t0, t1, lyr))
+    intervals.sort(key=lambda x: x[0])
+
+    merged = []
+    cur_s, cur_e, cur_lyr = intervals[0]
+    for t0, t1, lyr in intervals[1:]:
+        if t0 <= cur_e + merge_tol:      # overlap hoặc gap nhỏ → nối
+            cur_e = max(cur_e, t1)
+        else:
+            merged.append((cur_s, cur_e, cur_lyr))
+            cur_s, cur_e, cur_lyr = t0, t1, lyr
+    merged.append((cur_s, cur_e, cur_lyr))
+    return merged
+
+
+def _union_range(intervals):
+    """Tính (min_start, max_end) của tập intervals [(t_s, t_e, lyr), ...]."""
+    return min(iv[0] for iv in intervals), max(iv[1] for iv in intervals)
+
+
 def detect_beams_from_lines(elements,
                              angle_tol_deg=5.0,
-                             offset_tol=50.0,
-                             min_width=100.0,
-                             max_width=1000.0,
-                             min_overlap=0.60):
+                             offset_tol=30.0,
+                             merge_tol=100.0,
+                             min_d=100.0,
+                             max_d=1000.0,
+                             min_overlap_len=200.0):
     """
-    Method 1 – Adjacent Offset Pairing.
-
-    1. Explode → segments
-    2. Merge collinear segments
-    3. Direction clustering (angle_tol_deg)
-    4. Offset clustering (offset_tol)
-    5. Sort offsets → adjacent pairs only
-    6. Validate: width [min_width, max_width], overlap > min_overlap
-    7. Trả về list[BeamAxis]
+    Phát hiện dầm theo đúng thứ tự:
+      1. Explode → segments (lọc ngắn)
+      2. Direction clustering (angle_tol_deg)
+      3. Với mỗi direction group:
+         3.1 Cluster theo offset vuông góc (offset_tol)
+         3.2 Merge trong từng offset-cluster (merge_tol)
+         3.3 Sort cluster theo offset tăng dần
+         3.4 Pair chỉ cluster kề nhau (adjacent)
+         3.5 Kiểm tra min_d <= d <= max_d
+         3.6 Tính overlap; bỏ nếu overlap_len < min_overlap_len
+         3.7 Xác định dầm biên / giữa → tạo BeamAxis
     """
     angle_tol = math.radians(angle_tol_deg)
 
-    # Step 1: explode
+    # ── Step 1: Explode ──────────────────────────────────────────────────
     segs = _explode_to_segments(elements)
+    segs = [(p0, p1, lyr) for p0, p1, lyr in segs if _seg_length(p0, p1) >= 50]
     if not segs:
         return []
 
-    # Step 2: merge collinear
-    segs = _merge_collinear_segs(segs, angle_tol=math.radians(3), gap_tol=50.0)
-
-    # Step 3: direction clustering
-    # representative angle per cluster
-    dir_clusters = []   # list of list of (p0, p1, lyr)
-    dir_angles   = []
+    # ── Step 2: Direction clustering ─────────────────────────────────────
+    dir_clusters = []   # list of [ref_angle, [segs]]
 
     for seg in segs:
         p0, p1, lyr = seg
-        if _seg_length(p0, p1) < 50:   # quá ngắn → bỏ
+        a = _seg_angle(p0, p1)
+        placed = False
+        for dc in dir_clusters:
+            da = abs(a - dc[0])
+            if da > math.pi/2: da = math.pi - da
+            if da <= angle_tol:
+                dc[1].append(seg)
+                placed = True
+                break
+        if not placed:
+            dir_clusters.append([a, [seg]])
+
+    beam_axes = []
+
+    for ref_angle, dir_segs in dir_clusters:
+        if len(dir_segs) < 2:
+            continue
+
+        # Điểm gốc tham chiếu để đo offset và projection
+        p0_ref = dir_segs[0][0]
+        cos_a  = math.cos(ref_angle)
+        sin_a  = math.sin(ref_angle)
+        # p1_ref dùng cho _perp_offset
+        p1_ref = (p0_ref[0] + cos_a, p0_ref[1] + sin_a)
+
+        # ── Step 3.1: Cluster theo offset ────────────────────────────────
+        # offset_clusters: list of [mean_offset, [segs]]
+        offset_clusters = []
+        for seg in dir_segs:
+            mid = _seg_midpoint(seg[0], seg[1])
+            off = _perp_offset(p0_ref, p1_ref, mid)
+            placed = False
+            for oc in offset_clusters:
+                if abs(off - oc[0]) <= offset_tol:
+                    oc[1].append(seg)
+                    # cập nhật mean offset
+                    oc[0] = sum(
+                        _perp_offset(p0_ref, p1_ref, _seg_midpoint(s[0], s[1]))
+                        for s in oc[1]
+                    ) / len(oc[1])
+                    placed = True
+                    break
+            if not placed:
+                offset_clusters.append([off, [seg]])
+
+        offset_clusters.sort(key=lambda x: x[0])
+        n_clusters = len(offset_clusters)
+        if n_clusters < 2:
+            continue
+
+        # ── Step 3.2: Merge trong từng offset-cluster ────────────────────
+        # merged_clusters: list of (mean_offset, [(t_start, t_end, lyr)])
+        merged_clusters = []
+        for mean_off, oc_segs in offset_clusters:
+            intervals = _merge_segs_in_cluster(oc_segs, p0_ref, ref_angle, merge_tol)
+            if intervals:
+                lyr = intervals[0][2]
+                merged_clusters.append((mean_off, intervals, lyr))
+
+        if len(merged_clusters) < 2:
+            continue
+
+        n_mc = len(merged_clusters)
+
+        # ── Step 3.3 + 3.4: Sort (đã sort) → Pair kề nhau ──────────────
+        for gi in range(n_mc - 1):
+            off_a, ivs_a, lyr_a = merged_clusters[gi]
+            off_b, ivs_b, lyr_b = merged_clusters[gi + 1]
+
+            # ── Step 3.5: Kiểm tra khoảng cách ──────────────────────────
+            d = abs(off_b - off_a)
+            if d < min_d or d > max_d:
+                continue
+
+            # ── Step 3.6: Tính overlap ───────────────────────────────────
+            a_s, a_e = _union_range(ivs_a)
+            b_s, b_e = _union_range(ivs_b)
+            ov_start = max(a_s, b_s)
+            ov_end   = min(a_e, b_e)
+            ov_len   = ov_end - ov_start
+            if ov_len < min_overlap_len:
+                continue
+
+            # ── Step 3.7: Xác định dầm biên / giữa ─────────────────────
+            # Edge = một trong hai cluster là ngoài cùng của toàn nhóm
+            is_edge = (gi == 0 or gi + 1 == n_mc - 1)
+            beam_type = 'edge' if is_edge else 'middle'
+
+            if beam_type == 'edge':
+                # Location line = nét ngoài cùng (cluster xa tâm nhóm hơn)
+                all_offsets   = [mc[0] for mc in merged_clusters]
+                bbox_mid_off  = (min(all_offsets) + max(all_offsets)) / 2.0
+                loc_off = off_a if abs(off_a - bbox_mid_off) > abs(off_b - bbox_mid_off) else off_b
+            else:
+                # Location line = tim giữa 2 cluster
+                loc_off = (off_a + off_b) / 2.0
+
+            # Chuyển (proj trên trục, offset vuông góc) → tọa độ thực
+            ref_proj_base = p0_ref[0]*cos_a + p0_ref[1]*sin_a
+
+            def _to_xy(t_proj, perp_off):
+                base_x = p0_ref[0] + t_proj * cos_a
+                base_y = p0_ref[1] + t_proj * sin_a
+                return (base_x + (-sin_a) * perp_off,
+                        base_y +   cos_a  * perp_off)
+
+            ax_start = _to_xy(ov_start, loc_off)
+            ax_end   = _to_xy(ov_end,   loc_off)
+
+            layer = lyr_a or lyr_b
+            beam_axes.append(BeamAxis(ax_start, ax_end, d, layer, beam_type))
+
+    return beam_axes
+
+
+# ── Legacy wrapper (giữ tương thích nếu có nơi gọi cũ) ──────────────────
+def _detect_beams_legacy(elements,
+                          angle_tol_deg=5.0,
+                          offset_tol=50.0,
+                          min_width=100.0,
+                          max_width=1000.0,
+                          min_overlap=0.60):
+    """Wrapper chuyển sang API mới."""
+    return detect_beams_from_lines(
+        elements,
+        angle_tol_deg   = angle_tol_deg,
+        offset_tol      = offset_tol,
+        merge_tol       = 100.0,
+        min_d           = min_width,
+        max_d           = max_width,
+        min_overlap_len = 200.0,
+    )
+
+
+# ── DEAD CODE ─ kept for reference only ─────────────────────────────────
+def _dead_detect_beams_old(elements,
+                            angle_tol_deg=5.0,
+                            offset_tol=50.0,
+                            min_width=100.0,
+                            max_width=1000.0,
+                            min_overlap=0.60):
+    """Old version – Merge TRƯỚC direction cluster (sai thứ tự, giữ tham khảo)."""
+    angle_tol = math.radians(angle_tol_deg)
+    segs = _explode_to_segments(elements)
+    if not segs:
+        return []
+    # (BUG: merge global truoc khi cluster theo direction)
+    segs = _merge_collinear_segs(segs, angle_tol=math.radians(3), gap_tol=50.0)
+    dir_clusters = []
+    dir_angles   = []
+    for seg in segs:
+        p0, p1, lyr = seg
+        if _seg_length(p0, p1) < 50:
             continue
         a = _seg_angle(p0, p1)
         placed = False
@@ -800,103 +1023,146 @@ def detect_beams_from_lines(elements,
         if not placed:
             dir_clusters.append([seg])
             dir_angles.append(a)
-
     beam_axes = []
-
     for ci, cluster in enumerate(dir_clusters):
         if len(cluster) < 2:
             continue
         ref_angle = dir_angles[ci]
-        # Dùng segment đầu làm trục tham chiếu để đo offset
         p0_ref, p1_ref, _ = cluster[0]
-
-        # Step 4: offset clustering
-        # Gán mỗi segment 1 offset value = perp distance từ ref line
         seg_offsets = []
         for seg in cluster:
             mid = _seg_midpoint(seg[0], seg[1])
             off = _perp_offset(p0_ref, p1_ref, mid)
             seg_offsets.append((off, seg))
-
         seg_offsets.sort(key=lambda x: x[0])
-
-        # Gom segments có offset gần nhau vào cùng 1 group
-        offset_groups = []   # list of (mean_offset, [segs])
+        offset_groups = []
         for off, seg in seg_offsets:
             placed = False
             for og in offset_groups:
                 if abs(off - og[0]) <= offset_tol:
                     og[1].append(seg)
-                    # update mean
-                    og[0] = sum(_perp_offset(p0_ref, p1_ref,
-                                             _seg_midpoint(s[0], s[1]))
+                    og[0] = sum(_perp_offset(p0_ref, p1_ref, _seg_midpoint(s[0], s[1]))
                                 for s in og[1]) / len(og[1])
                     placed = True
                     break
             if not placed:
                 offset_groups.append([off, [seg]])
-
-        # Sort by offset
         offset_groups.sort(key=lambda x: x[0])
         if len(offset_groups) < 2:
             continue
-
-        # Step 5: adjacent pairing
         for gi in range(len(offset_groups) - 1):
             off_a, segs_a = offset_groups[gi]
             off_b, segs_b = offset_groups[gi+1]
             width = abs(off_b - off_a)
-
-            # Step 6: validate width
             if width < min_width or width > max_width:
                 continue
-
-            # Get representative segments (longest in each group)
             def _best_seg(sg_list):
                 return max(sg_list, key=lambda s: _seg_length(s[0], s[1]))
-
             sa = _best_seg(segs_a)
             sb = _best_seg(segs_b)
-
-            # overlap check
             ovr, ovr_len = _axis_overlap(sa[0], sa[1], sb[0], sb[1], ref_angle)
-            if ovr < min_overlap:
+            if ovr < min_overlap or ovr_len < 100:
                 continue
-            if ovr_len < 100:
-                continue
-
-            # Build beam axis = midpoint chain
-            cos_a = math.cos(ref_angle)
-            sin_a = math.sin(ref_angle)
-            def _proj(p): return p[0]*cos_a + p[1]*sin_a
-            def _along(t): return (p0_ref[0] + t*cos_a, p0_ref[1] + t*sin_a)
-            def _perp_pt(p, mid_off):
-                # project point onto axis, then shift by mid_off in perpendicular
-                t    = _proj(p) - _proj(p0_ref)
-                ax_p = (p0_ref[0] + t*cos_a, p0_ref[1] + t*sin_a)
-                return (ax_p[0] + (-sin_a)*mid_off, ax_p[1] + cos_a*mid_off)
-
-            mid_off = (off_a + off_b) / 2.0
-            # Overlap range
-            all_projs = [_proj(sa[0]), _proj(sa[1]), _proj(sb[0]), _proj(sb[1])]
-            all_projs_ref = _proj(p0_ref)
-            t_vals = [v - _proj(p0_ref) for v in all_projs]
-            t_all  = [_proj(sa[0])-_proj(p0_ref), _proj(sa[1])-_proj(p0_ref),
-                      _proj(sb[0])-_proj(p0_ref), _proj(sb[1])-_proj(p0_ref)]
-            t_start = max(min(_proj(sa[0]), _proj(sa[1])),
-                          min(_proj(sb[0]), _proj(sb[1]))) - _proj(p0_ref)
-            t_end   = min(max(_proj(sa[0]), _proj(sa[1])),
-                          max(_proj(sb[0]), _proj(sb[1]))) - _proj(p0_ref)
-
-            ax_start = (p0_ref[0] + t_start*cos_a + (-sin_a)*mid_off,
-                        p0_ref[1] + t_start*sin_a + cos_a*mid_off)
-            ax_end   = (p0_ref[0] + t_end  *cos_a + (-sin_a)*mid_off,
-                        p0_ref[1] + t_end  *sin_a + cos_a*mid_off)
-
-            layer = sa[2] or sb[2]
-            beam_axes.append(BeamAxis(ax_start, ax_end, width, layer))
+            # (phần dựng BeamAxis cũ đã bị bỏ – xem detect_beams_from_lines mới)
+            pass
 
     return beam_axes
+
+
+# =============================================
+# STEP 7 – GHÉP TEXT VÀO DẦM (beam axis)
+# =============================================
+def _pair_texts_with_beams(beam_axes, texts):
+    """
+    Ghép text kích thước gần nhất vào mỗi BeamAxis.
+    texts: list of (content, x, y, layer)
+    Kết quả: beam.h và beam.text_label được cập nhật in-place.
+    """
+    if not beam_axes or not texts:
+        return
+    for beam in beam_axes:
+        mid = _seg_midpoint(beam.start, beam.end)
+        best_dsq  = None
+        best_dims = None
+        for (content, tx, ty, _lyr) in texts:
+            dims = _extract_beam_dims(content)
+            if dims is None:
+                continue
+            dsq = _dist_sq(mid, (tx, ty))
+            if best_dsq is None or dsq < best_dsq:
+                best_dsq  = dsq
+                best_dims = dims
+        if best_dims is not None:
+            beam.h          = best_dims[1]   # height từ text
+            beam.text_label = u'{}x{}'.format(best_dims[0], best_dims[1])
+
+
+# =============================================
+# AXIS ALIGN – Làm tròn về hệ tọa độ trục
+# =============================================
+def align_elements_to_axis(elements, grid_elem):
+    """
+    Snap tọa độ location line (dầm) / tâm (cột, móng) về bội số 5mm
+    trong hệ tọa độ địa phương của grid_elem.
+
+    grid_elem : CadElement (line/polyline) – đường trục tham chiếu
+    Trả về (elements_snapped, status):
+        status = 'v'  → OK
+        status = '!'  → grid_elem không hợp lệ
+    """
+    if grid_elem is None:
+        return elements, '!'
+    pts = getattr(grid_elem, 'points', [])
+    if len(pts) < 2:
+        return elements, '!'
+
+    p0, p1 = pts[0], pts[-1]
+    dx = p1[0] - p0[0]
+    dy = p1[1] - p0[1]
+    L  = math.sqrt(dx*dx + dy*dy)
+    if L < 1e-6:
+        return elements, '!'
+
+    ux, uy = dx / L, dy / L          # trục u = dọc theo grid
+    vx, vy = -uy, ux                  # trục v = vuông góc grid
+
+    def _to_local(pt):
+        qx, qy = pt[0] - p0[0], pt[1] - p0[1]
+        return qx*ux + qy*uy, qx*vx + qy*vy
+
+    def _to_world(u_loc, v_loc):
+        return (p0[0] + u_loc*ux + v_loc*vx,
+                p0[1] + u_loc*uy + v_loc*vy)
+
+    def _snap_pt(pt):
+        u_loc, v_loc = _to_local(pt)
+        return _to_world(_round5(u_loc), _round5(v_loc))
+
+    for elem in elements:
+        if elem.type == 'beam_axis':
+            elem.start  = _snap_pt(elem.start)
+            elem.end    = _snap_pt(elem.end)
+            elem.points = [elem.start, elem.end]
+
+        elif elem.type == 'circle' and elem.center:
+            new_c = _snap_pt(elem.center)
+            dx_s  = new_c[0] - elem.center[0]
+            dy_s  = new_c[1] - elem.center[1]
+            elem.center = new_c
+            if elem.points:
+                elem.points = [(p[0]+dx_s, p[1]+dy_s) for p in elem.points]
+
+        elif elem.type == 'polyline' and elem.points:
+            xs = [p[0] for p in elem.points]
+            ys = [p[1] for p in elem.points]
+            cx = sum(xs) / len(xs)
+            cy = sum(ys) / len(ys)
+            new_cx, new_cy = _snap_pt((cx, cy))
+            dx_s = new_cx - cx
+            dy_s = new_cy - cy
+            elem.points = [(p[0]+dx_s, p[1]+dy_s) for p in elem.points]
+
+    return elements, 'v'
 
 
 # =============================================
@@ -945,12 +1211,16 @@ def group_elements_by_label(elements):
     groups = {}
 
     for elem in elements:
-        # BeamAxis: group key = width only (không group theo chiều dài trục)
+        # BeamAxis: group key = width x h (từ text label nếu có)
         if getattr(elem, 'type', '') == 'beam_axis':
             w   = getattr(elem, 'width', 0) or 0
-            lbl = 'BEA: {}x?'.format(w)
+            h   = getattr(elem, 'h', 0) or 0
+            if h and h > 0:
+                lbl = 'BEA: {}x{}'.format(w, h)
+            else:
+                lbl = 'BEA: {}x?'.format(w)
             if lbl not in groups:
-                groups[lbl] = {'shape': 'BEA', 'label': lbl, 'w': w, 'h': 0, 'elements': []}
+                groups[lbl] = {'shape': 'BEA', 'label': lbl, 'w': w, 'h': h, 'elements': []}
             groups[lbl]['elements'].append(elem)
             continue
 
@@ -1008,8 +1278,12 @@ def _extract_beam_dims(text_str):
 
 def select_beam_elements_in_cad(doc):
     """
-    Interactive: chọn hỗn hợp line + text, tự động ghép cặp.
+    Interactive (legacy workflow): chọn hỗn hợp line + text, tự động ghép cặp.
     Trả về list[CadBeamPair].
+
+    NOTE: Trong workflow mới, lines được lấy từ detect_beams_from_lines()
+    và texts được lấy từ extract_all_from_doc() theo Text Layer rule.
+    Dùng pair_beams_with_text_layer() thay thế.
     """
     raw = _raw_select(
         doc,
@@ -1032,8 +1306,27 @@ def select_beam_elements_in_cad(doc):
     return _pair_lines_with_texts(lines, texts)
 
 
+def pair_beams_with_text_layer(beam_axes, all_texts, text_layer_name=''):
+    """
+    Workflow mới: ghép BeamAxis với texts từ Text Layer rule.
+    beam_axes       : list[BeamAxis] – kết quả từ detect_beams_from_lines()
+    all_texts       : list[(content, x, y, layer)] – từ extract_all_from_doc()
+    text_layer_name : tên layer cần lọc (nếu rỗng → dùng tất cả texts)
+    Cập nhật beam.h và beam.text_label in-place.
+    """
+    if text_layer_name:
+        layer_up = text_layer_name.strip().upper()
+        texts = [(c, x, y, lyr) for c, x, y, lyr in all_texts
+                 if lyr.upper() == layer_up]
+    else:
+        texts = list(all_texts)
+    _pair_texts_with_beams(beam_axes, texts)
+
+
 def _pair_lines_with_texts(lines, texts):
-    """Ghép mỗi line với text có kích thước gần nhất."""
+    """Ghép mỗi line với text có kích thước gần nhất.
+    texts có thể là 3-tuple (content, x, y) hoặc 4-tuple (content, x, y, layer).
+    """
     result = []
     for line in lines:
         pts = line.points
@@ -1045,7 +1338,8 @@ def _pair_lines_with_texts(lines, texts):
         best_dsq  = None
         best_dims = None
 
-        for (txt, tx, ty) in texts:
+        for t_entry in texts:
+            txt, tx, ty = t_entry[0], t_entry[1], t_entry[2]
             dims = _extract_beam_dims(txt)
             if dims is None:
                 continue

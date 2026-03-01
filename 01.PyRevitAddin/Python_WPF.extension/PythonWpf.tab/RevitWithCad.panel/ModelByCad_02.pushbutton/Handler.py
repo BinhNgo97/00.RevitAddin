@@ -23,9 +23,10 @@ from CadUtils import (
     filter_elements_by_rules, analyze_condition,
     merge_lines_to_closed_polylines, group_elements_by_label,
     select_beam_elements_in_cad, group_beam_pairs_by_label,
-    CadBeamPair, detect_beams_from_lines, BeamAxis
+    CadBeamPair, detect_beams_from_lines, BeamAxis,
+    _pair_texts_with_beams, align_elements_to_axis,
 )
-from ViewModel import CadGroup, ConditionRow, RuleRow
+from ViewModel import CadGroup, ConditionRow, RuleRow, SelectedBeamInfoRow
 
 # ─────────────────────────────────────────────────────────
 #   REVIT API
@@ -333,6 +334,12 @@ class CreateModelHandler(IExternalEventHandler if _REVIT_AVAILABLE else object):
 
                     for elem in group.elements:
                         try:
+                            # Per-element FamilyType override
+                            fam_override = getattr(elem, 'family_type_override', None)
+                            elem_symbol  = symbol_map.get(fam_override, symbol) if fam_override else symbol
+                            if elem_symbol is None:
+                                elem_symbol = symbol
+
                             if isinstance(elem, (CadBeamPair, BeamAxis)):
                                 # Dầm: curve overload (start/end đã là tuple (x,y))
                                 xyz_s = _transform_to_revit(
@@ -343,10 +350,18 @@ class CreateModelHandler(IExternalEventHandler if _REVIT_AVAILABLE else object):
                                 xyz_e = XYZ(xyz_e.X, xyz_e.Y, level_z)
                                 curve = RvtLine.CreateBound(xyz_s, xyz_e)
                                 inst  = doc.Create.NewFamilyInstance(
-                                    curve, symbol, level, StructuralType.Beam)
+                                    curve, elem_symbol, level, StructuralType.Beam)
                                 try:
+                                    # Per-element override có ưu tiên; fallback: edge→Left(0), other→Center(2)
+                                    loc_override = getattr(elem, 'location_type_override', None)
+                                    if loc_override is not None:
+                                        y_just = loc_override
+                                    else:
+                                        is_edge = (isinstance(elem, BeamAxis) and
+                                                   getattr(elem, 'beam_type', '') == 'edge')
+                                        y_just = 0 if is_edge else 2
                                     p = inst.get_Parameter(BuiltInParameter.Y_JUSTIFICATION)
-                                    if p and not p.IsReadOnly: p.Set(3)
+                                    if p and not p.IsReadOnly: p.Set(y_just)
                                 except Exception: pass
                             else:
                                 # Cột / Móng: point overload
@@ -358,7 +373,7 @@ class CreateModelHandler(IExternalEventHandler if _REVIT_AVAILABLE else object):
                                     center[0], center[1], s_cad, s_revit_ft, theta)
                                 xyz = XYZ(xyz.X, xyz.Y, level_z)
                                 doc.Create.NewFamilyInstance(
-                                    xyz, symbol, level, struct_type)
+                                    xyz, elem_symbol, level, struct_type)
                             total_created += 1
                         except Exception as ex_elem:
                             total_skipped += 1
@@ -388,6 +403,154 @@ class CreateModelHandler(IExternalEventHandler if _REVIT_AVAILABLE else object):
 
 
 # ─────────────────────────────────────────────────────────
+#   REVIT EXTERNAL EVENT: Create Model for Single Condition
+# ─────────────────────────────────────────────────────────
+class CreateModelSingleHandler(IExternalEventHandler if _REVIT_AVAILABLE else object):
+    """
+    Tạo FamilyInstance trong Revit chỉ cho 1 ConditionRow được chỉ định.
+    window đặt self.pending_condition rồi raise event.
+    """
+    def __init__(self, vm):
+        self.vm                = vm
+        self.pending_condition = None   # ConditionRow cần create
+        self._window           = None   # set bởi script.py sau khi khởi tạo
+
+    def Execute(self, uiapp):
+        cond = self.pending_condition
+        if cond is None:
+            return
+        self.pending_condition = None
+
+        vm  = self.vm
+        doc = uiapp.ActiveUIDocument.Document
+
+        # Lấy layer name tham chiếu CAD
+        grid_layer = (getattr(vm, 'CadGridLayer', '') or '').strip().upper()
+        if not grid_layer:
+            MessageBox.Show(
+                u"Chưa nhập tên layer tham chiếu CAD (Grid Layer).",
+                u"Thiếu tham chiếu CAD"
+            )
+            return
+
+        # Tìm element tham chiếu trên layer grid
+        file_elements = vm.get_elements_for_file(cond.FileName)
+        grid_elem = None
+        for fe in file_elements:
+            if (getattr(fe, 'layer', '').upper() == grid_layer and
+                    fe.type in ('line', 'polyline') and
+                    len(getattr(fe, 'points', [])) >= 2):
+                grid_elem = fe
+                break
+        if grid_elem is None:
+            MessageBox.Show(
+                u"Không tìm thấy đường tham chiếu trên layer '{}' trong file '{}'.".format(
+                    grid_layer, cond.FileName),
+                u"Thiếu tham chiếu CAD"
+            )
+            return
+
+        symbol_map = _resolve_symbols(doc)
+        level_map  = _resolve_levels(doc)
+
+        try:
+            s_cad, s_revit_ft, theta = _build_transform(grid_elem, cond.RevitLineRef)
+        except Exception as ex:
+            MessageBox.Show(u"Lỗi transform: {}".format(ex), u"Create Model")
+            return
+
+        level = level_map.get(cond.BaseLevel)
+        if level is None:
+            MessageBox.Show(
+                u"Không tìm thấy Level '{}'.".format(cond.BaseLevel),
+                u"Create Model"
+            )
+            return
+
+        struct_type = _category_to_structural_type(cond.Category)
+        level_z     = level.Elevation
+        created     = 0
+        skipped     = 0
+        errors      = []
+
+        t = Transaction(doc, u"Create Model [{}]".format(cond.ConditionName))
+        t.Start()
+        try:
+            for group in cond.cad_groups:
+                if not group.is_ready():
+                    skipped += len(group.elements)
+                    continue
+                symbol = symbol_map.get(group.FamilyType)
+                if symbol is None:
+                    skipped += len(group.elements)
+                    errors.append(u"Không tìm thấy FamilySymbol: '{}'".format(group.FamilyType))
+                    continue
+                if not symbol.IsActive:
+                    symbol.Activate()
+                    doc.Regenerate()
+
+                for elem in group.elements:
+                    try:
+                        # Per-element FamilyType override
+                        fam_override = getattr(elem, 'family_type_override', None)
+                        elem_symbol  = symbol_map.get(fam_override, symbol) if fam_override else symbol
+                        if elem_symbol is None:
+                            elem_symbol = symbol
+
+                        if isinstance(elem, (CadBeamPair, BeamAxis)):
+                            xyz_s = _transform_to_revit(elem.start[0], elem.start[1], s_cad, s_revit_ft, theta)
+                            xyz_e = _transform_to_revit(elem.end[0],   elem.end[1],   s_cad, s_revit_ft, theta)
+                            xyz_s = XYZ(xyz_s.X, xyz_s.Y, level_z)
+                            xyz_e = XYZ(xyz_e.X, xyz_e.Y, level_z)
+                            curve = RvtLine.CreateBound(xyz_s, xyz_e)
+                            inst  = doc.Create.NewFamilyInstance(
+                                curve, elem_symbol, level, StructuralType.Beam)
+                            try:
+                                # Per-element override có ưu tiên; fallback: edge→Left(0), other→Center(2)
+                                loc_override = getattr(elem, 'location_type_override', None)
+                                if loc_override is not None:
+                                    y_just = loc_override
+                                else:
+                                    is_edge = (isinstance(elem, BeamAxis) and
+                                               getattr(elem, 'beam_type', '') == 'edge')
+                                    y_just = 0 if is_edge else 2
+                                p = inst.get_Parameter(BuiltInParameter.Y_JUSTIFICATION)
+                                if p and not p.IsReadOnly: p.Set(y_just)
+                            except Exception: pass
+                        else:
+                            center = _get_element_center(elem)
+                            if center is None:
+                                skipped += 1
+                                continue
+                            xyz = _transform_to_revit(center[0], center[1], s_cad, s_revit_ft, theta)
+                            xyz = XYZ(xyz.X, xyz.Y, level_z)
+                            doc.Create.NewFamilyInstance(xyz, elem_symbol, level, struct_type)
+                        created += 1
+                    except Exception as ex_e:
+                        skipped += 1
+                        errors.append(str(ex_e))
+            t.Commit()
+        except Exception as ex_t:
+            t.RollBack()
+            MessageBox.Show(u"Lỗi transaction: {}".format(ex_t), u"Create Model")
+            return
+
+        cond.CreateModelStatus = 'v'
+        vm.Status = u"[{}] Tạo xong: {} instances. Bỏ qua: {}.".format(
+            cond.ConditionName, created, skipped)
+
+        report = u"[{}] Tạo thành công {} instances!".format(cond.ConditionName, created)
+        if skipped:
+            report += u"\nBỏ qua: {} elements.".format(skipped)
+        if errors:
+            report += u"\n\nChi tiết:\n" + u"\n".join(errors[:5])
+        MessageBox.Show(report, u"Kết quả Create Model")
+
+    def GetName(self):
+        return "CreateModelSingle"
+
+
+# ─────────────────────────────────────────────────────────
 #   BIND ALL HANDLERS
 # ─────────────────────────────────────────────────────────
 def bind_handlers(window):
@@ -398,9 +561,6 @@ def bind_handlers(window):
 
     window.BtnDelete.Tag   = window
     window.BtnDelete.Click += on_delete
-
-    window.BtnCreateModel.Tag   = window
-    window.BtnCreateModel.Click += on_create_model
 
     window.BtnRefresh.Tag   = window
     window.BtnRefresh.Click += on_refresh
@@ -466,9 +626,9 @@ def on_load_file(sender, e):
             if doc is None:
                 print(u"Khong the mo: {}".format(filepath))
                 continue
-            elements, layers = extract_all_from_doc(doc)
+            elements, layers, texts = extract_all_from_doc(doc)
             filename = os.path.basename(filepath)
-            vm.add_loaded_file(filename, elements, layers, filepath)
+            vm.add_loaded_file(filename, elements, layers, filepath, texts)
             loaded.append(u"{} ({} elems, {} layers)".format(filename, len(elements), len(layers)))
         except Exception as ex:
             print(u"on_load_file error [{}]: {}".format(filepath, ex))
@@ -556,12 +716,46 @@ def on_delete(sender, e):
 
 
 def on_create_model(sender, e):
-    """Raise ExternalEvent tạo model trong Revit."""
+    """Raise ExternalEvent tạo model trong Revit (top button – legacy)."""
     window = sender.Tag
     if hasattr(window, '_ext_create_model'):
         window._ext_create_model.Raise()
     else:
         MessageBox.Show(u"ExternalEvent chua khoi tao.", u"Loi")
+
+
+def on_create_model_for_condition(cond, window):
+    """
+    Tạo model trong Revit chỉ cho 1 condition cụ thể.
+    Kiểm tra điều kiện, sau đó raise ExternalEvent với condition đó.
+    """
+    vm = window.DataContext
+
+    if not cond.is_ready():
+        missing = []
+        if cond.AnalysisStatus != 'v':
+            missing.append(u'- Chưa chạy Analysis')
+        if not cond.cad_groups:
+            missing.append(u'- Không có kết quả phân tích')
+        if not cond.BaseLevel:
+            missing.append(u'- Chưa chọn Base Level')
+        if cond.RevitLineRef is None:
+            missing.append(u'- Chưa chọn Line in Revit')
+        if not all(g.is_ready() for g in cond.cad_groups):
+            missing.append(u'- Chưa map đủ Family Type trong Set up data type')
+        MessageBox.Show(
+            u'Condition [{}] chưa đủ điều kiện:\n{}'.format(
+                cond.ConditionName, u'\n'.join(missing)),
+            u'Create Model'
+        )
+        return
+
+    if hasattr(window, '_ext_create_model_single'):
+        window._ext_create_model_single.pending_condition = cond
+        window._ext_create_model_single_event.Raise()
+    else:
+        # Fallback: call directly (ngoài Revit context, dùng cho debug)
+        MessageBox.Show(u'ExternalEvent SingleCreate chưa khởi tạo.', u'Lỗi')
 
 
 def on_refresh(sender, e):
@@ -605,13 +799,13 @@ def on_insert_condition(sender, e):
         MessageBox.Show(u"Vui long chon Category.", u"Thieu thong tin")
         return
 
-    # Thêm condition với rules hiện tại
-    cond = vm.add_condition(name, filename, category, list(vm.CurrentRules))
-
-    # Populate default rules nếu Bảng 2 đang trống
+    # Populate default rules theo category nếu Bảng 2 đang trống
     if not list(vm.CurrentRules):
         _populate_default_rules(vm, category)
-        cond.save_rules_snapshot(list(vm.CurrentRules))
+
+    # Thêm condition với rules hiện tại
+    cond = vm.add_condition(name, filename, category, list(vm.CurrentRules))
+    cond.save_rules_snapshot(list(vm.CurrentRules))
 
     vm.Status = u"Da them condition '{}' [{} | {}].".format(name, filename, category)
 
@@ -623,11 +817,16 @@ def _populate_default_rules(vm, category):
     if 'column' in cat or 'foundation' in cat or 'footing' in cat:
         vm.CurrentRules.Add(RuleRow('Layer Name', 'Equal', ''))
     elif 'framing' in cat or 'beam' in cat:
-        vm.CurrentRules.Add(RuleRow('Layer Name', 'Equal', ''))
-        vm.CurrentRules.Add(RuleRow('Length', 'is greater than', '1000'))
+        # Format chuẩn cho dầm – value để trống, người dùng tự nhập
+        vm.CurrentRules.Add(RuleRow('Min Beam Distance', 'Equal', ''))
+        vm.CurrentRules.Add(RuleRow('Max Beam Distance', 'Equal', ''))
+        vm.CurrentRules.Add(RuleRow('Length',            'is greater than', ''))
+        vm.CurrentRules.Add(RuleRow('Text Layer',        'Equal', ''))
+        vm.CurrentRules.Add(RuleRow('Layer Name',        'Equal', ''))
     elif 'wall' in cat:
+        # Format chuẩn cho tường – value để trống, người dùng tự nhập
+        vm.CurrentRules.Add(RuleRow('Length',     'is greater than', ''))
         vm.CurrentRules.Add(RuleRow('Layer Name', 'Equal', ''))
-        vm.CurrentRules.Add(RuleRow('Distance', 'is less than', '300'))
     else:
         vm.CurrentRules.Add(RuleRow('Layer Name', 'Equal', ''))
 
@@ -687,6 +886,7 @@ def on_conditions_datagrid_click(sender, e):
     Intercept click trên các button trong DataGrid Bảng 3:
       - Analysis button  → chạy analysis cho condition đó
       - Line in Revit button → raise ExternalEvent chọn line
+      - Create Model button → tạo model cho condition đó
     """
     try:
         source = e.OriginalSource
@@ -722,6 +922,12 @@ def on_conditions_datagrid_click(sender, e):
         if content in ('Select', u'\u2713 OK'):
             e.Handled = True
             on_select_line_for_condition(tag, window)
+            return
+
+        # Create Model button (content = 'Create ?' or '✓ Created')
+        if content in (u'Create ?', u'\u2713 Created'):
+            e.Handled = True
+            on_create_model_for_condition(tag, window)
             return
 
     except Exception as ex:
@@ -782,7 +988,25 @@ def on_run_analysis(cond, window):
         )
         return
 
-    # 1) Filter theo rules
+    # 1) Trích tham số của thuật toán từ rules (không phải filter element)
+    min_length = 1000.0   # chiều dài tối thiểu sau merge (default)
+    min_d      = 100.0    # khoảng cách dầm nhỏ nhất
+    max_d      = 1000.0   # khoảng cách dầm lớn nhất
+    for r in (rules or []):
+        rd = r.to_dict() if hasattr(r, 'to_dict') else r
+        param = rd.get('parameter', '')
+        try:
+            v = float(rd.get('value', 0))
+        except (ValueError, TypeError):
+            v = 0.0
+        if param == 'Length' and rd.get('ruler') == 'is greater than':
+            min_length = v
+        elif param == 'Min Beam Distance':
+            min_d = v
+        elif param == 'Max Beam Distance':
+            max_d = v
+
+    # 2) Filter theo rules (Layer Name + Length – bỏ qua Min/Max Beam Distance)
     if rules:
         filtered = filter_elements_by_rules(all_elements, rules)
     else:
@@ -797,14 +1021,19 @@ def on_run_analysis(cond, window):
         )
         return
 
-    # 2) Analyze theo Category
+    # 3) Analyze theo Category
     cat_lower = category.lower()
     if 'column' in cat_lower or 'foundation' in cat_lower or 'footing' in cat_lower:
         merged   = merge_lines_to_closed_polylines(filtered)
         analyzed = analyze_condition(merged, category)
     elif 'framing' in cat_lower or 'beam' in cat_lower:
-        # Method 1: adjacent offset pairing – trả về list[BeamAxis]
-        analyzed = detect_beams_from_lines(filtered)
+        # Truyền tham số người dùng vào thuật toán phát hiện dầm
+        analyzed = detect_beams_from_lines(
+            filtered,
+            min_d           = min_d,
+            max_d           = max_d,
+            min_overlap_len = min_length,
+        )
     elif 'wall' in cat_lower:
         analyzed = analyze_condition(filtered, category)
     else:
@@ -820,6 +1049,21 @@ def on_run_analysis(cond, window):
         return
 
     # 3) Group theo kích thước
+    # 3-pre) Pair texts trước khi group (để h được điền vào BeamAxis trước khi tạo group key)
+    if 'framing' in cat_lower or 'beam' in cat_lower:
+        text_layer_name = ''
+        for r in (rules or []):
+            rd = r.to_dict() if hasattr(r, 'to_dict') else r
+            if rd.get('parameter') == 'Text Layer':
+                text_layer_name = (rd.get('value', '') or '').strip().upper()
+                break
+        if text_layer_name:
+            all_texts = vm.get_texts_for_file(filename)
+            layer_texts = [(c, x, y, lyr) for c, x, y, lyr in all_texts
+                           if lyr.upper() == text_layer_name]
+            if layer_texts:
+                _pair_texts_with_beams(analyzed, layer_texts)
+
     groups_data = group_elements_by_label(analyzed)
 
     # 3b) Remap labels theo Category
@@ -843,8 +1087,11 @@ def on_run_analysis(cond, window):
                 g['label'] = u'D: {}'.format(d_v)
         elif shape == 'BEA':
             if 'framing' in cat_lo or 'beam' in cat_lo:
-                # BeamAxis: grouped by width only → label = FRM: <width>
-                g['label'] = u'FRM: {}'.format(w_v)
+                # BeamAxis: w = bề rộng (khoảng cách 2 mép), h = chiều cao (từ text CAD hoặc ?)
+                if h_v and h_v > 0:
+                    g['label'] = u'FRM: {}x{}'.format(w_v, h_v)
+                else:
+                    g['label'] = u'FRM: {}x?'.format(w_v)
 
     # 4) Gán _group_label vào mỗi element (cho canvas coloring)
     for g in groups_data:
@@ -872,6 +1119,24 @@ def on_run_analysis(cond, window):
     cond.result_elements = analyzed
     cond.cad_groups      = cad_groups
     cond.AnalysisStatus  = 'v'
+
+    # 7) Axis Align: snap locations to nearest 5mm in grid coordinate system
+    grid_layer = (getattr(vm, 'CadGridLayer', '') or '').strip().upper()
+    axis_status = ''
+    if grid_layer and analyzed:
+        file_elems = vm.get_elements_for_file(filename)
+        grid_elem = None
+        for fe in file_elems:
+            if (getattr(fe, 'layer', '').upper() == grid_layer and
+                    getattr(fe, 'type', '') in ('line', 'polyline') and
+                    len(getattr(fe, 'points', [])) >= 2):
+                grid_elem = fe
+                break
+        if grid_elem is not None:
+            _, axis_status = align_elements_to_axis(analyzed, grid_elem)
+        else:
+            axis_status = '!'
+    cond.AxisAlignStatus = axis_status
 
     n_types   = len(cad_groups)
     n_elems   = sum(len(g.elements) for g in cad_groups)
@@ -1099,6 +1364,25 @@ def _draw_elements_on_canvas(canvas, elem_cond_pairs, grid_elems,
             c1 = to_canvas(elem.start[0], elem.start[1])
             c2 = to_canvas(elem.end[0],   elem.end[1])
             _draw_line_on_canvas(canvas, c1[0], c1[1], c2[0], c2[1], color, thickness=2.5, tag=stag)
+            # Draw the 2 bounding lines of the beam axis (beam width visualization)
+            if elem.type == 'beam_axis':
+                half_w = getattr(elem, 'width', 0) / 2.0
+                if half_w > 0:
+                    # Direction unit vector
+                    dx = elem.end[0] - elem.start[0]
+                    dy = elem.end[1] - elem.start[1]
+                    L  = math.sqrt(dx*dx + dy*dy) or 1.0
+                    ux, uy = dx/L, dy/L
+                    # Perpendicular
+                    vx, vy = -uy, ux
+                    bound_color = Color.FromArgb(80, color.R, color.G, color.B)
+                    for sign in (1, -1):
+                        ox = sign * half_w * vx
+                        oy = sign * half_w * vy
+                        b1 = to_canvas(elem.start[0]+ox, elem.start[1]+oy)
+                        b2 = to_canvas(elem.end[0]+ox,   elem.end[1]+oy)
+                        _draw_line_on_canvas(canvas, b1[0], b1[1], b2[0], b2[1],
+                                             bound_color, thickness=1.0)
 
         elif elem.type == 'arc' and elem.center:
             r = elem.radius
@@ -1145,8 +1429,9 @@ def on_canvas_click(sender, e):
                 break
 
         if hit_tag is None:
-            vm.SelectedElement = None
-            vm.SelectedGroup   = None
+            vm.SelectedElement  = None
+            vm.SelectedGroup    = None
+            # SelectedBeamInfo ở panel cố định – giữ nguyên khi click vùng trống canvas
             _redraw(window)
             return
 
@@ -1163,6 +1448,24 @@ def on_canvas_click(sender, e):
                     break
         finally:
             _canvas_selecting = False
+
+        # Nếu click vào beam_axis → hiển thị overlay panel
+        elem = hit_tag.elem
+        if getattr(elem, 'type', None) == 'beam_axis':
+            beam_group = None
+            beam_cond  = getattr(hit_tag, 'condition', None)
+            if beam_cond is not None:
+                for g in beam_cond.cad_groups:
+                    if elem in g.elements:
+                        beam_group = g
+                        break
+            if beam_group is not None:
+                vm.SelectedBeamInfo = SelectedBeamInfoRow(elem, beam_group, beam_cond, vm)
+            else:
+                vm.SelectedBeamInfo = None
+        else:
+            vm.SelectedBeamInfo = None
+
         _redraw(window)
     except Exception as ex:
         print("on_canvas_click error: {}".format(ex))

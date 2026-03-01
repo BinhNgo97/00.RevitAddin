@@ -119,9 +119,15 @@ class ModelByCadWindow(forms.WPFWindow):
                 select_grid_handler    = Handler.SelectRevitGridHandler(view_model)
                 self._ext_select_grid  = ExternalEvent.Create(select_grid_handler)
 
-                # ExternalEvent: Create Model
+                # ExternalEvent: Create Model (all conditions – legacy)
                 create_model_handler   = Handler.CreateModelHandler(view_model)
                 self._ext_create_model = ExternalEvent.Create(create_model_handler)
+
+                # ExternalEvent: Create Model for a single condition
+                create_single_handler                = Handler.CreateModelSingleHandler(view_model)
+                create_single_handler._window        = self
+                self._ext_create_model_single        = create_single_handler
+                self._ext_create_model_single_event  = ExternalEvent.Create(create_single_handler)
 
                 # Điền data Revit vào dropdowns
                 _load_revit_data(view_model)

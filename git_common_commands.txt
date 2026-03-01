@@ -1,0 +1,76 @@
+GIT COMMON COMMANDS (PowerShell, Bash, CMD Compatible)
+
+I. CONFIGURATION
+
+git config –global user.name “Your Name” git config –global user.email
+“your@email.com” git config –list
+
+II. REPOSITORY SETUP
+
+git init git clone git remote -v git remote add origin
+
+III. BASIC WORKFLOW
+
+git status
+git add . 
+git add 
+git commit -m “commit message” 
+git push 
+git pull 
+git fetch
+
+IV. BRANCHING
+
+git branch 
+git branch 
+git checkout 
+git checkout -b 
+git switch 
+git merge
+git branch -d
+
+V. INSPECTION & HISTORY
+
+git log 
+git log –oneline 
+git diff 
+git show
+
+VI. UNDO / RESET
+
+git restore 
+git restore –staged 
+git reset –soft HEAD~1 
+git reset –hard HEAD~1 
+git revert
+
+VII. CLEANING
+
+git clean -fd 
+git rm 
+git rm –cached
+
+VIII. STASH
+
+git stash 
+git stash list 
+git stash apply 
+git stash pop
+
+IX. SUBMODULE
+
+git submodule add 
+git submodule update –init –recursive 
+git submodule
+status 
+git submodule deinit -f
+
+X. POWERFUL UTILITIES
+
+git reflog 
+git cherry-pick 
+git tag git tag git push –tags
+
+NOTES: - All commands work in PowerShell, Git Bash, and CMD. - Use
+forward slash “/” for paths when possible (Git handles it
+cross-platform).

@@ -42,9 +42,9 @@ class RuleRow(ViewModel_BaseEventHandler):
       - Length / Distance + Ruler  → Value là giá trị số
     Logic giữa các dòng trong 1 condition: OR
     """
-    PARAMETERS     = ['Layer Name', 'Length', 'Distance']
+    PARAMETERS     = ['Layer Name', 'Length', 'Min Beam Distance', 'Max Beam Distance', 'Text Layer']
     RULERS_LAYER   = ['Equal']
-    RULERS_NUMERIC = ['is greater than', 'is less than']
+    RULERS_NUMERIC = ['is greater than', 'is less than', 'Equal']
 
     def __init__(self, parameter='Layer Name', ruler='Equal', value=''):
         ViewModel_BaseEventHandler.__init__(self)
@@ -61,7 +61,7 @@ class RuleRow(ViewModel_BaseEventHandler):
     def Parameter(self, value):
         self._parameter = value
         # Auto adjust ruler
-        if value == 'Layer Name':
+        if value in ('Layer Name', 'Text Layer'):
             self._ruler = 'Equal'
         else:
             if self._ruler == 'Equal':
@@ -103,7 +103,7 @@ class RuleRow(ViewModel_BaseEventHandler):
     @property
     def IsLayerRule(self):
         """True → Value ô là dropdown layer; False → TextBox số."""
-        return self._parameter == 'Layer Name'
+        return self._parameter in ('Layer Name', 'Text Layer')
 
     # ---- Serialization ----
     def to_dict(self):
@@ -181,6 +181,108 @@ class CadGroup(ViewModel_BaseEventHandler):
 
 
 # =============================================
+# SelectedBeamInfoRow – thông tin dầm được click trên canvas
+# =============================================
+class SelectedBeamInfoRow(ViewModel_BaseEventHandler):
+    """
+    Binding cho floating overlay panel khi user click 1 beam_axis trên canvas.
+    Cho phép sửa Location Type và Family Type riêng cho từng element.
+    """
+    LOCATION_TYPES = [u'Auto', u'Left', u'Right', u'Center', u'Origin']
+    _LOC_TO_INT = {u'Auto': None, u'Left': 0, u'Right': 1, u'Center': 2, u'Origin': 3}
+    _INT_TO_LOC = {None: u'Auto', 0: u'Left', 1: u'Right', 2: u'Center', 3: u'Origin'}
+
+    def __init__(self, elem, group, condition, vm):
+        ViewModel_BaseEventHandler.__init__(self)
+        self._elem      = elem       # BeamAxis
+        self._group     = group      # CadGroup hiện tại của elem
+        self._condition = condition  # ConditionRow chứa elem
+        self._vm        = vm         # ModelByCadViewModel
+
+    @property
+    def BeamLabel(self):
+        lbl = getattr(self._elem, 'text_label', None)
+        return lbl if lbl else u'w={}'.format(getattr(self._elem, 'width', 0))
+
+    @property
+    def LocationType(self):
+        return self._INT_TO_LOC.get(
+            getattr(self._elem, 'location_type_override', None), u'Auto')
+
+    @LocationType.setter
+    def LocationType(self, v):
+        self._elem.location_type_override = self._LOC_TO_INT.get(v, None)
+        self.OnPropertyChanged('LocationType')
+
+    @property
+    def FamilyType(self):
+        override = getattr(self._elem, 'family_type_override', None)
+        return override if override is not None else self._group.FamilyType
+
+    @FamilyType.setter
+    def FamilyType(self, v):
+        if v == self.FamilyType:
+            return
+        self._elem.family_type_override = v
+        self._rebalance_groups(v)
+        self.OnPropertyChanged('FamilyType')
+
+    @property
+    def FilteredFamilyTypes(self):
+        if self._vm and self._condition:
+            return self._vm.get_types_for_category(self._condition.Category)
+        return []
+
+    def _rebalance_groups(self, new_fam_type):
+        """Chuyển elem sang nhóm khác khi FamilyType thay đổi."""
+        elem      = self._elem
+        old_group = self._group
+        condition = self._condition
+
+        # 1) Xóa elem khỏi nhóm cũ
+        if elem in old_group.elements:
+            old_group.elements.remove(elem)
+            old_group.notify_count_changed()
+
+        # 2) Xóa nhóm rỗng
+        if len(old_group.elements) == 0:
+            if old_group in list(condition.cad_groups):
+                condition.cad_groups.remove(old_group)
+
+        # 3) Tìm nhóm đã có cùng FamilyType trong condition
+        target_group = None
+        for g in condition.cad_groups:
+            if g.FamilyType == new_fam_type and g.shape == old_group.shape:
+                target_group = g
+                break
+
+        if target_group is not None:
+            target_group.elements.append(elem)
+            target_group.notify_count_changed()
+            self._group = target_group
+        else:
+            # 4) Tạo nhóm mới cho element này
+            new_group = CadGroup(
+                label       = old_group.label,
+                shape       = old_group.shape,
+                elements    = [elem],
+                w           = old_group.w,
+                h           = old_group.h,
+                dia         = old_group.dia,
+                vm          = self._vm,
+                source_type = old_group.source_type,
+                condition   = condition,
+            )
+            new_group.FamilyType = new_fam_type
+            condition.cad_groups.append(new_group)
+            self._group = new_group
+
+        # 5) Cập nhật PreviewGroups
+        if self._vm:
+            self._vm.refresh_preview_groups()
+
+
+# =============================================
 # ConditionRow – 1 dòng trong Bảng 3
 # =============================================
 class ConditionRow(ViewModel_BaseEventHandler):
@@ -198,6 +300,7 @@ class ConditionRow(ViewModel_BaseEventHandler):
 
         self._analysis_status = 'x'     # 'x' = chưa | 'v' = hoàn thành
         self._preview_checked = False
+        self._axis_align_status = ''    # '' = chưa chạy | 'v' = OK | '!' = cần kiểm tra
         self._revit_line_ref  = None    # Revit element (đường tham chiếu cho transform)
         self._base_level      = ''
 
@@ -266,6 +369,30 @@ class ConditionRow(ViewModel_BaseEventHandler):
         """Checkbox Preview chỉ enable khi Analysis = v."""
         return self.AnalysisDone
 
+    # ---- AxisAlignStatus ----
+    @property
+    def AxisAlignStatus(self):
+        return self._axis_align_status
+
+    @AxisAlignStatus.setter
+    def AxisAlignStatus(self, v):
+        self._axis_align_status = v or ''
+        self.OnPropertyChanged('AxisAlignStatus')
+        self.OnPropertyChanged('AxisAlignLabel')
+        self.OnPropertyChanged('AxisAlignDone')
+
+    @property
+    def AxisAlignDone(self):
+        return self._axis_align_status == 'v'
+
+    @property
+    def AxisAlignLabel(self):
+        if self._axis_align_status == 'v':
+            return u'\u2713'                         # ✓
+        if self._axis_align_status == '!':
+            return u'Vui l\u00f2ng ki\u1ec3m tra AxisAlign'  # warning
+        return u''
+
     # ---- PreviewChecked ----
     @property
     def PreviewChecked(self):
@@ -325,6 +452,29 @@ class ConditionRow(ViewModel_BaseEventHandler):
             and all(g.is_ready() for g in self.cad_groups)
         )
 
+    # ---- CreateModelStatus ----
+    @property
+    def CreateModelStatus(self):
+        return getattr(self, '_create_model_status', '')
+
+    @CreateModelStatus.setter
+    def CreateModelStatus(self, v):
+        self._create_model_status = v or ''
+        self.OnPropertyChanged('CreateModelStatus')
+        self.OnPropertyChanged('CreateModelLabel')
+        self.OnPropertyChanged('CreateModelDone')
+
+    @property
+    def CreateModelDone(self):
+        return getattr(self, '_create_model_status', '') == 'v'
+
+    @property
+    def CreateModelLabel(self):
+        status = getattr(self, '_create_model_status', '')
+        if status == 'v':
+            return u'\u2713 Created'
+        return u'Create ?'
+
 
 # =============================================
 # ModelByCadViewModel – ViewModel chính
@@ -357,9 +507,10 @@ class ModelByCadViewModel(ViewModel_BaseEventHandler):
         self._preview_groups = ObservableCollection[object]()
 
         # Selection state
-        self._selected_condition = None
-        self._selected_group     = None
-        self._selected_element   = None
+        self._selected_condition  = None
+        self._selected_group      = None
+        self._selected_element    = None
+        self._selected_beam_info  = None   # SelectedBeamInfoRow khi click beam trên canvas
 
         # Revit data
         self._categories        = ObservableCollection[object]()
@@ -378,11 +529,12 @@ class ModelByCadViewModel(ViewModel_BaseEventHandler):
     # ──────────────────────────────────────────────────────────
     #   LOADED FILES
     # ──────────────────────────────────────────────────────────
-    def add_loaded_file(self, filename, elements, layers, filepath=''):
+    def add_loaded_file(self, filename, elements, layers, filepath='', texts=None):
         self.loaded_files[filename] = {
             'elements': elements,
             'layers'  : sorted(set(layers)),
             'path'    : filepath,
+            'texts'   : texts or [],   # list of (content, x, y, layer)
         }
         # Rebuild persistent collection so ComboBox sees the change
         self._loaded_file_names.Clear()
@@ -403,6 +555,10 @@ class ModelByCadViewModel(ViewModel_BaseEventHandler):
 
     def get_elements_for_file(self, filename):
         return self.loaded_files.get(filename, {}).get('elements', [])
+
+    def get_texts_for_file(self, filename):
+        """Trả về list[(content, x, y, layer)] của file đã load."""
+        return self.loaded_files.get(filename, {}).get('texts', [])
 
     # ──────────────────────────────────────────────────────────
     #   CONDITIONS – Bảng 3
@@ -478,10 +634,12 @@ class ModelByCadViewModel(ViewModel_BaseEventHandler):
         cond = self._selected_condition
         cond.save_rules_snapshot(list(self._current_rules))
         # Rules thay đổi → cần chạy lại analysis
-        cond.AnalysisStatus  = 'x'
-        cond.PreviewChecked  = False
-        cond.result_elements = []
-        cond.cad_groups      = []
+        cond.AnalysisStatus    = 'x'
+        cond.PreviewChecked    = False
+        cond.AxisAlignStatus   = ''
+        cond.CreateModelStatus = ''
+        cond.result_elements   = []
+        cond.cad_groups        = []
         self.refresh_preview_groups()
         return True
 
@@ -532,6 +690,21 @@ class ModelByCadViewModel(ViewModel_BaseEventHandler):
     def SelectedElement(self, v):
         self._selected_element = v
         self.OnPropertyChanged('SelectedElement')
+
+    @property
+    def SelectedBeamInfo(self):
+        return self._selected_beam_info
+
+    @SelectedBeamInfo.setter
+    def SelectedBeamInfo(self, v):
+        self._selected_beam_info = v
+        self.OnPropertyChanged('SelectedBeamInfo')
+        self.OnPropertyChanged('BeamInfoVisible')
+
+    @property
+    def BeamInfoVisible(self):
+        from System.Windows import Visibility
+        return Visibility.Visible if self._selected_beam_info is not None else Visibility.Collapsed
 
     # ──────────────────────────────────────────────────────────
     #   BẢNG 1 INPUT FIELDS
@@ -641,10 +814,11 @@ class ModelByCadViewModel(ViewModel_BaseEventHandler):
         self._conditions.Clear()
         self._current_rules.Clear()
         self._preview_groups.Clear()
-        self._selected_condition = None
-        self._selected_group     = None
-        self._selected_element   = None
-        self.cad_grid_elements   = []
+        self._selected_condition  = None
+        self._selected_group      = None
+        self._selected_element    = None
+        self._selected_beam_info  = None
+        self.cad_grid_elements    = []
         self.revit_grids         = []
         self._cad_grid_layer     = ''
         self.loaded_files.clear()
@@ -652,6 +826,8 @@ class ModelByCadViewModel(ViewModel_BaseEventHandler):
         self.OnPropertyChanged('SelectedCondition')
         self.OnPropertyChanged('SelectedGroup')
         self.OnPropertyChanged('SelectedElement')
+        self.OnPropertyChanged('SelectedBeamInfo')
+        self.OnPropertyChanged('BeamInfoVisible')
         self.OnPropertyChanged('LoadedFileNames')
         self.OnPropertyChanged('AvailableLayers')
         self.OnPropertyChanged('CadGridLayer')
