@@ -1,0 +1,63 @@
+BEAM DETECTION METHOD 1 ADJACENT OFFSET PAIRING (80% PRACTICAL SOLUTION)
+
+OBJECTIVE: Detect beam location lines from CAD linework using a
+simplified and stable geometric pipeline.
+
+  --------------------------------------------------
+  STEP 1 – NORMALIZATION
+  --------------------------------------------------
+  1. Explode all polylines into line segments. 2.
+  Merge collinear segments: - Angle difference < 3
+  degrees - Endpoint gap < 50 mm 3. Remove duplicate
+  lines: - Angle difference < 1 degree - Distance <
+  100 mm - Overlap > 80%
+
+  --------------------------------------------------
+
+STEP 2 – DIRECTION CLUSTERING
+
+Group lines by direction: - Angle tolerance ±5 degrees Each cluster is
+processed independently.
+
+  --------------------------------------------------
+  STEP 3 – OFFSET CLUSTERING
+  --------------------------------------------------
+  For each direction cluster: 1. Compute
+  perpendicular offset distance. 2. Group offsets if
+  |d1 - d2| < 50 mm. Each offset group represents
+  one beam edge.
+
+  --------------------------------------------------
+
+STEP 4 – SORT OFFSETS
+
+Sort offset groups in ascending order.
+
+Example: 0 | 250 | 450
+
+  --------------------------------------------------
+  STEP 5 – ADJACENT PAIRING
+  --------------------------------------------------
+  Only pair neighboring offsets: (0–250), (250–450)
+
+  DO NOT create non-adjacent pairs (0–450).
+  --------------------------------------------------
+
+STEP 6 – VALIDATION
+
+Check beam width: 100 mm < width < 1000 mm
+
+Check axis overlap: Overlap ratio > 60%
+
+If valid → Create beam.
+
+  ------------
+  ADVANTAGES
+  ------------
+
+-   Simple implementation
+-   Stable performance
+-   Avoids large false beams
+-   Complexity: O(n log n)
+
+COVERAGE: ~80% of practical beam drawing cases.

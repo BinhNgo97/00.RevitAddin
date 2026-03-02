@@ -1,0 +1,66 @@
+BEAM DETECTION METHOD 2 FULL OFFSET PAIR + SCORING (HIGH ACCURACY
+APPROACH)
+
+OBJECTIVE: Generate all possible beam candidates and use scoring logic
+to select the most geometrically consistent beams.
+
+  --------------------------------------------------
+  STEP 1 – NORMALIZATION
+  --------------------------------------------------
+  Same as Method 1: - Explode polylines - Merge
+  collinear - Remove duplicates - Direction
+  clustering - Offset clustering
+
+  --------------------------------------------------
+
+STEP 2 – FULL OFFSET PAIR GENERATION
+
+For each direction cluster: Generate all offset pairs (i < j).
+
+Example: Offsets: 0 | 250 | 450 | 900
+
+Pairs: 0–250 0–450 0–900 250–450 250–900 450–900
+
+Filter by width: 100 mm < width < 1000 mm
+
+  --------------------------------------------------
+  STEP 3 – AXIS OVERLAP CHECK
+  --------------------------------------------------
+  Project segments to beam axis. Compute overlap
+  ratio.
+
+  Keep candidate if: Overlap > 60%
+  --------------------------------------------------
+
+STEP 4 – SCORING
+
+For each candidate beam:
+
+Score = w1 * OverlapRatio + w2 * LengthSimilarity + w3 * TextProximity -
+w4 * WidthPenalty - w5 * IsolationPenalty
+
+Where: OverlapRatio = OverlapLength / MinEdgeLength LengthSimilarity =
+min(L1,L2)/max(L1,L2)
+
+  --------------------------------------------------
+  STEP 5 – CONFLICT RESOLUTION
+  --------------------------------------------------
+  Sort candidates by score descending.
+
+  Select beam if: - Does not conflict with higher
+  score beam - Or allowed shared edge (configurable)
+  --------------------------------------------------
+
+ADVANTAGES
+
+-   Handles shared edge cases
+-   Detects non-adjacent beams
+-   Higher geometric robustness
+
+DISADVANTAGES
+
+-   More complex
+-   Requires tuning scoring weights
+-   Complexity: O(n^2)
+
+COVERAGE: ~90–95% depending on scoring quality.
